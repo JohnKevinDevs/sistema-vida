@@ -1,10 +1,10 @@
 # Sistema JK
 
-Sistema JK v1 - Vida e Tarefas.
+Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem apenas o setup inicial da aplicacao web.
+MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual estatica do modulo Vida e Tarefas.
 
 ## Stack
 
@@ -36,4 +36,4 @@ Use `.env.example` como referencia.
 
 ## Status atual
 
-Fase 0.1 - Setup inicial.
+Fase 0.2 - Estrutura visual base.
