@@ -19,7 +19,8 @@ export function ProjectPreview({
 }: ProjectPreviewProps) {
   return (
     <button
-      className={`w-full rounded-md border p-4 text-left transition ${
+      aria-pressed={isSelected}
+      className={`focus-ring w-full rounded-md border p-4 text-left transition active:scale-[0.99] ${
         isSelected
           ? "border-cyan-300/40 bg-cyan-300/10"
           : "border-white/10 bg-neutral-900/70 hover:border-white/20 hover:bg-white/[0.05]"

@@ -18,7 +18,7 @@ export function ProjectsSection({
   return (
     <section>
       <SectionHeader
-        description={`Projeto destacado: ${selectedProject?.name ?? "nenhum"}. Clique em outro card para trocar o foco visual.`}
+        description={`Projeto em foco: ${selectedProject?.name ?? "nenhum"}. Selecione outro card para trocar o destaque visual.`}
         eyebrow="Execucao"
         title="Projetos ativos"
       />

@@ -13,6 +13,10 @@ const statusStyles: Record<Task["status"], string> = {
 };
 
 export function TaskPreview({ isDone, onToggle, task }: TaskPreviewProps) {
+  const buttonLabel = isDone
+    ? `Desmarcar tarefa: ${task.title}`
+    : `Marcar tarefa como concluida: ${task.title}`;
+
   return (
     <article
       className={`rounded-md border p-4 transition ${
@@ -41,7 +45,8 @@ export function TaskPreview({ isDone, onToggle, task }: TaskPreviewProps) {
             {task.status}
           </span>
           <button
-            className={`rounded-md border px-2.5 py-1 text-xs font-medium transition ${
+            aria-label={buttonLabel}
+            className={`focus-ring rounded-md border px-2.5 py-1 text-xs font-medium transition active:scale-[0.98] ${
               isDone
                 ? "border-emerald-300/30 bg-emerald-300/15 text-emerald-100"
                 : "border-white/10 bg-white/[0.03] text-neutral-300 hover:border-white/20 hover:bg-white/[0.06]"
@@ -49,7 +54,7 @@ export function TaskPreview({ isDone, onToggle, task }: TaskPreviewProps) {
             onClick={onToggle}
             type="button"
           >
-            {isDone ? "Concluida" : "Marcar"}
+            {isDone ? "Feita" : "Marcar"}
           </button>
         </div>
       </div>

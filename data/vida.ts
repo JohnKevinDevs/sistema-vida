@@ -12,8 +12,8 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 0.4 em refino",
-  mainFocus: "Auditar a estrutura visual e reduzir complexidade dos componentes",
+  state: "Fase 0.5 em polimento",
+  mainFocus: "Refinar microcopy, foco por teclado e clareza dos controles",
   nextFocus: "Manter a UI preparada para evoluir sem criar persistencia ainda",
 };
 
@@ -28,15 +28,15 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "0.3",
-    detail: "tipos e estado local leve",
+    value: "0.5",
+    detail: "UX e acessibilidade basica",
     tone: "emerald",
   },
   {
     id: "proximo-foco",
     label: "Proximo foco",
-    value: "Fluxo",
-    detail: "interacoes visuais sem persistencia",
+    value: "Clareza",
+    detail: "controles mais legiveis",
     tone: "amber",
   },
 ];
@@ -97,7 +97,7 @@ export const todayTasks: Task[] = [
   },
   {
     id: "proximos-passos",
-    title: "Registrar proximos passos da Fase 0.4",
+    title: "Registrar proximos passos da Fase 0.6",
     area: "Planejamento",
     time: "Noite",
     status: "Planejado",
@@ -174,5 +174,5 @@ export const assistantPreview: AssistantPreview = {
   title: "Assistente futuro",
   status: "Reservado para uma etapa posterior",
   description:
-    "Este espaco mostra onde o chat conversacional podera aparecer, mas ainda nao possui IA, API ou integracao externa.",
+    "Espaco reservado para o chat conversacional futuro. Nesta fase ele continua sem IA, API ou integracao externa.",
 };

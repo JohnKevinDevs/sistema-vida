@@ -21,13 +21,15 @@ export function Sidebar() {
           </h1>
         </div>
         <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 lg:mt-6 lg:inline-flex">
-          Fase 0.4
+          Fase 0.5
         </div>
       </div>
 
-      <nav className="mt-6 flex gap-2 overflow-x-auto pb-1 lg:mt-10 lg:flex-col lg:overflow-visible lg:pb-0">
+      <nav aria-label="Mapa visual do modulo" className="mt-6 lg:mt-10">
+        <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
         {navigationItems.map((item, index) => (
-          <div
+          <li
+            aria-current={index === 0 ? "page" : undefined}
             className={`whitespace-nowrap rounded-md px-3 py-2 text-sm transition ${
               index === 0
                 ? "bg-white text-neutral-950"
@@ -36,8 +38,9 @@ export function Sidebar() {
             key={item}
           >
             {item}
-          </div>
+          </li>
         ))}
+        </ul>
       </nav>
 
       <div className="mt-6 hidden rounded-md border border-white/10 bg-white/[0.03] p-4 lg:block">
@@ -45,8 +48,8 @@ export function Sidebar() {
           Estado atual
         </p>
         <p className="mt-3 text-sm leading-6 text-neutral-300">
-          Interface com estado local leve, ainda sem banco, IA, persistencia ou
-          rotas de API.
+          Interface refinada com estado local leve, ainda sem banco, IA,
+          persistencia ou rotas de API.
         </p>
       </div>
     </aside>

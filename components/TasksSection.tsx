@@ -16,7 +16,7 @@ export function TasksSection({
   return (
     <section>
       <SectionHeader
-        description={`${completedTaskIds.length} de ${tasks.length} tarefas marcadas apenas nesta sessao.`}
+        description={`${completedTaskIds.length} de ${tasks.length} tarefas marcadas nesta sessao. Nada e salvo ao recarregar.`}
         eyebrow="Prioridades"
         title="Tarefas do dia"
       />
