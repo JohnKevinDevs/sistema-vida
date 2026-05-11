@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura e mocks locais sem persistencia.
+MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura, mocks locais sem persistencia e uma configuracao isolada do Gemini.
 
 ## Stack
 
@@ -13,6 +13,7 @@ MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem
 - App Router
 - Tailwind CSS
 - ESLint
+- Gemini SDK (`@google/generative-ai`)
 
 ## Instalar dependencias
 
@@ -34,6 +35,14 @@ Crie ou mantenha um arquivo `.env.local` com as variaveis locais. Esse arquivo n
 
 Use `.env.example` como referencia.
 
+Variavel usada pela configuracao isolada do Gemini:
+
+```bash
+GEMINI_API_KEY=sua_chave_do_gemini
+```
+
+Sem essa variavel, o projeto ainda consegue executar lint e build. A chave so e exigida quando alguma funcao em `lib/gemini.ts` for chamada.
+
 ## Status atual
 
-Fase 0.6 - Modelo conceitual de dados.
+Fase 1.1 - Configuracao isolada do Gemini.
