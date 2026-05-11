@@ -1,8 +1,10 @@
+import type { DashboardStat } from "@/lib/types";
+
 type DashboardCardProps = {
   label: string;
   value: string;
   detail: string;
-  tone: "cyan" | "emerald" | "amber";
+  tone: DashboardStat["tone"];
 };
 
 const toneStyles: Record<DashboardCardProps["tone"], string> = {

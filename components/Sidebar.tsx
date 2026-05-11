@@ -21,7 +21,7 @@ export function Sidebar() {
           </h1>
         </div>
         <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 lg:mt-6 lg:inline-flex">
-          Fase 0.2
+          Fase 0.3
         </div>
       </div>
 
@@ -45,8 +45,8 @@ export function Sidebar() {
           Estado atual
         </p>
         <p className="mt-3 text-sm leading-6 text-neutral-300">
-          Interface estatica preparada para evoluir sem banco, IA ou rotas de
-          API nesta etapa.
+          Interface com estado local leve, ainda sem banco, IA, persistencia ou
+          rotas de API.
         </p>
       </div>
     </aside>
