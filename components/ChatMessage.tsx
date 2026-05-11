@@ -6,7 +6,7 @@ type ChatMessageProps = {
 
 const roleLabels: Record<LocalChatMessage["role"], string> = {
   assistant: "Sistema JK",
-  user: "Voce",
+  user: "Você",
 };
 
 export function ChatMessage({ message }: ChatMessageProps) {
@@ -14,10 +14,13 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <article
+      aria-label={`Mensagem de ${roleLabels[message.role]}`}
       className={`rounded-md border p-3 ${
         isUser
           ? "border-cyan-300/20 bg-cyan-300/10"
-          : "border-white/10 bg-neutral-900/80"
+          : message.status === "error"
+            ? "border-amber-300/30 bg-amber-300/10"
+            : "border-white/10 bg-neutral-900/80"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
@@ -25,7 +28,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
           {roleLabels[message.role]}
         </p>
         {message.status === "error" ? (
-          <span className="text-xs font-medium text-amber-200">Erro</span>
+          <span className="text-xs font-medium text-amber-200">
+            Atenção necessária
+          </span>
         ) : null}
       </div>
       <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-neutral-100">

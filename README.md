@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura, mocks locais sem persistencia, configuracao isolada do Gemini, API local do assistente e uma UI minima de chat.
+MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, tipos conceituais para evolução futura, mocks locais sem persistência, configuração isolada do Gemini, API local do assistente e uma UI mínima de chat refinada.
 
 ## Stack
 
@@ -15,7 +15,7 @@ MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem
 - ESLint
 - Gemini SDK (`@google/generative-ai`)
 
-## Instalar dependencias
+## Instalar dependências
 
 ```bash
 npm install
@@ -29,19 +29,19 @@ npm run dev
 
 Depois, abra `http://localhost:3000`.
 
-## Variaveis de ambiente
+## Variáveis de ambiente
 
-Crie ou mantenha um arquivo `.env.local` com as variaveis locais. Esse arquivo nao deve ser commitado.
+Crie ou mantenha um arquivo `.env.local` com as variáveis locais. Esse arquivo não deve ser commitado.
 
-Use `.env.example` como referencia.
+Use `.env.example` como referência.
 
-Variavel usada pela configuracao isolada do Gemini:
+Variável usada pela configuração isolada do Gemini:
 
 ```bash
 GEMINI_API_KEY=sua_chave_do_gemini
 ```
 
-Sem essa variavel, o projeto ainda consegue executar lint e build. A chave so e exigida quando alguma funcao em `lib/gemini.ts` ou `lib/assistant.ts` for chamada.
+Sem essa variável, o projeto ainda consegue executar lint e build. A chave só é exigida quando alguma função em `lib/gemini.ts` ou `lib/assistant.ts` for chamada.
 
 ## Assistente
 
@@ -51,26 +51,34 @@ A API local do assistente fica em `app/api/chat/route.ts` e aceita apenas `POST`
 
 ```json
 {
-  "message": "Ola, me ajude a organizar meu dia."
+  "message": "Olá, me ajude a organizar meu dia."
 }
 ```
 
 Exemplo no PowerShell, com o servidor local rodando:
 
 ```powershell
-Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"message":"Ola, me ajude a organizar meu dia."}'
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"message":"Olá, me ajude a organizar meu dia."}'
 ```
 
 Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_KEY` configurada.
 
-Ainda nao existe interface de chat, historico persistido ou banco de dados.
+Ainda não existe histórico persistido ou banco de dados.
 
 ## Chat local
 
-A UI minima de chat aparece no dashboard, na area do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuario imediatamente e exibe a resposta ou um erro amigavel.
+A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuário imediatamente e exibe a resposta ou um erro amigável.
 
-O historico fica somente em estado local do React. Ao recarregar a pagina, a conversa desaparece.
+O histórico fica somente em estado local do React. Ao recarregar a página, a conversa desaparece.
+
+Para testar manualmente:
+
+- Digite uma mensagem no campo do assistente.
+- Use `Ctrl+Enter` no Windows/Linux ou `Cmd+Enter` no macOS para enviar.
+- Use `Enter` sozinho para quebrar linha.
+- Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
+- Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
 ## Status atual
 
-Fase 1.4 - UI minima de chat conectada a API.
+Fase 1.5 - Refinos de UX do chat e preparação para teste real com Gemini.

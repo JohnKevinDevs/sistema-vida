@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
 import type { AssistantPreview, LocalChatMessage } from "@/lib/types";
 
@@ -16,7 +16,7 @@ type ChatApiResponse = {
 };
 
 const friendlyErrorMessage =
-  "Nao consegui responder agora. Verifique se a chave do Gemini esta configurada e tente novamente.";
+  "Não consegui responder agora. Verifique se a chave do Gemini está configurada e tente novamente.";
 
 function createMessage(
   role: LocalChatMessage["role"],
@@ -39,9 +39,10 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<LocalChatMessage[]>([]);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const trimmedInput = input.trim();
+  const canSubmit = Boolean(trimmedInput) && !isLoading;
 
+  async function sendMessage() {
     const message = input.trim();
 
     if (!message || isLoading) {
@@ -63,7 +64,7 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
       const data = (await response.json()) as ChatApiResponse;
 
       if (!response.ok || data.error || !data.content) {
-        throw new Error(data.error ?? "Resposta invalida da API do assistente.");
+        throw new Error(data.error ?? "Resposta inválida da API do assistente.");
       }
 
       setMessages((current) => [
@@ -77,6 +78,18 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
       ]);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void sendMessage();
+  }
+
+  function handleTextareaKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      void sendMessage();
     }
   }
 
@@ -112,9 +125,16 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
           </div>
         )}
         {isLoading ? (
-          <div className="rounded-md border border-white/10 bg-neutral-900/80 p-3">
-            <p className="text-sm leading-6 text-neutral-300">
-              Pensando em uma resposta...
+          <div
+            className="rounded-md border border-cyan-300/20 bg-neutral-900/80 p-3"
+            role="status"
+          >
+            <p className="flex items-center gap-2 text-sm leading-6 text-neutral-300">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 rounded-full bg-cyan-200"
+              />
+              Organizando uma resposta para você...
             </p>
           </div>
         ) : null}
@@ -128,18 +148,25 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
           >
             Mensagem para o assistente
           </label>
+          <p className="mt-1 text-xs leading-5 text-neutral-500" id="chat-hint">
+            Use Enter para quebrar linha. Use Ctrl+Enter ou Cmd+Enter para
+            enviar.
+          </p>
           <textarea
+            aria-describedby="chat-hint"
             className="focus-ring mt-2 min-h-24 w-full resize-none rounded-md border border-white/10 bg-neutral-950/70 px-3 py-2 text-sm leading-6 text-neutral-100 placeholder:text-neutral-600"
             disabled={isLoading}
             id="assistant-message"
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Ex: me ajude a organizar meus proximos focos."
+            onKeyDown={handleTextareaKeyDown}
+            placeholder="Ex: me ajude a organizar meus próximos focos."
             value={input}
           />
         </div>
         <button
+          aria-label="Enviar mensagem para o assistente"
           className="focus-ring w-full rounded-md border border-cyan-300/30 bg-cyan-300/15 px-3 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-300/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.03] disabled:text-neutral-500"
-          disabled={isLoading || !input.trim()}
+          disabled={!canSubmit}
           type="submit"
         >
           {isLoading ? "Enviando..." : "Enviar mensagem"}

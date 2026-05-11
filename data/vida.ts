@@ -12,9 +12,9 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 1.4 com chat local",
-  mainFocus: "Testar a conversa minima conectada a API do assistente",
-  nextFocus: "Manter o chat sem historico salvo ate existir persistencia real",
+  state: "Fase 1.5 com chat refinado",
+  mainFocus: "Testar a conversa mínima conectada à API do assistente",
+  nextFocus: "Manter o chat sem histórico salvo até existir persistência real",
 };
 
 export const dashboardStats: DashboardStat[] = [
@@ -28,8 +28,8 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "1.4",
-    detail: "chat local conectado a API",
+    value: "1.5",
+    detail: "chat local com UX refinada",
     tone: "emerald",
   },
   {
@@ -210,7 +210,7 @@ export const routineBlocks: RoutineBlock[] = [
 
 export const assistantPreview: AssistantPreview = {
   title: "Assistente do Sistema JK",
-  status: "Conectado a API local, sem historico salvo",
+  status: "Conectado à API local, sem histórico salvo",
   description:
-    "Use para pedir ajuda com rotina, tarefas, estudos e projetos. A conversa fica apenas nesta sessao.",
+    "Use para pedir ajuda com rotina, tarefas, estudos e projetos. A conversa fica apenas nesta sessão.",
 };
