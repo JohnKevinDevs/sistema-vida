@@ -19,7 +19,7 @@ export function ProjectPreview({
 }: ProjectPreviewProps) {
   return (
     <button
-      className={`rounded-md border p-4 text-left transition ${
+      className={`w-full rounded-md border p-4 text-left transition ${
         isSelected
           ? "border-cyan-300/40 bg-cyan-300/10"
           : "border-white/10 bg-neutral-900/70 hover:border-white/20 hover:bg-white/[0.05]"

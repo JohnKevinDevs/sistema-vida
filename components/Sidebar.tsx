@@ -21,7 +21,7 @@ export function Sidebar() {
           </h1>
         </div>
         <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 lg:mt-6 lg:inline-flex">
-          Fase 0.3
+          Fase 0.4
         </div>
       </div>
 

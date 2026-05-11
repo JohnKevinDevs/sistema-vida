@@ -12,9 +12,9 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 0.3 em organizacao",
-  mainFocus: "Organizar tipos, mocks e estado local leve da interface",
-  nextFocus: "Preparar uma base limpa para futuras acoes reais",
+  state: "Fase 0.4 em refino",
+  mainFocus: "Auditar a estrutura visual e reduzir complexidade dos componentes",
+  nextFocus: "Manter a UI preparada para evoluir sem criar persistencia ainda",
 };
 
 export const dashboardStats: DashboardStat[] = [
