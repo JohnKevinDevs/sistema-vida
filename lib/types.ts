@@ -174,3 +174,11 @@ export type AssistantResponse = {
   model: string;
   error?: string;
 };
+
+export type LocalChatMessage = {
+  id: EntityId;
+  role: Extract<MessageRole, "user" | "assistant">;
+  content: string;
+  createdAt: ISODateString;
+  status?: "sending" | "sent" | "error";
+};

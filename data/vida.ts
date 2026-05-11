@@ -12,9 +12,9 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 0.6 em modelagem",
-  mainFocus: "Definir o modelo conceitual de dados do Sistema JK",
-  nextFocus: "Manter contratos claros antes de criar banco, API ou IA",
+  state: "Fase 1.4 com chat local",
+  mainFocus: "Testar a conversa minima conectada a API do assistente",
+  nextFocus: "Manter o chat sem historico salvo ate existir persistencia real",
 };
 
 export const dashboardStats: DashboardStat[] = [
@@ -28,15 +28,15 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "0.6",
-    detail: "modelo conceitual de dados",
+    value: "1.4",
+    detail: "chat local conectado a API",
     tone: "emerald",
   },
   {
     id: "proximo-foco",
     label: "Proximo foco",
-    value: "Modelo",
-    detail: "entidades futuras organizadas",
+    value: "Chat",
+    detail: "fluxo sem persistencia real",
     tone: "amber",
   },
 ];
@@ -209,8 +209,8 @@ export const routineBlocks: RoutineBlock[] = [
 ];
 
 export const assistantPreview: AssistantPreview = {
-  title: "Assistente futuro",
-  status: "Reservado para uma etapa posterior",
+  title: "Assistente do Sistema JK",
+  status: "Conectado a API local, sem historico salvo",
   description:
-    "Espaco reservado para o chat conversacional futuro. Nesta fase ele continua sem IA, API ou integracao externa.",
+    "Use para pedir ajuda com rotina, tarefas, estudos e projetos. A conversa fica apenas nesta sessao.",
 };

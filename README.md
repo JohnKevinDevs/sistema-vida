@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura, mocks locais sem persistencia, configuracao isolada do Gemini e uma camada local de servico do assistente.
+MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura, mocks locais sem persistencia, configuracao isolada do Gemini, API local do assistente e uma UI minima de chat.
 
 ## Stack
 
@@ -65,6 +65,12 @@ Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_
 
 Ainda nao existe interface de chat, historico persistido ou banco de dados.
 
+## Chat local
+
+A UI minima de chat aparece no dashboard, na area do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuario imediatamente e exibe a resposta ou um erro amigavel.
+
+O historico fica somente em estado local do React. Ao recarregar a pagina, a conversa desaparece.
+
 ## Status atual
 
-Fase 1.3 - API route simples do assistente.
+Fase 1.4 - UI minima de chat conectada a API.

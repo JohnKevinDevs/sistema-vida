@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { AssistantPreviewCard } from "@/components/AssistantPreviewCard";
+import { ChatPanel } from "@/components/ChatPanel";
 import { DashboardCard } from "@/components/DashboardCard";
 import { GoalsSection } from "@/components/GoalsSection";
 import { LifeAreasSection } from "@/components/LifeAreasSection";
@@ -119,7 +119,7 @@ export function VidaDashboard() {
 
           <div className="space-y-8">
             <RoutineSection blocks={routineBlocks} />
-            <AssistantPreviewCard assistant={assistantPreview} />
+            <ChatPanel assistant={assistantPreview} />
           </div>
         </section>
       </div>
