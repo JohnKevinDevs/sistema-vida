@@ -6,10 +6,16 @@ type TaskPreviewProps = {
   task: Task;
 };
 
-const statusStyles: Record<Task["status"], string> = {
-  Prioridade: "bg-cyan-300/10 text-cyan-200 ring-cyan-300/20",
-  "Em andamento": "bg-emerald-300/10 text-emerald-200 ring-emerald-300/20",
-  Planejado: "bg-amber-300/10 text-amber-200 ring-amber-300/20",
+const priorityLabels: Record<Task["priority"], string> = {
+  low: "Baixa",
+  medium: "Media",
+  high: "Alta",
+};
+
+const priorityStyles: Record<Task["priority"], string> = {
+  low: "bg-neutral-300/10 text-neutral-200 ring-neutral-300/20",
+  medium: "bg-amber-300/10 text-amber-200 ring-amber-300/20",
+  high: "bg-cyan-300/10 text-cyan-200 ring-cyan-300/20",
 };
 
 export function TaskPreview({ isDone, onToggle, task }: TaskPreviewProps) {
@@ -35,14 +41,14 @@ export function TaskPreview({ isDone, onToggle, task }: TaskPreviewProps) {
             {task.title}
           </h3>
           <p className="mt-1 text-xs text-neutral-500">
-            {task.area} / {task.time}
+            {task.areaLabel} / {task.timeWindow ?? "Sem horario"}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <span
-            className={`rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${statusStyles[task.status]}`}
+            className={`rounded-full px-2.5 py-1 text-xs font-medium ring-1 ${priorityStyles[task.priority]}`}
           >
-            {task.status}
+            Prioridade {priorityLabels[task.priority]}
           </span>
           <button
             aria-label={buttonLabel}

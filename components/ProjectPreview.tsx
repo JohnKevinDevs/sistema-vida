@@ -12,6 +12,13 @@ const signalStyles: Record<Project["signal"], string> = {
   Azul: "bg-cyan-300",
 };
 
+const statusLabels: Record<Project["status"], string> = {
+  planned: "Planejado",
+  active: "Ativo",
+  paused: "Pausado",
+  completed: "Concluido",
+};
+
 export function ProjectPreview({
   isSelected,
   onSelect,
@@ -36,9 +43,11 @@ export function ProjectPreview({
           <h3 className="text-sm font-medium leading-6 text-white">
             {project.name}
           </h3>
-          <p className="text-xs text-neutral-500">{project.status}</p>
+          <p className="text-xs text-neutral-500">
+            {statusLabels[project.status]}
+          </p>
           <p className="mt-3 text-sm leading-6 text-neutral-300">
-            {project.nextStep}
+            {project.nextAction}
           </p>
           {isSelected ? (
             <p className="mt-3 text-xs font-medium uppercase tracking-[0.16em] text-cyan-200">

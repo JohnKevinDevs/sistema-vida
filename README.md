@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas com secoes organizadas, tipos reutilizaveis, estado local leve e polimentos basicos de UX/acessibilidade.
+MVP local do segundo cerebro pessoal de John Kevin. Nesta fase, o projeto contem a base visual do modulo Vida e Tarefas, tipos conceituais para evolucao futura e mocks locais sem persistencia.
 
 ## Stack
 
@@ -36,4 +36,4 @@ Use `.env.example` como referencia.
 
 ## Status atual
 
-Fase 0.5 - Refino leve de UX, acessibilidade e microcopy.
+Fase 0.6 - Modelo conceitual de dados.
