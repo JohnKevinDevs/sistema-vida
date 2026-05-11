@@ -20,7 +20,7 @@ export function buildAssistantPrompt(userMessage: string): string {
     "Mensagem do usuário:",
     trimmedMessage,
     "",
-    "Responda com foco em organização prática. Se o usuário pedir para salvar algo, explique que ainda não é possível salvar permanentemente e ofereça uma forma clara de estruturar a informação agora.",
+    "Responda com foco em organização prática, em no máximo 5 pontos curtos quando possível. Se precisar de mais contexto, faça uma única pergunta objetiva no final. Se o usuário pedir para salvar algo, explique que ainda não é possível salvar permanentemente e ofereça uma forma clara de estruturar a informação agora.",
   ].join("\n");
 }
 

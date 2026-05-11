@@ -47,6 +47,8 @@ Sem essa variável, o projeto ainda consegue executar lint e build. A chave só 
 
 A camada local do assistente fica em `lib/assistant.ts`. Ela prepara o prompt final com o `SYSTEM_PROMPT`, chama o cliente Gemini isolado e retorna texto ou erro controlado.
 
+Modelo Gemini configurado nesta fase: `gemini-2.5-flash`.
+
 O comportamento esperado do assistente nesta fase:
 
 - responder em PT-BR;
@@ -54,7 +56,8 @@ O comportamento esperado do assistente nesta fase:
 - ajudar com tarefas, rotina, estudos, projetos e próximas ações;
 - não dizer que salvou, registrou ou lembrou algo permanentemente;
 - não fingir memória persistente, histórico salvo ou banco de dados;
-- pedir no máximo uma pergunta de clarificação quando faltar contexto importante.
+- pedir no máximo uma pergunta de clarificação quando faltar contexto importante;
+- priorizar respostas curtas, normalmente com 3 a 5 ações claras.
 
 A API local do assistente fica em `app/api/chat/route.ts` e aceita apenas `POST` com JSON:
 
@@ -99,4 +102,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 1.6 - Teste real com Gemini e ajuste fino do comportamento do assistente.
+Fase 1.7 - Teste real com Gemini e ajustes finais de prompt.
