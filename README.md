@@ -47,8 +47,24 @@ Sem essa variavel, o projeto ainda consegue executar lint e build. A chave so e 
 
 A camada local do assistente fica em `lib/assistant.ts`. Ela prepara o prompt final com o `SYSTEM_PROMPT`, chama o cliente Gemini isolado e retorna texto ou erro controlado.
 
-Ainda nao existe rota de API, interface de chat, historico persistido ou banco de dados.
+A API local do assistente fica em `app/api/chat/route.ts` e aceita apenas `POST` com JSON:
+
+```json
+{
+  "message": "Ola, me ajude a organizar meu dia."
+}
+```
+
+Exemplo no PowerShell, com o servidor local rodando:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"message":"Ola, me ajude a organizar meu dia."}'
+```
+
+Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_KEY` configurada.
+
+Ainda nao existe interface de chat, historico persistido ou banco de dados.
 
 ## Status atual
 
-Fase 1.2 - Camada de servico local do assistente.
+Fase 1.3 - API route simples do assistente.
