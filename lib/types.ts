@@ -158,3 +158,19 @@ export type AssistantPreview = {
   status: string;
   description: string;
 };
+
+export type AssistantMessage = {
+  role: Extract<MessageRole, "user" | "assistant">;
+  content: string;
+};
+
+export type AssistantRequest = {
+  userMessage: string;
+};
+
+export type AssistantResponse = {
+  content: string;
+  createdAt: ISODateString;
+  model: string;
+  error?: string;
+};
