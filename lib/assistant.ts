@@ -12,10 +12,15 @@ export function buildAssistantPrompt(userMessage: string): string {
   return [
     SYSTEM_PROMPT,
     "",
-    "Mensagem do usuario:",
+    "Contexto da versão atual:",
+    "- O Sistema JK roda localmente e ainda não possui persistência real.",
+    "- O chat não salva histórico, tarefas, memórias ou dados após recarregar a página.",
+    "- Use apenas a mensagem atual do usuário como contexto confiável.",
+    "",
+    "Mensagem do usuário:",
     trimmedMessage,
     "",
-    "Responda considerando apenas o contexto informado nesta mensagem e as regras do Sistema JK.",
+    "Responda com foco em organização prática. Se o usuário pedir para salvar algo, explique que ainda não é possível salvar permanentemente e ofereça uma forma clara de estruturar a informação agora.",
   ].join("\n");
 }
 
@@ -41,7 +46,7 @@ export async function askAssistant(
     const message =
       error instanceof Error
         ? error.message
-        : "Nao foi possivel gerar uma resposta do assistente.";
+        : "Não foi possível gerar uma resposta do assistente.";
 
     return {
       content: "",

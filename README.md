@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, tipos conceituais para evolução futura, mocks locais sem persistência, configuração isolada do Gemini, API local do assistente e uma UI mínima de chat refinada.
+MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, tipos conceituais para evolução futura, mocks locais sem persistência, configuração isolada do Gemini, API local do assistente e uma UI mínima de chat conectada ao Gemini.
 
 ## Stack
 
@@ -47,6 +47,15 @@ Sem essa variável, o projeto ainda consegue executar lint e build. A chave só 
 
 A camada local do assistente fica em `lib/assistant.ts`. Ela prepara o prompt final com o `SYSTEM_PROMPT`, chama o cliente Gemini isolado e retorna texto ou erro controlado.
 
+O comportamento esperado do assistente nesta fase:
+
+- responder em PT-BR;
+- ser direto e prático;
+- ajudar com tarefas, rotina, estudos, projetos e próximas ações;
+- não dizer que salvou, registrou ou lembrou algo permanentemente;
+- não fingir memória persistente, histórico salvo ou banco de dados;
+- pedir no máximo uma pergunta de clarificação quando faltar contexto importante.
+
 A API local do assistente fica em `app/api/chat/route.ts` e aceita apenas `POST` com JSON:
 
 ```json
@@ -79,6 +88,15 @@ Para testar manualmente:
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
+Para teste real com Gemini, configure manualmente `GEMINI_API_KEY` em `.env.local`, reinicie o servidor local e envie mensagens como:
+
+- `Tenho escola, CEAP e curso hoje. Me ajude a organizar minhas prioridades.`
+- `Estou com várias ideias para a FluxON e o Sistema JK. Me ajude a transformar isso em próximos passos.`
+- `Me faça uma revisão rápida do meu dia.`
+- `Salve que amanhã tenho uma reunião importante.`
+
+No pedido para salvar algo, o assistente deve explicar que ainda não consegue salvar permanentemente nesta versão e pode apenas ajudar a estruturar a informação naquele momento.
+
 ## Status atual
 
-Fase 1.5 - Refinos de UX do chat e preparação para teste real com Gemini.
+Fase 1.6 - Teste real com Gemini e ajuste fino do comportamento do assistente.
