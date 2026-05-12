@@ -12,9 +12,9 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 1.5 com chat refinado",
-  mainFocus: "Testar a conversa mínima conectada à API do assistente",
-  nextFocus: "Manter o chat sem histórico salvo até existir persistência real",
+  state: "Fase 3.0 em refino visual",
+  mainFocus: "Usar o chat como porta de entrada para organizar o dia.",
+  nextFocus: "Manter a central simples: dia, semana e metas.",
 };
 
 export const dashboardStats: DashboardStat[] = [
@@ -28,37 +28,37 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "1.5",
-    detail: "chat local com UX refinada",
+    value: "3.0",
+    detail: "layout de produto em refinamento",
     tone: "emerald",
   },
   {
     id: "proximo-foco",
-    label: "Proximo foco",
-    value: "Chat",
-    detail: "fluxo sem persistencia real",
+    label: "Próximo foco",
+    value: "Tarefas",
+    detail: "persistência real sem poluir a tela",
     tone: "amber",
   },
 ];
 
 export const viewSummaries: ViewSummary[] = [
   {
-    view: "Hoje",
-    title: "Prioridades do dia",
+    view: "Dia",
+    title: "Dia em foco",
     description:
-      "Visao curta para escolher a primeira acao e reduzir ruido mental.",
+      "Prioridades essenciais, próximo passo e espaço para conversar com o assistente.",
   },
   {
     view: "Semana",
-    title: "Mapa da semana",
+    title: "Semana em andamento",
     description:
-      "Panorama visual para distribuir energia entre projetos, rotina e estudos.",
+      "Projetos, blocos de rotina e pontos de atenção para distribuir energia.",
   },
   {
-    view: "Focos",
-    title: "Focos ativos",
+    view: "Metas",
+    title: "Metas principais",
     description:
-      "Recorte simples do que merece atencao antes de adicionar qualquer automacao.",
+      "Progresso simples das direções mais importantes do Sistema JK.",
   },
 ];
 
@@ -83,20 +83,20 @@ export const lifeAreas: LifeArea[] = [
 export const todayTasks: Task[] = [
   {
     id: "base-visual",
-    title: "Finalizar organizacao tecnica da base visual",
-    description: "Revisar contratos e manter a tela atual funcionando.",
+    title: "Validar a nova hierarquia visual",
+    description: "Conferir se o chat ficou mais central e se a tela respira melhor.",
     status: "todo",
     priority: "high",
     area: "sistema",
     areaLabel: "Sistema",
-    timeWindow: "Manha",
+    timeWindow: "Manhã",
     createdAt: "2026-05-10T09:00:00.000Z",
     updatedAt: "2026-05-10T09:00:00.000Z",
   },
   {
     id: "estado-local",
-    title: "Validar interacoes locais sem persistencia",
-    description: "Garantir que os mocks tipados continuam alimentando a UI.",
+    title: "Testar conversas salvas",
+    description: "Selecionar, renomear, excluir e continuar uma conversa real.",
     status: "in_progress",
     priority: "medium",
     area: "tarefas",
@@ -107,8 +107,8 @@ export const todayTasks: Task[] = [
   },
   {
     id: "proximos-passos",
-    title: "Registrar proximos passos da Fase 0.7",
-    description: "Documentar decisoes antes de qualquer persistencia real.",
+    title: "Registrar o próximo ciclo",
+    description: "Definir o início do módulo de tarefas reais sem criar excesso.",
     status: "todo",
     priority: "medium",
     area: "planejamento",
@@ -127,16 +127,16 @@ export const mainGoals: Goal[] = [
     status: "active",
     progress: 22,
     targetDate: "2026-06-30T00:00:00.000Z",
-    note: "Setup e interface base prontos; organizacao tecnica em progresso.",
+    note: "Chat, histórico local e módulo de conversas já estão estáveis.",
   },
   {
     id: "revisao-diaria",
-    title: "Criar uma rotina simples de revisao diaria",
+    title: "Criar uma rotina simples de revisão diária",
     area: "revisoes",
     status: "planned",
     progress: 14,
     targetDate: "2026-06-15T00:00:00.000Z",
-    note: "Espaco visual existe antes de qualquer persistencia real.",
+    note: "A rotina ainda é visual, mas já tem lugar claro na central.",
   },
   {
     id: "evolucao-controlada",
@@ -144,7 +144,7 @@ export const mainGoals: Goal[] = [
     area: "sistema",
     status: "active",
     progress: 28,
-    note: "Sem IA, banco, API ou CRUD nesta fase.",
+    note: "Cada fase adiciona só o necessário para o próximo passo.",
   },
 ];
 
@@ -152,10 +152,10 @@ export const activeProjects: Project[] = [
   {
     id: "sistema-jk-v1",
     name: "Sistema JK v1",
-    description: "Aplicacao local para organizar vida, tarefas e revisoes.",
+    description: "Aplicação local para organizar vida, tarefas e revisões.",
     status: "active",
     area: "sistema",
-    nextAction: "Separar estado local de persistencia futura",
+    nextAction: "Refinar layout antes de iniciar tarefas reais",
     signal: "Verde",
     createdAt: "2026-05-10T09:00:00.000Z",
     updatedAt: "2026-05-10T09:00:00.000Z",
@@ -163,10 +163,10 @@ export const activeProjects: Project[] = [
   {
     id: "vida-e-tarefas",
     name: "Vida e Tarefas",
-    description: "Modulo inicial para rotina, prioridades e projetos.",
+    description: "Módulo inicial para rotina, prioridades e projetos.",
     status: "active",
     area: "tarefas",
-    nextAction: "Refinar tarefas, metas, projetos e revisoes",
+    nextAction: "Preparar tarefas com persistência local",
     signal: "Azul",
     createdAt: "2026-05-10T09:00:00.000Z",
     updatedAt: "2026-05-10T09:00:00.000Z",
@@ -174,10 +174,10 @@ export const activeProjects: Project[] = [
   {
     id: "rotina-estudos",
     name: "Rotina de estudos",
-    description: "Espaco futuro para ciclos de estudo e revisao.",
+    description: "Espaço futuro para ciclos de estudo e revisão.",
     status: "planned",
     area: "estudos",
-    nextAction: "Organizar ciclos de estudo e revisao",
+    nextAction: "Organizar ciclos de estudo e revisão",
     signal: "Amarelo",
     createdAt: "2026-05-10T09:00:00.000Z",
     updatedAt: "2026-05-10T09:00:00.000Z",
@@ -194,23 +194,23 @@ export const routineBlocks: RoutineBlock[] = [
   },
   {
     id: "execucao",
-    title: "Bloco de execucao",
+    title: "Bloco de execução",
     window: "10:00",
     focus: "Trabalhar no foco principal sem trocar de contexto.",
     area: "tarefas",
   },
   {
     id: "estudos-revisao",
-    title: "Estudos e revisao",
+    title: "Estudos e revisão",
     window: "17:00",
-    focus: "Consolidar aprendizados e preparar o proximo ciclo.",
+    focus: "Consolidar aprendizados e preparar o próximo ciclo.",
     area: "estudos",
   },
 ];
 
 export const assistantPreview: AssistantPreview = {
   title: "Assistente do Sistema JK",
-  status: "Conectado à API local, sem histórico salvo",
+  status: "Chat com histórico local ativo",
   description:
-    "Use para pedir ajuda com rotina, tarefas, estudos e projetos. A conversa fica apenas nesta sessão.",
+    "Use para transformar ideias soltas em próximos passos claros.",
 };

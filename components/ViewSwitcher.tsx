@@ -14,7 +14,7 @@ export function ViewSwitcher({
   return (
     <div
       aria-label="Alternar recorte da central"
-      className="mt-6 flex flex-wrap gap-2"
+      className="flex flex-wrap gap-2"
       role="group"
     >
       {views.map((view) => (

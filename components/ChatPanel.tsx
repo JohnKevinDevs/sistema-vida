@@ -12,6 +12,7 @@ import type {
 type ChatPanelProps = {
   activeConversationId: string | null;
   assistant: AssistantPreview;
+  className?: string;
   resetKey: number;
   onConversationChange: (conversationId: string) => void;
   onConversationCreated: (conversationId: string) => void;
@@ -104,6 +105,7 @@ function isLocalChatMessage(
 export function ChatPanel({
   activeConversationId,
   assistant,
+  className = "",
   resetKey,
   onConversationChange,
   onConversationCreated,
@@ -258,28 +260,29 @@ export function ChatPanel({
   }
 
   return (
-    <section className="rounded-md border border-cyan-300/20 bg-cyan-300/10 p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
-        Assistente
-      </p>
-      <h2 className="mt-3 text-lg font-semibold text-white">
-        {assistant.title}
-      </h2>
-      <p className="mt-2 text-sm font-medium text-cyan-100">
-        {assistant.status}
-      </p>
-      <p className="mt-4 text-sm leading-6 text-neutral-300">
-        {assistant.description}
-      </p>
-      <p className="mt-3 text-xs font-medium text-cyan-100/80">
-        {activeConversationId
-          ? "Conversa salva carregada nesta sessão"
-          : "Nova conversa será criada no primeiro envio"}
-      </p>
+    <section
+      className={`flex min-h-[620px] flex-col rounded-md border border-white/10 bg-neutral-900/80 p-4 shadow-2xl shadow-black/20 sm:p-5 ${className}`}
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+            Assistente
+          </p>
+          <h2 className="mt-2 text-xl font-semibold text-white">
+            {assistant.title}
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-400">
+            {assistant.description}
+          </p>
+        </div>
+        <div className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-medium text-cyan-100">
+          {activeConversationId ? "Conversa ativa" : "Nova conversa"}
+        </div>
+      </div>
 
       <div
         aria-live="polite"
-        className="mt-5 max-h-80 space-y-3 overflow-y-auto pr-1"
+        className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
       >
         {isHistoryLoading ? (
           <div
@@ -310,7 +313,7 @@ export function ChatPanel({
             <p className="text-sm leading-6 text-neutral-400">
               {activeConversationId
                 ? "Esta conversa ainda não tem mensagens salvas."
-                : "Envie uma pergunta curta para organizar o dia, uma rotina, um estudo ou um projeto. Nada é restaurado automaticamente ao recarregar."}
+                : "Comece pelo que está na sua cabeça agora: uma prioridade, uma dúvida ou uma ideia solta."}
             </p>
           </div>
         )}
@@ -330,7 +333,10 @@ export function ChatPanel({
         ) : null}
       </div>
 
-      <form className="mt-5 space-y-3" onSubmit={handleSubmit}>
+      <form
+        className="mt-4 space-y-3 border-t border-white/10 pt-4"
+        onSubmit={handleSubmit}
+      >
         <div>
           <label
             className="text-xs font-medium uppercase tracking-[0.16em] text-neutral-500"

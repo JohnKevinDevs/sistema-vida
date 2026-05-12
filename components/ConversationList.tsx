@@ -89,7 +89,9 @@ export function ConversationList({
           return;
         }
 
-        setConversations(Array.isArray(data.conversations) ? data.conversations : []);
+        setConversations(
+          Array.isArray(data.conversations) ? data.conversations : [],
+        );
         setLoadState("success");
       } catch {
         if (!isMounted) {
@@ -219,28 +221,20 @@ export function ConversationList({
   }
 
   return (
-    <section
-      aria-labelledby="saved-conversations-title"
-      className="mt-6 rounded-md border border-white/10 bg-white/[0.03] p-4"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">
-            Conversas
-          </p>
-          <h2
-            className="mt-2 text-sm font-semibold text-neutral-100"
-            id="saved-conversations-title"
-          >
-            Salvas localmente
-          </h2>
-        </div>
-        <span className="rounded-full border border-cyan-400/20 px-2 py-1 text-[11px] font-medium text-cyan-200">
+    <section aria-labelledby="saved-conversations-title" className="mt-7">
+      <div className="flex items-center justify-between gap-3">
+        <h2
+          className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500"
+          id="saved-conversations-title"
+        >
+          Conversas
+        </h2>
+        <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-medium text-neutral-500">
           SQLite
         </span>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         {loadState === "loading" && (
           <p className="text-sm leading-6 text-neutral-400">
             Carregando conversas...
@@ -254,22 +248,21 @@ export function ConversationList({
         )}
 
         {loadState === "success" && conversations.length === 0 && (
-          <p className="text-sm leading-6 text-neutral-400">
+          <p className="text-sm leading-6 text-neutral-500">
             Nenhuma conversa salva ainda.
           </p>
         )}
 
         {conversations.length > 0 && (
-          <ul className="max-h-56 space-y-2 overflow-y-auto pr-1">
+          <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1 lg:max-h-[42vh]">
             {conversations.map((conversation) => {
               const isActive = conversation.id === activeConversationId;
               const isEditing = conversation.id === editingConversationId;
-              const isRenaming =
-                conversation.id === renamingConversationId;
-              const isDeleting =
-                conversation.id === deletingConversationId;
+              const isRenaming = conversation.id === renamingConversationId;
+              const isDeleting = conversation.id === deletingConversationId;
               const isPendingDelete =
                 conversation.id === pendingDeleteConversationId;
+              const titleInputId = `conversation-title-${conversation.id}`;
               const currentDeleteError =
                 deleteError?.conversationId === conversation.id
                   ? deleteError.message
@@ -279,33 +272,28 @@ export function ConversationList({
                 <li
                   className={`rounded-md border transition ${
                     isActive
-                      ? "border-cyan-300/40 bg-cyan-300/15"
-                      : "border-white/10 bg-neutral-900/70"
+                      ? "border-cyan-300/30 bg-cyan-300/10"
+                      : "border-transparent bg-transparent hover:bg-white/[0.04]"
                   }`}
                   key={conversation.id}
                 >
                   <button
                     aria-label={`Carregar conversa: ${conversation.title}`}
                     aria-current={isActive ? "true" : undefined}
-                    className="focus-ring w-full rounded-t-md px-3 py-2 text-left transition hover:bg-white/[0.06]"
+                    className="focus-ring w-full rounded-md px-3 py-2 text-left"
                     data-conversation-id={conversation.id}
                     onClick={() => onSelectConversation(conversation.id)}
                     type="button"
                   >
-                    <span className="line-clamp-2 text-sm font-medium leading-5 text-neutral-100">
+                    <span className="line-clamp-1 text-sm font-medium leading-5 text-neutral-100">
                       {conversation.title}
                     </span>
-                    <span className="mt-1 block text-xs text-neutral-500">
-                      Atualizada em {formatUpdatedAt(conversation.updatedAt)}
+                    <span className="mt-0.5 block text-xs text-neutral-500">
+                      {formatUpdatedAt(conversation.updatedAt)}
                     </span>
-                    {isActive ? (
-                      <span className="mt-2 inline-flex rounded-full border border-cyan-300/30 px-2 py-0.5 text-[11px] font-medium text-cyan-100">
-                        Selecionada
-                      </span>
-                    ) : null}
                   </button>
 
-                  <div className="border-t border-white/10 px-3 py-2">
+                  <div className="px-3 pb-2">
                     {isEditing ? (
                       <form
                         className="space-y-2"
@@ -313,14 +301,14 @@ export function ConversationList({
                           handleRenameSubmit(event, conversation.id)
                         }
                       >
-                        <label className="sr-only" htmlFor="conversation-title">
+                        <label className="sr-only" htmlFor={titleInputId}>
                           Novo título da conversa
                         </label>
                         <input
                           className="focus-ring w-full rounded-md border border-white/10 bg-neutral-950/80 px-2 py-1.5 text-sm text-neutral-100 placeholder:text-neutral-600"
                           data-conversation-rename-input={conversation.id}
                           disabled={isRenaming}
-                          id="conversation-title"
+                          id={titleInputId}
                           maxLength={80}
                           onChange={(event) =>
                             setRenameDraft(event.target.value)
@@ -381,9 +369,9 @@ export function ConversationList({
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         <button
-                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-400 transition hover:bg-white/[0.06] hover:text-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-500 transition hover:bg-white/[0.06] hover:text-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-600"
                           data-conversation-rename={conversation.id}
                           disabled={isDeleting}
                           onClick={() => startRename(conversation)}
@@ -392,7 +380,7 @@ export function ConversationList({
                           Renomear
                         </button>
                         <button
-                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/80 transition hover:bg-red-300/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-300/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-neutral-600"
                           data-conversation-delete={conversation.id}
                           disabled={isDeleting}
                           onClick={() =>
@@ -414,12 +402,6 @@ export function ConversationList({
               );
             })}
           </ul>
-        )}
-
-        {loadState === "success" && conversations.length > 0 && (
-          <p className="mt-3 text-xs leading-5 text-neutral-500">
-            Selecione uma conversa para carregar o histórico no chat.
-          </p>
         )}
       </div>
     </section>

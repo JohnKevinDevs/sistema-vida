@@ -4,7 +4,7 @@ Sistema JK v1.0 - Vida e Tarefas.
 
 ## Objetivo
 
-MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, tipos conceituais para evolução futura, mocks locais sem persistência, configuração isolada do Gemini, API local do assistente e uma UI mínima de chat conectada ao Gemini.
+MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, chat real com Gemini, histórico persistente em SQLite local e uma interface mais simples organizada em Dia, Semana e Metas.
 
 ## Stack
 
@@ -228,6 +228,14 @@ Cada conversa também pode ser excluída pela ação `Excluir`. A UI pede confir
 
 Na Fase 2.11, o fluxo completo de conversas foi auditado: criar, continuar, listar, selecionar, carregar histórico, renomear, excluir, tratar payload inválido e manter erros amigáveis do Gemini persistidos sem quebrar a UI.
 
+Na Fase 3.0, a interface foi refinada para reduzir poluição visual. A sidebar ficou mais próxima de uma central de conversas, com cabeçalho simples, botão `Nova conversa`, lista compacta de projetos, conversas reais salvas e status discreto. A área principal passou a mostrar apenas um contexto por vez:
+
+- `Dia`: foco principal, três prioridades e próximo passo.
+- `Semana`: projetos em andamento, projeto em foco e ritmo da semana.
+- `Metas`: metas principais com progresso simples.
+
+O chat ganhou mais espaço e passou a ser a área de maior protagonismo da tela, mantendo o mesmo fluxo técnico de conversa, histórico, renomear, excluir e persistência local.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -271,4 +279,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.11 - auditoria final do módulo de conversas.
+Fase 3.0 - refino de produto e layout v1.

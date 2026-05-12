@@ -2,7 +2,7 @@ export type EntityId = string;
 
 export type ISODateString = string;
 
-export type LifeView = "Hoje" | "Semana" | "Focos";
+export type LifeView = "Dia" | "Semana" | "Metas";
 
 export type LifeAreaId =
   | "vida"
