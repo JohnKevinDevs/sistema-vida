@@ -14,6 +14,7 @@ MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto cont�
 - Tailwind CSS
 - ESLint
 - Gemini SDK (`@google/generative-ai`)
+- SQLite local com `better-sqlite3`
 
 ## Instalar dependências
 
@@ -77,6 +78,32 @@ Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_
 
 Ainda não existe histórico persistido ou banco de dados.
 
+## Banco local
+
+A base SQLite inicial fica em:
+
+```text
+data/sistema-jk.db
+```
+
+O acesso ao banco está isolado em `lib/db.ts`. Nesta fase, ele cria apenas as tabelas:
+
+- `conversations`
+- `messages`
+
+Funções disponíveis:
+
+- `initializeDatabase()`
+- `createConversation(title?)`
+- `listConversations()`
+- `getConversationById(id)`
+- `listMessages(conversationId)`
+- `createMessage(input)`
+
+A UI do chat ainda não está conectada ao banco. O histórico visual continua apenas em estado local do React.
+
+Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
+
 Em caso de falha controlada, a API retorna JSON com mensagem amigável e código:
 
 ```json
@@ -134,4 +161,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 1.8 - Tratamento inteligente de erros da API/UI do chat.
+Fase 2.1 - SQLite inicial para conversas e mensagens.

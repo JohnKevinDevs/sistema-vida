@@ -116,6 +116,13 @@ export type Message = {
   createdAt: ISODateString;
 };
 
+export type CreateMessageInput = {
+  conversationId: EntityId;
+  role: MessageRole;
+  content: string;
+  createdAt?: ISODateString;
+};
+
 export type Memory = {
   id: EntityId;
   content: string;
