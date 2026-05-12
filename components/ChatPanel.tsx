@@ -1,15 +1,18 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
 import type {
   AssistantErrorCode,
   AssistantPreview,
   LocalChatMessage,
+  Message,
 } from "@/lib/types";
 
 type ChatPanelProps = {
+  activeConversationId: string | null;
   assistant: AssistantPreview;
+  onConversationChange: (conversationId: string) => void;
 };
 
 type ChatApiResponse = {
@@ -20,6 +23,14 @@ type ChatApiResponse = {
   error?: string;
   model?: string;
 };
+
+type ConversationMessagesResponse = {
+  code?: AssistantErrorCode;
+  error?: string;
+  messages?: Message[];
+};
+
+type HistoryLoadState = "idle" | "loading" | "success" | "error";
 
 const chatErrorMessages: Record<AssistantErrorCode, string> = {
   EMPTY_RESPONSE:
@@ -61,19 +72,96 @@ function getChatErrorMessage(data?: ChatApiResponse) {
   return chatErrorMessages.UNKNOWN_ERROR;
 }
 
-export function ChatPanel({ assistant }: ChatPanelProps) {
+function mapStoredMessage(message: Message): LocalChatMessage | null {
+  if (message.role !== "user" && message.role !== "assistant") {
+    return null;
+  }
+
+  return {
+    content: message.content,
+    createdAt: message.createdAt,
+    id: message.id,
+    role: message.role,
+    status: "sent",
+  };
+}
+
+function isLocalChatMessage(
+  message: LocalChatMessage | null,
+): message is LocalChatMessage {
+  return Boolean(message);
+}
+
+export function ChatPanel({
+  activeConversationId,
+  assistant,
+  onConversationChange,
+}: ChatPanelProps) {
   const [input, setInput] = useState("");
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [historyLoadState, setHistoryLoadState] =
+    useState<HistoryLoadState>("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<LocalChatMessage[]>([]);
 
   const trimmedInput = input.trim();
-  const canSubmit = Boolean(trimmedInput) && !isLoading;
+  const isHistoryLoading = historyLoadState === "loading";
+  const canSubmit = Boolean(trimmedInput) && !isLoading && !isHistoryLoading;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadConversationMessages(conversationId: string) {
+      setHistoryLoadState("loading");
+      setMessages([]);
+
+      try {
+        const response = await fetch(
+          `/api/conversations/${encodeURIComponent(conversationId)}/messages`,
+          { cache: "no-store" },
+        );
+        const data = (await response.json()) as ConversationMessagesResponse;
+
+        if (!response.ok || data.error || !Array.isArray(data.messages)) {
+          throw new Error("Failed to load conversation messages");
+        }
+
+        if (!isMounted) {
+          return;
+        }
+
+        setMessages(
+          data.messages.map(mapStoredMessage).filter(isLocalChatMessage),
+        );
+        setHistoryLoadState("success");
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+
+        setMessages([]);
+        setHistoryLoadState("error");
+      }
+    }
+
+    if (!activeConversationId) {
+      setHistoryLoadState("idle");
+      setMessages([]);
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    loadConversationMessages(activeConversationId);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeConversationId]);
 
   async function sendMessage() {
     const message = input.trim();
 
-    if (!message || isLoading) {
+    if (!message || isLoading || isHistoryLoading) {
       return;
     }
 
@@ -82,8 +170,8 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
     setMessages((current) => [...current, createMessage("user", message)]);
 
     try {
-      const requestBody = conversationId
-        ? { conversationId, message }
+      const requestBody = activeConversationId
+        ? { conversationId: activeConversationId, message }
         : { message };
       const response = await fetch("/api/chat", {
         body: JSON.stringify(requestBody),
@@ -103,7 +191,7 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
       }
 
       if (data.conversationId) {
-        setConversationId(data.conversationId);
+        onConversationChange(data.conversationId);
       }
 
       setMessages((current) => [
@@ -151,8 +239,8 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
         {assistant.description}
       </p>
       <p className="mt-3 text-xs font-medium text-cyan-100/80">
-        {conversationId
-          ? "Conversa local ativa nesta sessão"
+        {activeConversationId
+          ? "Conversa salva carregada nesta sessão"
           : "Nova conversa será criada no primeiro envio"}
       </p>
 
@@ -160,15 +248,36 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
         aria-live="polite"
         className="mt-5 max-h-80 space-y-3 overflow-y-auto pr-1"
       >
-        {messages.length > 0 ? (
+        {isHistoryLoading ? (
+          <div
+            className="rounded-md border border-cyan-300/20 bg-neutral-900/80 p-3"
+            role="status"
+          >
+            <p className="flex items-center gap-2 text-sm leading-6 text-neutral-300">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 rounded-full bg-cyan-200"
+              />
+              Carregando histórico da conversa...
+            </p>
+          </div>
+        ) : historyLoadState === "error" ? (
+          <div className="rounded-md border border-amber-300/30 bg-amber-300/10 p-3">
+            <p className="text-sm leading-6 text-amber-100">
+              Não consegui carregar esta conversa agora. Tente selecionar outra
+              conversa ou envie uma nova mensagem.
+            </p>
+          </div>
+        ) : messages.length > 0 ? (
           messages.map((message) => (
             <ChatMessage key={message.id} message={message} />
           ))
         ) : (
           <div className="rounded-md border border-white/10 bg-neutral-950/40 p-3">
             <p className="text-sm leading-6 text-neutral-400">
-              Envie uma pergunta curta para organizar o dia, uma rotina, um
-              estudo ou um projeto. Nada fica salvo ao recarregar.
+              {activeConversationId
+                ? "Esta conversa ainda não tem mensagens salvas."
+                : "Envie uma pergunta curta para organizar o dia, uma rotina, um estudo ou um projeto. Nada é restaurado automaticamente ao recarregar."}
             </p>
           </div>
         )}
@@ -203,7 +312,7 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
           <textarea
             aria-describedby="chat-hint"
             className="focus-ring mt-2 min-h-24 w-full resize-none rounded-md border border-white/10 bg-neutral-950/70 px-3 py-2 text-sm leading-6 text-neutral-100 placeholder:text-neutral-600"
-            disabled={isLoading}
+            disabled={isLoading || isHistoryLoading}
             id="assistant-message"
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={handleTextareaKeyDown}

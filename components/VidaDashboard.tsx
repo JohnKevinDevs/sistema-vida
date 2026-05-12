@@ -28,6 +28,9 @@ const viewOptions: LifeView[] = ["Hoje", "Semana", "Focos"];
 
 export function VidaDashboard() {
   const [activeView, setActiveView] = useState<LifeView>("Hoje");
+  const [activeConversationId, setActiveConversationId] = useState<
+    string | null
+  >(null);
   const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState(
     activeProjects[0]?.id ?? "",
@@ -56,7 +59,10 @@ export function VidaDashboard() {
   }
 
   return (
-    <AppShell>
+    <AppShell
+      activeConversationId={activeConversationId}
+      onSelectConversation={setActiveConversationId}
+    >
       <div className="space-y-8">
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <div className="min-w-0">
@@ -119,7 +125,11 @@ export function VidaDashboard() {
 
           <div className="space-y-8">
             <RoutineSection blocks={routineBlocks} />
-            <ChatPanel assistant={assistantPreview} />
+            <ChatPanel
+              activeConversationId={activeConversationId}
+              assistant={assistantPreview}
+              onConversationChange={setActiveConversationId}
+            />
           </div>
         </section>
       </div>

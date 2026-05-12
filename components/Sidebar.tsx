@@ -10,9 +10,17 @@ const navigationItems = [
   "Revisoes",
 ];
 
-export function Sidebar() {
+type SidebarProps = {
+  activeConversationId: string | null;
+  onSelectConversation: (conversationId: string) => void;
+};
+
+export function Sidebar({
+  activeConversationId,
+  onSelectConversation,
+}: SidebarProps) {
   return (
-    <aside className="border-b border-white/10 bg-neutral-950/95 px-4 py-5 lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:border-b-0 lg:border-r lg:px-6 lg:py-8">
+    <aside className="border-b border-white/10 bg-neutral-950/95 px-4 py-5 lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-6 lg:py-8">
       <div className="flex items-center justify-between gap-4 lg:block">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">
@@ -23,7 +31,7 @@ export function Sidebar() {
           </h1>
         </div>
         <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 lg:mt-6 lg:inline-flex">
-          Fase 2.5
+          Fase 2.6
         </div>
       </div>
 
@@ -55,7 +63,10 @@ export function Sidebar() {
         </p>
       </div>
 
-      <ConversationList />
+      <ConversationList
+        activeConversationId={activeConversationId}
+        onSelectConversation={onSelectConversation}
+      />
     </aside>
   );
 }

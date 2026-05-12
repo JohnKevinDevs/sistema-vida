@@ -183,9 +183,9 @@ Códigos principais:
 
 A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuário imediatamente e exibe a resposta ou um erro amigável.
 
-O histórico visual fica somente em estado local do React. Ao recarregar a página, a conversa desaparece da tela por enquanto.
+O histórico visual fica em estado local do React. Ao recarregar a página, a última conversa ainda não é restaurada automaticamente.
 
-A sidebar busca `GET /api/conversations` no client e mostra uma lista simples de conversas salvas localmente no SQLite. Nesta fase, a lista é apenas visual: ela ainda não seleciona conversa, não troca a conversa ativa e não carrega mensagens salvas.
+A sidebar busca `GET /api/conversations` no client e mostra conversas salvas localmente no SQLite. Ao selecionar uma conversa, o chat usa `GET /api/conversations/[conversationId]/messages` para carregar as mensagens salvas e continua enviando novas mensagens no mesmo `conversationId`.
 
 Para testar manualmente:
 
@@ -195,6 +195,7 @@ Para testar manualmente:
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
+- Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
 Também é possível testar a API diretamente:
@@ -226,4 +227,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.5 - conversas reais exibidas na sidebar, sem carregar mensagens ainda.
+Fase 2.6 - seleção de conversa salva e carregamento de mensagens no chat.
