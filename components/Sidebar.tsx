@@ -1,3 +1,5 @@
+import { ConversationList } from "@/components/ConversationList";
+
 const navigationItems = [
   "Hoje",
   "Semana",
@@ -21,7 +23,7 @@ export function Sidebar() {
           </h1>
         </div>
         <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-200 lg:mt-6 lg:inline-flex">
-          Fase 0.5
+          Fase 2.5
         </div>
       </div>
 
@@ -48,10 +50,12 @@ export function Sidebar() {
           Estado atual
         </p>
         <p className="mt-3 text-sm leading-6 text-neutral-300">
-          Interface refinada com estado local leve, ainda sem banco, IA,
-          persistencia ou rotas de API.
+          Chat conectado ao Gemini com conversas e mensagens salvas no SQLite
+          local.
         </p>
       </div>
+
+      <ConversationList />
     </aside>
   );
 }

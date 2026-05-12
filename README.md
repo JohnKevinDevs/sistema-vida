@@ -185,6 +185,8 @@ A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia men
 
 O histórico visual fica somente em estado local do React. Ao recarregar a página, a conversa desaparece da tela por enquanto.
 
+A sidebar busca `GET /api/conversations` no client e mostra uma lista simples de conversas salvas localmente no SQLite. Nesta fase, a lista é apenas visual: ela ainda não seleciona conversa, não troca a conversa ativa e não carrega mensagens salvas.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -192,6 +194,7 @@ Para testar manualmente:
 - Use `Enter` sozinho para quebrar linha.
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
+- Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
 Também é possível testar a API diretamente:
@@ -223,4 +226,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.4 - endpoints de leitura para conversas e mensagens.
+Fase 2.5 - conversas reais exibidas na sidebar, sem carregar mensagens ainda.
