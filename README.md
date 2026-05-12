@@ -168,6 +168,14 @@ Em caso de falha controlada, a API retorna JSON com mensagem amigável e código
 }
 ```
 
+Na Fase 2.8, quando a mensagem do usuário já foi salva e o Gemini falha, a API também salva uma mensagem amigável do assistente na mesma conversa:
+
+```text
+Não consegui responder agora. Verifique a configuração do Gemini e tente novamente.
+```
+
+Esse registro mantém o histórico consistente no SQLite, permite que a conversa recém-criada apareça na sidebar mesmo em erro e não expõe detalhes técnicos sensíveis.
+
 Códigos principais:
 
 - `MISSING_API_KEY`: a chave do Gemini não foi configurada.
@@ -188,6 +196,8 @@ O histórico visual fica em estado local do React. Ao recarregar a página, a ú
 A sidebar busca `GET /api/conversations` no client e mostra conversas salvas localmente no SQLite. Ao selecionar uma conversa, o chat usa `GET /api/conversations/[conversationId]/messages` para carregar as mensagens salvas e continua enviando novas mensagens no mesmo `conversationId`.
 
 O botão `Nova conversa` limpa apenas o chat visível, remove a seleção atual e prepara a próxima mensagem para criar uma nova conversa no SQLite. Conversas antigas não são apagadas.
+
+Se o Gemini falhar durante uma nova conversa ou conversa existente, o app mantém a conversa ativa, registra uma resposta amigável do assistente e preserva o código estruturado da falha para a UI.
 
 Para testar manualmente:
 
@@ -230,4 +240,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.7 - botão de nova conversa e reset do chat atual.
+Fase 2.8 - auditoria e estabilização da persistência do chat.

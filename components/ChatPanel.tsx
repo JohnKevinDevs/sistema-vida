@@ -34,6 +34,9 @@ type ConversationMessagesResponse = {
 
 type HistoryLoadState = "idle" | "loading" | "success" | "error";
 
+const persistedAssistantErrorMessage =
+  "Não consegui responder agora. Verifique a configuração do Gemini e tente novamente.";
+
 const chatErrorMessages: Record<AssistantErrorCode, string> = {
   EMPTY_RESPONSE:
     "Recebi uma resposta vazia da IA. Tente reformular sua mensagem.",
@@ -84,7 +87,11 @@ function mapStoredMessage(message: Message): LocalChatMessage | null {
     createdAt: message.createdAt,
     id: message.id,
     role: message.role,
-    status: "sent",
+    status:
+      message.role === "assistant" &&
+      message.content === persistedAssistantErrorMessage
+        ? "error"
+        : "sent",
   };
 }
 
@@ -193,9 +200,21 @@ export function ChatPanel({
       const data = (await response.json()) as ChatApiResponse;
 
       if (!response.ok || data.error || !data.content) {
+        if (data.conversationId) {
+          if (activeConversationId) {
+            onConversationChange(data.conversationId);
+          } else {
+            onConversationCreated(data.conversationId);
+          }
+        }
+
         setMessages((current) => [
           ...current,
-          createMessage("assistant", getChatErrorMessage(data), "error"),
+          createMessage(
+            "assistant",
+            data.content ?? getChatErrorMessage(data),
+            "error",
+          ),
         ]);
         return;
       }

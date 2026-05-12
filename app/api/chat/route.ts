@@ -12,6 +12,9 @@ type ChatRequestBody = {
   message?: unknown;
 };
 
+const ASSISTANT_PERSISTED_ERROR_MESSAGE =
+  "Não consegui responder agora. Verifique a configuração do Gemini e tente novamente.";
+
 export const runtime = "nodejs";
 
 function jsonError(
@@ -120,10 +123,23 @@ export async function POST(request: Request) {
   const assistantResponse = await askAssistant(message);
 
   if (assistantResponse.error) {
-    return jsonError(
-      assistantResponse.error,
-      500,
-      assistantResponse.errorCode ?? "UNKNOWN_ERROR",
+    const persistedErrorMessage = createMessage({
+      content: ASSISTANT_PERSISTED_ERROR_MESSAGE,
+      conversationId: conversation.id,
+      createdAt: assistantResponse.createdAt,
+      role: "assistant",
+    });
+
+    return NextResponse.json(
+      {
+        code: assistantResponse.errorCode ?? "UNKNOWN_ERROR",
+        content: persistedErrorMessage.content,
+        conversationId: conversation.id,
+        createdAt: persistedErrorMessage.createdAt,
+        error: assistantResponse.error,
+        model: assistantResponse.model,
+      },
+      { status: 500 },
     );
   }
 
