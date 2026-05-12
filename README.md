@@ -68,6 +68,15 @@ A API local do assistente fica em `app/api/chat/route.ts` e aceita apenas `POST`
 }
 ```
 
+Ela também aceita `conversationId` para continuar salvando mensagens em uma conversa existente:
+
+```json
+{
+  "conversationId": "id-da-conversa",
+  "message": "Agora transforme isso em uma checklist."
+}
+```
+
 Exemplo no PowerShell, com o servidor local rodando:
 
 ```powershell
@@ -76,7 +85,7 @@ Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentTyp
 
 Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_KEY` configurada.
 
-Ainda não existe histórico persistido ou banco de dados.
+A resposta de sucesso inclui `conversationId`, que identifica a conversa salva no SQLite local.
 
 ## Banco local
 
@@ -100,7 +109,7 @@ Funções disponíveis:
 - `listMessages(conversationId)`
 - `createMessage(input)`
 
-A UI do chat ainda não está conectada ao banco. O histórico visual continua apenas em estado local do React.
+A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI do chat ainda não carrega esse histórico salvo; o histórico visual continua apenas em estado local do React.
 
 Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
 
@@ -144,6 +153,12 @@ Também é possível testar a API diretamente:
 Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"message":"Me ajude a organizar meu dia em 3 passos."}'
 ```
 
+Para continuar uma conversa salva, use o `conversationId` retornado:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"conversationId":"COLE_O_ID_AQUI","message":"Agora transforme isso em uma checklist."}'
+```
+
 Payload inválido:
 
 ```powershell
@@ -161,4 +176,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.1 - SQLite inicial para conversas e mensagens.
+Fase 2.2 - API do chat salvando conversas e mensagens no SQLite.
