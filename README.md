@@ -109,7 +109,7 @@ Funções disponíveis:
 - `listMessages(conversationId)`
 - `createMessage(input)`
 
-A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI do chat ainda não carrega esse histórico salvo; o histórico visual continua apenas em estado local do React.
+A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI guarda o `conversationId` apenas em estado local durante a sessão atual, então mensagens seguintes continuam a mesma conversa enquanto a página não for recarregada. A UI ainda não carrega histórico salvo; o histórico visual continua apenas em estado local do React.
 
 Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
 
@@ -137,7 +137,7 @@ Códigos principais:
 
 A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuário imediatamente e exibe a resposta ou um erro amigável.
 
-O histórico fica somente em estado local do React. Ao recarregar a página, a conversa desaparece.
+O histórico visual fica somente em estado local do React. Ao recarregar a página, a conversa desaparece da tela por enquanto.
 
 Para testar manualmente:
 
@@ -145,6 +145,7 @@ Para testar manualmente:
 - Use `Ctrl+Enter` no Windows/Linux ou `Cmd+Enter` no macOS para enviar.
 - Use `Enter` sozinho para quebrar linha.
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
+- Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
 Também é possível testar a API diretamente:
@@ -176,4 +177,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.2 - API do chat salvando conversas e mensagens no SQLite.
+Fase 2.3 - UI do chat conectada ao conversationId ativo.

@@ -14,6 +14,7 @@ type ChatPanelProps = {
 
 type ChatApiResponse = {
   code?: AssistantErrorCode;
+  conversationId?: string;
   content?: string;
   createdAt?: string;
   error?: string;
@@ -62,6 +63,7 @@ function getChatErrorMessage(data?: ChatApiResponse) {
 
 export function ChatPanel({ assistant }: ChatPanelProps) {
   const [input, setInput] = useState("");
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<LocalChatMessage[]>([]);
 
@@ -80,8 +82,11 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
     setMessages((current) => [...current, createMessage("user", message)]);
 
     try {
+      const requestBody = conversationId
+        ? { conversationId, message }
+        : { message };
       const response = await fetch("/api/chat", {
-        body: JSON.stringify({ message }),
+        body: JSON.stringify(requestBody),
         headers: {
           "Content-Type": "application/json",
         },
@@ -95,6 +100,10 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
           createMessage("assistant", getChatErrorMessage(data), "error"),
         ]);
         return;
+      }
+
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
       }
 
       setMessages((current) => [
@@ -140,6 +149,11 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
       </p>
       <p className="mt-4 text-sm leading-6 text-neutral-300">
         {assistant.description}
+      </p>
+      <p className="mt-3 text-xs font-medium text-cyan-100/80">
+        {conversationId
+          ? "Conversa local ativa nesta sessão"
+          : "Nova conversa será criada no primeiro envio"}
       </p>
 
       <div
