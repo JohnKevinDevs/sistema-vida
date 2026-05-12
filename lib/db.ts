@@ -209,6 +209,20 @@ export function updateConversationTitle(
   return getConversationById(id);
 }
 
+export function deleteConversation(id: string): boolean {
+  const database = initializeDatabase();
+  const result = database
+    .prepare(
+      `
+        DELETE FROM conversations
+        WHERE id = ?
+      `,
+    )
+    .run(id);
+
+  return result.changes > 0;
+}
+
 export function listMessages(conversationId: string): Message[] {
   const database = initializeDatabase();
   const rows = database

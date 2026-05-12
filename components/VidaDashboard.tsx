@@ -71,10 +71,19 @@ export function VidaDashboard() {
     setConversationListRefreshKey((current) => current + 1);
   }
 
+  function handleConversationDeleted(conversationId: string) {
+    setConversationListRefreshKey((current) => current + 1);
+
+    if (conversationId === activeConversationId) {
+      startNewConversation();
+    }
+  }
+
   return (
     <AppShell
       activeConversationId={activeConversationId}
       conversationListRefreshKey={conversationListRefreshKey}
+      onDeleteConversation={handleConversationDeleted}
       onStartNewConversation={startNewConversation}
       onSelectConversation={setActiveConversationId}
     >

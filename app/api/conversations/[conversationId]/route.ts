@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateConversationTitle } from "@/lib/db";
+import { deleteConversation, updateConversationTitle } from "@/lib/db";
 import type { AssistantErrorCode } from "@/lib/types";
 
 type RenameConversationBody = {
@@ -103,6 +103,34 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   } catch {
     return jsonError(
       "Não consegui renomear a conversa agora.",
+      500,
+      "UNKNOWN_ERROR",
+    );
+  }
+}
+
+export async function DELETE(_request: Request, { params }: RouteContext) {
+  const conversationId = params.conversationId?.trim();
+
+  if (!conversationId) {
+    return jsonError(
+      "O conversationId é obrigatório.",
+      400,
+      "INVALID_REQUEST",
+    );
+  }
+
+  try {
+    const deleted = deleteConversation(conversationId);
+
+    if (!deleted) {
+      return jsonError("Conversa não encontrada.", 400, "INVALID_REQUEST");
+    }
+
+    return NextResponse.json({ conversationId, deleted: true });
+  } catch {
+    return jsonError(
+      "Não consegui excluir a conversa agora.",
       500,
       "UNKNOWN_ERROR",
     );

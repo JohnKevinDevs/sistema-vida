@@ -12,11 +12,18 @@ type RenameConversationResponse = {
   error?: string;
 };
 
+type DeleteConversationResponse = {
+  conversationId?: string;
+  deleted?: boolean;
+  error?: string;
+};
+
 type LoadState = "idle" | "loading" | "success" | "error";
 
 type ConversationListProps = {
   activeConversationId: string | null;
   refreshKey: number;
+  onDeleteConversation: (conversationId: string) => void;
   onSelectConversation: (conversationId: string) => void;
 };
 
@@ -38,13 +45,23 @@ function formatUpdatedAt(value: string) {
 export function ConversationList({
   activeConversationId,
   refreshKey,
+  onDeleteConversation,
   onSelectConversation,
 }: ConversationListProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [deleteError, setDeleteError] = useState<{
+    conversationId: string;
+    message: string;
+  } | null>(null);
+  const [deletingConversationId, setDeletingConversationId] = useState<
+    string | null
+  >(null);
   const [editingConversationId, setEditingConversationId] = useState<
     string | null
   >(null);
   const [loadState, setLoadState] = useState<LoadState>("idle");
+  const [pendingDeleteConversationId, setPendingDeleteConversationId] =
+    useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState("");
   const [renameError, setRenameError] = useState<string | null>(null);
   const [renamingConversationId, setRenamingConversationId] = useState<
@@ -93,6 +110,8 @@ export function ConversationList({
 
   function startRename(conversation: Conversation) {
     setEditingConversationId(conversation.id);
+    setDeleteError(null);
+    setPendingDeleteConversationId(null);
     setRenameDraft(conversation.title);
     setRenameError(null);
   }
@@ -101,6 +120,49 @@ export function ConversationList({
     setEditingConversationId(null);
     setRenameDraft("");
     setRenameError(null);
+  }
+
+  function requestDeleteConversation(conversationId: string) {
+    setDeleteError(null);
+    setEditingConversationId(null);
+    setPendingDeleteConversationId(conversationId);
+  }
+
+  async function handleDeleteConversation(conversation: Conversation) {
+    setDeleteError(null);
+    setDeletingConversationId(conversation.id);
+
+    try {
+      const response = await fetch(`/api/conversations/${conversation.id}`, {
+        method: "DELETE",
+      });
+      const data = (await response.json()) as DeleteConversationResponse;
+
+      if (!response.ok || !data.deleted) {
+        throw new Error(data.error ?? "Não consegui excluir a conversa.");
+      }
+
+      setConversations((current) =>
+        current.filter((item) => item.id !== conversation.id),
+      );
+
+      if (editingConversationId === conversation.id) {
+        cancelRename();
+      }
+
+      onDeleteConversation(conversation.id);
+      setPendingDeleteConversationId(null);
+    } catch (error) {
+      setDeleteError({
+        conversationId: conversation.id,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Não consegui excluir a conversa.",
+      });
+    } finally {
+      setDeletingConversationId(null);
+    }
   }
 
   async function handleRenameSubmit(
@@ -204,6 +266,14 @@ export function ConversationList({
               const isEditing = conversation.id === editingConversationId;
               const isRenaming =
                 conversation.id === renamingConversationId;
+              const isDeleting =
+                conversation.id === deletingConversationId;
+              const isPendingDelete =
+                conversation.id === pendingDeleteConversationId;
+              const currentDeleteError =
+                deleteError?.conversationId === conversation.id
+                  ? deleteError.message
+                  : null;
 
               return (
                 <li
@@ -281,16 +351,64 @@ export function ConversationList({
                           </button>
                         </div>
                       </form>
+                    ) : isPendingDelete ? (
+                      <div className="space-y-2">
+                        <p className="text-xs leading-5 text-amber-100">
+                          Excluir esta conversa? Essa ação não pode ser
+                          desfeita.
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          <button
+                            className="focus-ring rounded-md border border-red-300/30 px-2 py-1 text-xs font-medium text-red-100 transition hover:bg-red-300/10 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-neutral-500"
+                            data-conversation-delete-confirm={conversation.id}
+                            disabled={isDeleting}
+                            onClick={() => {
+                              void handleDeleteConversation(conversation);
+                            }}
+                            type="button"
+                          >
+                            {isDeleting ? "Excluindo..." : "Confirmar"}
+                          </button>
+                          <button
+                            className="focus-ring rounded-md border border-white/10 px-2 py-1 text-xs font-medium text-neutral-300 transition hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:text-neutral-500"
+                            data-conversation-delete-cancel={conversation.id}
+                            disabled={isDeleting}
+                            onClick={() => setPendingDeleteConversationId(null)}
+                            type="button"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
                     ) : (
-                      <button
-                        className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-400 transition hover:bg-white/[0.06] hover:text-neutral-100"
-                        data-conversation-rename={conversation.id}
-                        onClick={() => startRename(conversation)}
-                        type="button"
-                      >
-                        Renomear
-                      </button>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-400 transition hover:bg-white/[0.06] hover:text-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          data-conversation-rename={conversation.id}
+                          disabled={isDeleting}
+                          onClick={() => startRename(conversation)}
+                          type="button"
+                        >
+                          Renomear
+                        </button>
+                        <button
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/80 transition hover:bg-red-300/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          data-conversation-delete={conversation.id}
+                          disabled={isDeleting}
+                          onClick={() =>
+                            requestDeleteConversation(conversation.id)
+                          }
+                          type="button"
+                        >
+                          Excluir
+                        </button>
+                      </div>
                     )}
+                    {currentDeleteError ? (
+                      <p className="mt-2 text-xs leading-5 text-amber-200">
+                        {currentDeleteError}
+                      </p>
+                    ) : null}
                   </div>
                 </li>
               );

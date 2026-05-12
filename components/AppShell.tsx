@@ -5,6 +5,7 @@ type AppShellProps = {
   activeConversationId: string | null;
   children: ReactNode;
   conversationListRefreshKey: number;
+  onDeleteConversation: (conversationId: string) => void;
   onStartNewConversation: () => void;
   onSelectConversation: (conversationId: string) => void;
 };
@@ -13,6 +14,7 @@ export function AppShell({
   activeConversationId,
   children,
   conversationListRefreshKey,
+  onDeleteConversation,
   onStartNewConversation,
   onSelectConversation,
 }: AppShellProps) {
@@ -22,6 +24,7 @@ export function AppShell({
         <Sidebar
           activeConversationId={activeConversationId}
           conversationListRefreshKey={conversationListRefreshKey}
+          onDeleteConversation={onDeleteConversation}
           onStartNewConversation={onStartNewConversation}
           onSelectConversation={onSelectConversation}
         />

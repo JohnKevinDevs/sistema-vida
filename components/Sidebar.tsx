@@ -13,6 +13,7 @@ const navigationItems = [
 type SidebarProps = {
   activeConversationId: string | null;
   conversationListRefreshKey: number;
+  onDeleteConversation: (conversationId: string) => void;
   onStartNewConversation: () => void;
   onSelectConversation: (conversationId: string) => void;
 };
@@ -20,6 +21,7 @@ type SidebarProps = {
 export function Sidebar({
   activeConversationId,
   conversationListRefreshKey,
+  onDeleteConversation,
   onStartNewConversation,
   onSelectConversation,
 }: SidebarProps) {
@@ -78,6 +80,7 @@ export function Sidebar({
       <ConversationList
         activeConversationId={activeConversationId}
         refreshKey={conversationListRefreshKey}
+        onDeleteConversation={onDeleteConversation}
         onSelectConversation={onSelectConversation}
       />
     </aside>

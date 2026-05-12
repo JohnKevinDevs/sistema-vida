@@ -107,10 +107,11 @@ Funções disponíveis:
 - `listConversations()`
 - `getConversationById(id)`
 - `updateConversationTitle(id, title)`
+- `deleteConversation(id)`
 - `listMessages(conversationId)`
 - `createMessage(input)`
 
-A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI guarda o `conversationId` apenas em estado local durante a sessão atual, então mensagens seguintes continuam a mesma conversa enquanto a página não for recarregada. A UI ainda não carrega histórico salvo; o histórico visual continua apenas em estado local do React.
+A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI guarda o `conversationId` apenas em estado local durante a sessão atual, então mensagens seguintes continuam a mesma conversa enquanto a página não for recarregada. Ao selecionar uma conversa na sidebar, o histórico salvo é carregado no chat.
 
 Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
 
@@ -119,6 +120,7 @@ Endpoints de leitura criados na Fase 2.4:
 - `GET /api/conversations`: lista conversas salvas, ordenadas por atualização mais recente.
 - `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
 - `PATCH /api/conversations/[conversationId]`: renomeia uma conversa salva.
+- `DELETE /api/conversations/[conversationId]`: exclui uma conversa salva e suas mensagens.
 
 Formato de listagem de conversas:
 
@@ -171,6 +173,15 @@ Para renomear uma conversa, envie:
 
 A API remove espaços no começo e no fim, rejeita título vazio e limita o título a 80 caracteres.
 
+Para excluir uma conversa, envie `DELETE` para `/api/conversations/[conversationId]`. A remoção usa o cascade do SQLite para apagar também as mensagens da conversa:
+
+```json
+{
+  "deleted": true,
+  "conversationId": "id-da-conversa"
+}
+```
+
 Em caso de falha controlada, a API retorna JSON com mensagem amigável e código:
 
 ```json
@@ -213,6 +224,8 @@ Se o Gemini falhar durante uma nova conversa ou conversa existente, o app manté
 
 Cada conversa na sidebar pode ser renomeada pela ação `Renomear`. A edição é inline, mantém a conversa selecionada quando aplicável e atualiza a lista local após salvar.
 
+Cada conversa também pode ser excluída pela ação `Excluir`. A UI pede confirmação inline antes de remover; se a conversa excluída estiver ativa, o chat é limpo e a seleção volta para o estado de nova conversa.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -223,6 +236,7 @@ Para testar manualmente:
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
 - Use `Renomear` em uma conversa e confirme que o novo título aparece na sidebar.
+- Use `Excluir` em uma conversa e confirme que ela sai da sidebar apenas após confirmação.
 - Clique em `Nova conversa` e confirme que o chat volta ao estado inicial e a seleção antiga sai da sidebar.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
@@ -255,4 +269,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.9 - renomear conversa pela sidebar e API local.
+Fase 2.10 - exclusão segura de conversa pela sidebar e API local.
