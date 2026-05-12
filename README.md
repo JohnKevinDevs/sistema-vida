@@ -113,6 +113,52 @@ A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assis
 
 Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
 
+Endpoints de leitura criados na Fase 2.4:
+
+- `GET /api/conversations`: lista conversas salvas, ordenadas por atualização mais recente.
+- `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
+
+Formato de listagem de conversas:
+
+```json
+{
+  "conversations": [
+    {
+      "id": "id-da-conversa",
+      "title": "Título da conversa",
+      "createdAt": "2026-05-11T22:00:00.000Z",
+      "updatedAt": "2026-05-11T22:05:00.000Z"
+    }
+  ]
+}
+```
+
+Formato de mensagens:
+
+```json
+{
+  "conversationId": "id-da-conversa",
+  "messages": [
+    {
+      "id": "id-da-mensagem",
+      "conversationId": "id-da-conversa",
+      "role": "user",
+      "content": "Me ajude a organizar meu dia.",
+      "createdAt": "2026-05-11T22:00:00.000Z"
+    }
+  ]
+}
+```
+
+Se a conversa não existir, a API retorna erro controlado:
+
+```json
+{
+  "error": "Conversa não encontrada.",
+  "code": "INVALID_REQUEST"
+}
+```
+
 Em caso de falha controlada, a API retorna JSON com mensagem amigável e código:
 
 ```json
@@ -177,4 +223,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.3 - UI do chat conectada ao conversationId ativo.
+Fase 2.4 - endpoints de leitura para conversas e mensagens.
