@@ -106,6 +106,7 @@ Funções disponíveis:
 - `createConversation(title?)`
 - `listConversations()`
 - `getConversationById(id)`
+- `updateConversationTitle(id, title)`
 - `listMessages(conversationId)`
 - `createMessage(input)`
 
@@ -117,6 +118,7 @@ Endpoints de leitura criados na Fase 2.4:
 
 - `GET /api/conversations`: lista conversas salvas, ordenadas por atualização mais recente.
 - `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
+- `PATCH /api/conversations/[conversationId]`: renomeia uma conversa salva.
 
 Formato de listagem de conversas:
 
@@ -159,6 +161,16 @@ Se a conversa não existir, a API retorna erro controlado:
 }
 ```
 
+Para renomear uma conversa, envie:
+
+```json
+{
+  "title": "Planejamento do dia"
+}
+```
+
+A API remove espaços no começo e no fim, rejeita título vazio e limita o título a 80 caracteres.
+
 Em caso de falha controlada, a API retorna JSON com mensagem amigável e código:
 
 ```json
@@ -199,6 +211,8 @@ O botão `Nova conversa` limpa apenas o chat visível, remove a seleção atual 
 
 Se o Gemini falhar durante uma nova conversa ou conversa existente, o app mantém a conversa ativa, registra uma resposta amigável do assistente e preserva o código estruturado da falha para a UI.
 
+Cada conversa na sidebar pode ser renomeada pela ação `Renomear`. A edição é inline, mantém a conversa selecionada quando aplicável e atualiza a lista local após salvar.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -208,6 +222,7 @@ Para testar manualmente:
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
+- Use `Renomear` em uma conversa e confirme que o novo título aparece na sidebar.
 - Clique em `Nova conversa` e confirme que o chat volta ao estado inicial e a seleção antiga sai da sidebar.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
@@ -240,4 +255,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.8 - auditoria e estabilização da persistência do chat.
+Fase 2.9 - renomear conversa pela sidebar e API local.

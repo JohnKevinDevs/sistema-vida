@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import type { Conversation } from "@/lib/types";
 
 type ConversationsResponse = {
   conversations?: Conversation[];
+};
+
+type RenameConversationResponse = {
+  conversation?: Conversation;
+  error?: string;
 };
 
 type LoadState = "idle" | "loading" | "success" | "error";
@@ -36,7 +41,15 @@ export function ConversationList({
   onSelectConversation,
 }: ConversationListProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [editingConversationId, setEditingConversationId] = useState<
+    string | null
+  >(null);
   const [loadState, setLoadState] = useState<LoadState>("idle");
+  const [renameDraft, setRenameDraft] = useState("");
+  const [renameError, setRenameError] = useState<string | null>(null);
+  const [renamingConversationId, setRenamingConversationId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -77,6 +90,71 @@ export function ConversationList({
       isMounted = false;
     };
   }, [refreshKey]);
+
+  function startRename(conversation: Conversation) {
+    setEditingConversationId(conversation.id);
+    setRenameDraft(conversation.title);
+    setRenameError(null);
+  }
+
+  function cancelRename() {
+    setEditingConversationId(null);
+    setRenameDraft("");
+    setRenameError(null);
+  }
+
+  async function handleRenameSubmit(
+    event: FormEvent<HTMLFormElement>,
+    conversationId: string,
+  ) {
+    event.preventDefault();
+
+    const title = renameDraft.trim();
+
+    if (!title) {
+      setRenameError("O título não pode estar vazio.");
+      return;
+    }
+
+    if (title.length > 80) {
+      setRenameError("O título deve ter no máximo 80 caracteres.");
+      return;
+    }
+
+    setRenameError(null);
+    setRenamingConversationId(conversationId);
+
+    try {
+      const response = await fetch(`/api/conversations/${conversationId}`, {
+        body: JSON.stringify({ title }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+      });
+      const data = (await response.json()) as RenameConversationResponse;
+
+      if (!response.ok || !data.conversation) {
+        throw new Error(data.error ?? "Não consegui renomear a conversa.");
+      }
+
+      setConversations((current) => [
+        data.conversation as Conversation,
+        ...current.filter(
+          (conversation) => conversation.id !== data.conversation?.id,
+        ),
+      ]);
+      cancelRename();
+    } catch (error) {
+      setRenameError(
+        error instanceof Error
+          ? error.message
+          : "Não consegui renomear a conversa.",
+      );
+    } finally {
+      setRenamingConversationId(null);
+    }
+  }
 
   return (
     <section
@@ -123,17 +201,23 @@ export function ConversationList({
           <ul className="max-h-56 space-y-2 overflow-y-auto pr-1">
             {conversations.map((conversation) => {
               const isActive = conversation.id === activeConversationId;
+              const isEditing = conversation.id === editingConversationId;
+              const isRenaming =
+                conversation.id === renamingConversationId;
 
               return (
-                <li key={conversation.id}>
+                <li
+                  className={`rounded-md border transition ${
+                    isActive
+                      ? "border-cyan-300/40 bg-cyan-300/15"
+                      : "border-white/10 bg-neutral-900/70"
+                  }`}
+                  key={conversation.id}
+                >
                   <button
                     aria-label={`Carregar conversa: ${conversation.title}`}
                     aria-current={isActive ? "true" : undefined}
-                    className={`focus-ring w-full rounded-md border px-3 py-2 text-left transition ${
-                      isActive
-                        ? "border-cyan-300/40 bg-cyan-300/15"
-                        : "border-white/10 bg-neutral-900/70 hover:border-white/20 hover:bg-white/[0.06]"
-                    }`}
+                    className="focus-ring w-full rounded-t-md px-3 py-2 text-left transition hover:bg-white/[0.06]"
                     data-conversation-id={conversation.id}
                     onClick={() => onSelectConversation(conversation.id)}
                     type="button"
@@ -150,6 +234,64 @@ export function ConversationList({
                       </span>
                     ) : null}
                   </button>
+
+                  <div className="border-t border-white/10 px-3 py-2">
+                    {isEditing ? (
+                      <form
+                        className="space-y-2"
+                        onSubmit={(event) =>
+                          handleRenameSubmit(event, conversation.id)
+                        }
+                      >
+                        <label className="sr-only" htmlFor="conversation-title">
+                          Novo título da conversa
+                        </label>
+                        <input
+                          className="focus-ring w-full rounded-md border border-white/10 bg-neutral-950/80 px-2 py-1.5 text-sm text-neutral-100 placeholder:text-neutral-600"
+                          data-conversation-rename-input={conversation.id}
+                          disabled={isRenaming}
+                          id="conversation-title"
+                          maxLength={80}
+                          onChange={(event) =>
+                            setRenameDraft(event.target.value)
+                          }
+                          value={renameDraft}
+                        />
+                        {renameError ? (
+                          <p className="text-xs leading-5 text-amber-200">
+                            {renameError}
+                          </p>
+                        ) : null}
+                        <div className="flex gap-2">
+                          <button
+                            className="focus-ring rounded-md border border-cyan-300/30 px-2 py-1 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/10 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-neutral-500"
+                            data-conversation-rename-save={conversation.id}
+                            disabled={isRenaming}
+                            type="submit"
+                          >
+                            {isRenaming ? "Salvando..." : "Salvar"}
+                          </button>
+                          <button
+                            className="focus-ring rounded-md border border-white/10 px-2 py-1 text-xs font-medium text-neutral-300 transition hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:text-neutral-500"
+                            disabled={isRenaming}
+                            onClick={cancelRename}
+                            type="button"
+                          >
+                            Cancelar
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <button
+                        className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-400 transition hover:bg-white/[0.06] hover:text-neutral-100"
+                        data-conversation-rename={conversation.id}
+                        onClick={() => startRename(conversation)}
+                        type="button"
+                      >
+                        Renomear
+                      </button>
+                    )}
+                  </div>
                 </li>
               );
             })}

@@ -185,6 +185,30 @@ export function getConversationById(id: string): Conversation | null {
   return row ? mapConversation(row) : null;
 }
 
+export function updateConversationTitle(
+  id: string,
+  title: string,
+): Conversation | null {
+  const database = initializeDatabase();
+  const updatedAt = nowIso();
+
+  const result = database
+    .prepare(
+      `
+        UPDATE conversations
+        SET title = ?, updated_at = ?
+        WHERE id = ?
+      `,
+    )
+    .run(title.trim(), updatedAt, id);
+
+  if (result.changes === 0) {
+    return null;
+  }
+
+  return getConversationById(id);
+}
+
 export function listMessages(conversationId: string): Message[] {
   const database = initializeDatabase();
   const rows = database
