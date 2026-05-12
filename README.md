@@ -115,7 +115,7 @@ A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assis
 
 Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão protegidos no `.gitignore` e não devem ser commitados.
 
-Endpoints de leitura criados na Fase 2.4:
+Endpoints do módulo de conversas:
 
 - `GET /api/conversations`: lista conversas salvas, ordenadas por atualização mais recente.
 - `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
@@ -226,6 +226,8 @@ Cada conversa na sidebar pode ser renomeada pela ação `Renomear`. A edição �
 
 Cada conversa também pode ser excluída pela ação `Excluir`. A UI pede confirmação inline antes de remover; se a conversa excluída estiver ativa, o chat é limpo e a seleção volta para o estado de nova conversa.
 
+Na Fase 2.11, o fluxo completo de conversas foi auditado: criar, continuar, listar, selecionar, carregar histórico, renomear, excluir, tratar payload inválido e manter erros amigáveis do Gemini persistidos sem quebrar a UI.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -269,4 +271,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.10 - exclusão segura de conversa pela sidebar e API local.
+Fase 2.11 - auditoria final do módulo de conversas.

@@ -101,8 +101,8 @@ export function VidaDashboard() {
             </p>
             <p className="mt-6 max-w-3xl text-base leading-8 text-neutral-400">
               Central pessoal local para enxergar prioridades, estado atual e
-              proximos focos com clareza, ainda sem IA, banco de dados ou
-              automacoes.
+              próximos focos com clareza, com chat conectado ao assistente e
+              histórico de conversas salvo no SQLite local.
             </p>
             <ViewSwitcher
               activeView={activeView}
