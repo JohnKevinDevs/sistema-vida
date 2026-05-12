@@ -2,21 +2,39 @@
 
 import { FormEvent, KeyboardEvent, useState } from "react";
 import { ChatMessage } from "@/components/ChatMessage";
-import type { AssistantPreview, LocalChatMessage } from "@/lib/types";
+import type {
+  AssistantErrorCode,
+  AssistantPreview,
+  LocalChatMessage,
+} from "@/lib/types";
 
 type ChatPanelProps = {
   assistant: AssistantPreview;
 };
 
 type ChatApiResponse = {
+  code?: AssistantErrorCode;
   content?: string;
   createdAt?: string;
   error?: string;
   model?: string;
 };
 
-const friendlyErrorMessage =
-  "Não consegui responder agora. Verifique se a chave do Gemini está configurada e tente novamente.";
+const chatErrorMessages: Record<AssistantErrorCode, string> = {
+  EMPTY_RESPONSE:
+    "Recebi uma resposta vazia da IA. Tente reformular sua mensagem.",
+  INVALID_API_KEY:
+    "A chave do Gemini parece inválida. Verifique a configuração.",
+  INVALID_REQUEST: "A mensagem enviada ao assistente não é válida.",
+  MISSING_API_KEY: "A chave do Gemini ainda não está configurada.",
+  MODEL_UNAVAILABLE:
+    "O modelo de IA não está disponível agora. Tente novamente em instantes.",
+  QUOTA_EXCEEDED:
+    "A cota do Gemini foi atingida no momento. Tente novamente mais tarde.",
+  TEMPORARY_ERROR: "Ocorreu uma instabilidade temporária. Tente novamente.",
+  UNKNOWN_ERROR:
+    "Não consegui responder agora. Tente novamente em alguns instantes.",
+};
 
 function createMessage(
   role: LocalChatMessage["role"],
@@ -32,6 +50,14 @@ function createMessage(
     role,
     status,
   };
+}
+
+function getChatErrorMessage(data?: ChatApiResponse) {
+  if (data?.code) {
+    return chatErrorMessages[data.code];
+  }
+
+  return chatErrorMessages.UNKNOWN_ERROR;
 }
 
 export function ChatPanel({ assistant }: ChatPanelProps) {
@@ -64,7 +90,11 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
       const data = (await response.json()) as ChatApiResponse;
 
       if (!response.ok || data.error || !data.content) {
-        throw new Error(data.error ?? "Resposta inválida da API do assistente.");
+        setMessages((current) => [
+          ...current,
+          createMessage("assistant", getChatErrorMessage(data), "error"),
+        ]);
+        return;
       }
 
       setMessages((current) => [
@@ -74,7 +104,11 @@ export function ChatPanel({ assistant }: ChatPanelProps) {
     } catch {
       setMessages((current) => [
         ...current,
-        createMessage("assistant", friendlyErrorMessage, "error"),
+        createMessage(
+          "assistant",
+          chatErrorMessages.TEMPORARY_ERROR,
+          "error",
+        ),
       ]);
     } finally {
       setIsLoading(false);

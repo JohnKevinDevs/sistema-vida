@@ -77,6 +77,26 @@ Se o Next usar outra porta, ajuste a URL. A chamada real depende de `GEMINI_API_
 
 Ainda não existe histórico persistido ou banco de dados.
 
+Em caso de falha controlada, a API retorna JSON com mensagem amigável e código:
+
+```json
+{
+  "error": "A cota do Gemini foi atingida no momento. Tente novamente mais tarde.",
+  "code": "QUOTA_EXCEEDED"
+}
+```
+
+Códigos principais:
+
+- `MISSING_API_KEY`: a chave do Gemini não foi configurada.
+- `INVALID_API_KEY`: a chave parece inválida ou sem permissão.
+- `QUOTA_EXCEEDED`: a cota ou limite de taxa foi atingido.
+- `MODEL_UNAVAILABLE`: o modelo configurado não está disponível.
+- `EMPTY_RESPONSE`: o Gemini retornou uma resposta vazia.
+- `TEMPORARY_ERROR`: houve instabilidade temporária ou falha de rede.
+- `UNKNOWN_ERROR`: falha não classificada.
+- `INVALID_REQUEST`: o payload enviado para a API é inválido.
+
 ## Chat local
 
 A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia mensagens para `/api/chat`, mostra a mensagem do usuário imediatamente e exibe a resposta ou um erro amigável.
@@ -91,6 +111,18 @@ Para testar manualmente:
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
+Também é possível testar a API diretamente:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"message":"Me ajude a organizar meu dia em 3 passos."}'
+```
+
+Payload inválido:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{}'
+```
+
 Para teste real com Gemini, configure manualmente `GEMINI_API_KEY` em `.env.local`, reinicie o servidor local e envie mensagens como:
 
 - `Tenho escola, CEAP e curso hoje. Me ajude a organizar minhas prioridades.`
@@ -102,4 +134,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 1.7 - Teste real com Gemini e ajustes finais de prompt.
+Fase 1.8 - Tratamento inteligente de erros da API/UI do chat.

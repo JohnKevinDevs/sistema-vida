@@ -8,7 +8,7 @@ function getGeminiApiKey() {
 
   if (!apiKey) {
     throw new Error(
-      "GEMINI_API_KEY nao foi configurada. Defina essa variavel em .env.local antes de chamar o Gemini.",
+      "GEMINI_API_KEY não foi configurada.",
     );
   }
 
@@ -28,7 +28,7 @@ export async function generateGeminiResponse(prompt: string): Promise<string> {
   const trimmedPrompt = prompt.trim();
 
   if (!trimmedPrompt) {
-    throw new Error("O prompt enviado ao Gemini nao pode estar vazio.");
+    throw new Error("O prompt enviado ao Gemini não pode estar vazio.");
   }
 
   const model = getGeminiModel();

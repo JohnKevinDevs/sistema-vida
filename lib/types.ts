@@ -168,11 +168,27 @@ export type AssistantRequest = {
   userMessage: string;
 };
 
+export type AssistantErrorCode =
+  | "INVALID_REQUEST"
+  | "MISSING_API_KEY"
+  | "INVALID_API_KEY"
+  | "QUOTA_EXCEEDED"
+  | "MODEL_UNAVAILABLE"
+  | "EMPTY_RESPONSE"
+  | "TEMPORARY_ERROR"
+  | "UNKNOWN_ERROR";
+
+export type AssistantError = {
+  code: AssistantErrorCode;
+  message: string;
+};
+
 export type AssistantResponse = {
   content: string;
   createdAt: ISODateString;
   model: string;
   error?: string;
+  errorCode?: AssistantErrorCode;
 };
 
 export type LocalChatMessage = {
