@@ -13,17 +13,17 @@ export function ViewSwitcher({
 }: ViewSwitcherProps) {
   return (
     <div
-      aria-label="Alternar recorte da central"
-      className="flex flex-wrap gap-2"
+      aria-label="Alternar contexto da central"
+      className="inline-flex w-full rounded-lg border border-slate-800/80 bg-slate-950/70 p-1 shadow-inner shadow-black/30 sm:w-auto"
       role="group"
     >
       {views.map((view) => (
         <button
           aria-pressed={activeView === view}
-          className={`focus-ring rounded-md border px-3 py-2 text-sm font-medium transition active:scale-[0.98] ${
+          className={`focus-ring min-w-0 flex-1 rounded-md px-4 py-2 text-sm font-medium transition sm:min-w-24 sm:flex-none ${
             activeView === view
-              ? "border-cyan-300/40 bg-cyan-300/15 text-cyan-100"
-              : "border-white/10 bg-white/[0.03] text-neutral-400 hover:border-white/20 hover:text-neutral-100"
+              ? "bg-blue-600 text-white shadow-sm shadow-blue-950/30"
+              : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
           }`}
           key={view}
           onClick={() => onChange(view)}

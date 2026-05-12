@@ -261,44 +261,44 @@ export function ChatPanel({
 
   return (
     <section
-      className={`flex min-h-[620px] flex-col rounded-md border border-white/10 bg-neutral-900/80 p-4 shadow-2xl shadow-black/20 sm:p-5 ${className}`}
+      className={`surface-panel flex min-h-[620px] flex-col rounded-lg border p-4 shadow-2xl shadow-black/30 sm:p-5 ${className}`}
     >
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-300">
             Assistente
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-white">
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
             {assistant.title}
           </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-400">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
             {assistant.description}
           </p>
         </div>
-        <div className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-xs font-medium text-cyan-100">
+        <div className="rounded-full border border-blue-400/25 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-100">
           {activeConversationId ? "Conversa ativa" : "Nova conversa"}
         </div>
       </div>
 
       <div
         aria-live="polite"
-        className="mt-4 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
+        className="mt-5 min-h-0 flex-1 space-y-3 overflow-y-auto pr-1"
       >
         {isHistoryLoading ? (
           <div
-            className="rounded-md border border-cyan-300/20 bg-neutral-900/80 p-3"
+            className="rounded-md border border-blue-400/20 bg-blue-500/10 p-4"
             role="status"
           >
-            <p className="flex items-center gap-2 text-sm leading-6 text-neutral-300">
+            <p className="flex items-center gap-2 text-sm leading-6 text-slate-300">
               <span
                 aria-hidden="true"
-                className="h-2 w-2 rounded-full bg-cyan-200"
+                className="h-2 w-2 animate-pulse rounded-full bg-blue-300"
               />
               Carregando histórico da conversa...
             </p>
           </div>
         ) : historyLoadState === "error" ? (
-          <div className="rounded-md border border-amber-300/30 bg-amber-300/10 p-3">
+          <div className="rounded-md border border-amber-300/25 bg-amber-300/10 p-4">
             <p className="text-sm leading-6 text-amber-100">
               Não consegui carregar esta conversa agora. Tente selecionar outra
               conversa ou envie uma nova mensagem.
@@ -309,8 +309,8 @@ export function ChatPanel({
             <ChatMessage key={message.id} message={message} />
           ))
         ) : (
-          <div className="rounded-md border border-white/10 bg-neutral-950/40 p-3">
-            <p className="text-sm leading-6 text-neutral-400">
+          <div className="rounded-md border border-slate-800/80 bg-slate-950/55 p-4">
+            <p className="text-sm leading-6 text-slate-400">
               {activeConversationId
                 ? "Esta conversa ainda não tem mensagens salvas."
                 : "Comece pelo que está na sua cabeça agora: uma prioridade, uma dúvida ou uma ideia solta."}
@@ -319,13 +319,13 @@ export function ChatPanel({
         )}
         {isLoading ? (
           <div
-            className="rounded-md border border-cyan-300/20 bg-neutral-900/80 p-3"
+            className="rounded-md border border-blue-400/20 bg-blue-500/10 p-4"
             role="status"
           >
-            <p className="flex items-center gap-2 text-sm leading-6 text-neutral-300">
+            <p className="flex items-center gap-2 text-sm leading-6 text-slate-300">
               <span
                 aria-hidden="true"
-                className="h-2 w-2 rounded-full bg-cyan-200"
+                className="h-2 w-2 animate-pulse rounded-full bg-blue-300"
               />
               Organizando uma resposta para você...
             </p>
@@ -334,23 +334,23 @@ export function ChatPanel({
       </div>
 
       <form
-        className="mt-4 space-y-3 border-t border-white/10 pt-4"
+        className="mt-5 space-y-3 border-t border-slate-800/80 pt-5"
         onSubmit={handleSubmit}
       >
         <div>
           <label
-            className="text-xs font-medium uppercase tracking-[0.16em] text-neutral-500"
+            className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
             htmlFor="assistant-message"
           >
             Mensagem para o assistente
           </label>
-          <p className="mt-1 text-xs leading-5 text-neutral-500" id="chat-hint">
+          <p className="mt-1 text-xs leading-5 text-slate-500" id="chat-hint">
             Use Enter para quebrar linha. Use Ctrl+Enter ou Cmd+Enter para
             enviar.
           </p>
           <textarea
             aria-describedby="chat-hint"
-            className="focus-ring mt-2 min-h-24 w-full resize-none rounded-md border border-white/10 bg-neutral-950/70 px-3 py-2 text-sm leading-6 text-neutral-100 placeholder:text-neutral-600"
+            className="focus-ring mt-2 min-h-28 w-full resize-none rounded-md border border-slate-700/80 bg-slate-950/80 px-3.5 py-3 text-sm leading-6 text-slate-100 placeholder:text-slate-600 transition hover:border-slate-600 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={isLoading || isHistoryLoading}
             id="assistant-message"
             onChange={(event) => setInput(event.target.value)}
@@ -361,7 +361,7 @@ export function ChatPanel({
         </div>
         <button
           aria-label="Enviar mensagem para o assistente"
-          className="focus-ring w-full rounded-md border border-cyan-300/30 bg-cyan-300/15 px-3 py-2 text-sm font-medium text-cyan-100 transition hover:bg-cyan-300/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.03] disabled:text-neutral-500"
+          className="focus-ring w-full rounded-md border border-blue-400/30 bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:border-blue-300/50 hover:bg-blue-500 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 disabled:shadow-none"
           disabled={!canSubmit}
           type="submit"
         >

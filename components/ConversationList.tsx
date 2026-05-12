@@ -221,40 +221,40 @@ export function ConversationList({
   }
 
   return (
-    <section aria-labelledby="saved-conversations-title" className="mt-7">
-      <div className="flex items-center justify-between gap-3">
+    <section aria-labelledby="saved-conversations-title" className="mt-8">
+      <div className="flex items-center justify-between gap-3 px-1">
         <h2
-          className="text-xs font-semibold uppercase tracking-[0.18em] text-neutral-500"
+          className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500"
           id="saved-conversations-title"
         >
           Conversas
         </h2>
-        <span className="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-medium text-neutral-500">
+        <span className="rounded-full border border-slate-700/80 bg-slate-900/70 px-2 py-0.5 text-[11px] font-medium text-slate-500">
           SQLite
         </span>
       </div>
 
       <div className="mt-3">
         {loadState === "loading" && (
-          <p className="text-sm leading-6 text-neutral-400">
+          <p className="rounded-md border border-slate-800/80 bg-slate-900/55 px-3 py-3 text-sm leading-6 text-slate-400">
             Carregando conversas...
           </p>
         )}
 
         {loadState === "error" && (
-          <p className="text-sm leading-6 text-amber-200">
+          <p className="rounded-md border border-amber-300/20 bg-amber-300/10 px-3 py-3 text-sm leading-6 text-amber-100">
             Não consegui carregar as conversas agora.
           </p>
         )}
 
         {loadState === "success" && conversations.length === 0 && (
-          <p className="text-sm leading-6 text-neutral-500">
+          <p className="rounded-md border border-slate-800/80 bg-slate-900/55 px-3 py-3 text-sm leading-6 text-slate-500">
             Nenhuma conversa salva ainda.
           </p>
         )}
 
         {conversations.length > 0 && (
-          <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1 lg:max-h-[42vh]">
+          <ul className="max-h-80 space-y-1.5 overflow-y-auto pr-1 lg:max-h-[44vh]">
             {conversations.map((conversation) => {
               const isActive = conversation.id === activeConversationId;
               const isEditing = conversation.id === editingConversationId;
@@ -272,23 +272,27 @@ export function ConversationList({
                 <li
                   className={`rounded-md border transition ${
                     isActive
-                      ? "border-cyan-300/30 bg-cyan-300/10"
-                      : "border-transparent bg-transparent hover:bg-white/[0.04]"
+                      ? "border-blue-400/30 bg-blue-500/10 shadow-sm shadow-blue-950/20"
+                      : "border-transparent bg-transparent hover:border-slate-800/80 hover:bg-slate-900/60"
                   }`}
                   key={conversation.id}
                 >
                   <button
                     aria-label={`Carregar conversa: ${conversation.title}`}
                     aria-current={isActive ? "true" : undefined}
-                    className="focus-ring w-full rounded-md px-3 py-2 text-left"
+                    className="focus-ring w-full rounded-md px-3 py-2.5 text-left"
                     data-conversation-id={conversation.id}
                     onClick={() => onSelectConversation(conversation.id)}
                     type="button"
                   >
-                    <span className="line-clamp-1 text-sm font-medium leading-5 text-neutral-100">
+                    <span className="line-clamp-1 text-sm font-medium leading-5 text-slate-100">
                       {conversation.title}
                     </span>
-                    <span className="mt-0.5 block text-xs text-neutral-500">
+                    <span
+                      className={`mt-1 block text-xs ${
+                        isActive ? "text-blue-200/80" : "text-slate-500"
+                      }`}
+                    >
                       {formatUpdatedAt(conversation.updatedAt)}
                     </span>
                   </button>
@@ -305,7 +309,7 @@ export function ConversationList({
                           Novo título da conversa
                         </label>
                         <input
-                          className="focus-ring w-full rounded-md border border-white/10 bg-neutral-950/80 px-2 py-1.5 text-sm text-neutral-100 placeholder:text-neutral-600"
+                          className="focus-ring w-full rounded-md border border-slate-700/80 bg-slate-950/90 px-2.5 py-2 text-sm text-slate-100 placeholder:text-slate-600"
                           data-conversation-rename-input={conversation.id}
                           disabled={isRenaming}
                           id={titleInputId}
@@ -322,7 +326,7 @@ export function ConversationList({
                         ) : null}
                         <div className="flex gap-2">
                           <button
-                            className="focus-ring rounded-md border border-cyan-300/30 px-2 py-1 text-xs font-medium text-cyan-100 transition hover:bg-cyan-300/10 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-neutral-500"
+                            className="focus-ring rounded-md border border-blue-400/30 bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-100 transition hover:bg-blue-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
                             data-conversation-rename-save={conversation.id}
                             disabled={isRenaming}
                             type="submit"
@@ -330,7 +334,7 @@ export function ConversationList({
                             {isRenaming ? "Salvando..." : "Salvar"}
                           </button>
                           <button
-                            className="focus-ring rounded-md border border-white/10 px-2 py-1 text-xs font-medium text-neutral-300 transition hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:text-neutral-500"
+                            className="focus-ring rounded-md border border-slate-700/80 px-2.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:text-slate-500"
                             disabled={isRenaming}
                             onClick={cancelRename}
                             type="button"
@@ -340,14 +344,14 @@ export function ConversationList({
                         </div>
                       </form>
                     ) : isPendingDelete ? (
-                      <div className="space-y-2">
-                        <p className="text-xs leading-5 text-amber-100">
+                      <div className="space-y-2 rounded-md border border-red-300/15 bg-red-500/10 p-2.5">
+                        <p className="text-xs leading-5 text-red-100">
                           Excluir esta conversa? Essa ação não pode ser
                           desfeita.
                         </p>
                         <div className="flex flex-wrap gap-2">
                           <button
-                            className="focus-ring rounded-md border border-red-300/30 px-2 py-1 text-xs font-medium text-red-100 transition hover:bg-red-300/10 disabled:cursor-not-allowed disabled:border-white/10 disabled:text-neutral-500"
+                            className="focus-ring rounded-md border border-red-300/30 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-100 transition hover:bg-red-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
                             data-conversation-delete-confirm={conversation.id}
                             disabled={isDeleting}
                             onClick={() => {
@@ -358,7 +362,7 @@ export function ConversationList({
                             {isDeleting ? "Excluindo..." : "Confirmar"}
                           </button>
                           <button
-                            className="focus-ring rounded-md border border-white/10 px-2 py-1 text-xs font-medium text-neutral-300 transition hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:text-neutral-500"
+                            className="focus-ring rounded-md border border-slate-700/80 px-2.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:text-slate-500"
                             data-conversation-delete-cancel={conversation.id}
                             disabled={isDeleting}
                             onClick={() => setPendingDeleteConversationId(null)}
@@ -371,7 +375,7 @@ export function ConversationList({
                     ) : (
                       <div className="flex flex-wrap gap-1.5">
                         <button
-                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-neutral-500 transition hover:bg-white/[0.06] hover:text-neutral-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-slate-500 transition hover:bg-slate-800/80 hover:text-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
                           data-conversation-rename={conversation.id}
                           disabled={isDeleting}
                           onClick={() => startRename(conversation)}
@@ -380,7 +384,7 @@ export function ConversationList({
                           Renomear
                         </button>
                         <button
-                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-300/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-neutral-600"
+                          className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-500/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-slate-600"
                           data-conversation-delete={conversation.id}
                           disabled={isDeleting}
                           onClick={() =>
@@ -393,7 +397,7 @@ export function ConversationList({
                       </div>
                     )}
                     {currentDeleteError ? (
-                      <p className="mt-2 text-xs leading-5 text-amber-200">
+                      <p className="mt-2 rounded-md border border-amber-300/20 bg-amber-300/10 px-2 py-1.5 text-xs leading-5 text-amber-100">
                         {currentDeleteError}
                       </p>
                     ) : null}

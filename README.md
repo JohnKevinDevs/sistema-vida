@@ -236,6 +236,8 @@ Na Fase 3.0, a interface foi refinada para reduzir poluição visual. A sidebar 
 
 O chat ganhou mais espaço e passou a ser a área de maior protagonismo da tela, mantendo o mesmo fluxo técnico de conversa, histórico, renomear, excluir e persistência local.
 
+Na Fase 3.1, a UI recebeu um polish visual mais forte: paleta escura com azul profundo como acento, superfícies mais consistentes, melhor hierarquia tipográfica, espaçamentos mais confortáveis, botões e estados ativos mais refinados, mensagens do chat mais legíveis e microcopy revisada em PT-BR.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -279,4 +281,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 3.0 - refino de produto e layout v1.
+Fase 3.1 - polish visual forte de UI/UX.

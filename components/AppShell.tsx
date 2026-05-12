@@ -26,8 +26,8 @@ export function AppShell({
   selectedProjectId,
 }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto flex min-h-screen w-full max-w-[1600px] flex-col lg:flex-row">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="mx-auto flex min-h-screen w-full max-w-[1680px] flex-col lg:flex-row">
         <Sidebar
           activeConversationId={activeConversationId}
           conversationListRefreshKey={conversationListRefreshKey}
@@ -38,7 +38,7 @@ export function AppShell({
           projects={projects}
           selectedProjectId={selectedProjectId}
         />
-        <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+        <main className="min-w-0 flex-1 px-4 py-5 sm:px-6 lg:px-8 lg:py-7 xl:px-10">
           {children}
         </main>
       </div>

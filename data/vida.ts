@@ -12,9 +12,9 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 3.0 em refino visual",
-  mainFocus: "Usar o chat como porta de entrada para organizar o dia.",
-  nextFocus: "Manter a central simples: dia, semana e metas.",
+  state: "Fase 3.1 com polish visual",
+  mainFocus: "Começar pelo chat e transformar o dia em decisões claras.",
+  nextFocus: "Evoluir tarefas reais sem perder a clareza da central.",
 };
 
 export const dashboardStats: DashboardStat[] = [
@@ -28,15 +28,15 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "3.0",
-    detail: "layout de produto em refinamento",
+    value: "3.1",
+    detail: "polish visual de UI e UX",
     tone: "emerald",
   },
   {
     id: "proximo-foco",
     label: "Próximo foco",
     value: "Tarefas",
-    detail: "persistência real sem poluir a tela",
+    detail: "persistência real com interface limpa",
     tone: "amber",
   },
 ];
@@ -46,19 +46,19 @@ export const viewSummaries: ViewSummary[] = [
     view: "Dia",
     title: "Dia em foco",
     description:
-      "Prioridades essenciais, próximo passo e espaço para conversar com o assistente.",
+      "Prioridades essenciais, próximo passo e conversa para organizar a ação.",
   },
   {
     view: "Semana",
     title: "Semana em andamento",
     description:
-      "Projetos, blocos de rotina e pontos de atenção para distribuir energia.",
+      "Projetos, ritmo e pontos de atenção para distribuir energia com calma.",
   },
   {
     view: "Metas",
     title: "Metas principais",
     description:
-      "Progresso simples das direções mais importantes do Sistema JK.",
+      "Direções maiores do Sistema JK, sem transformar tudo em painel pesado.",
   },
 ];
 
@@ -83,8 +83,8 @@ export const lifeAreas: LifeArea[] = [
 export const todayTasks: Task[] = [
   {
     id: "base-visual",
-    title: "Validar a nova hierarquia visual",
-    description: "Conferir se o chat ficou mais central e se a tela respira melhor.",
+    title: "Validar o polish visual",
+    description: "Conferir hierarquia, espaçamento e legibilidade da central.",
     status: "todo",
     priority: "high",
     area: "sistema",
@@ -95,8 +95,8 @@ export const todayTasks: Task[] = [
   },
   {
     id: "estado-local",
-    title: "Testar conversas salvas",
-    description: "Selecionar, renomear, excluir e continuar uma conversa real.",
+    title: "Testar fluxo de conversas",
+    description: "Selecionar, renomear, excluir e continuar uma conversa salva.",
     status: "in_progress",
     priority: "medium",
     area: "tarefas",
@@ -108,7 +108,7 @@ export const todayTasks: Task[] = [
   {
     id: "proximos-passos",
     title: "Registrar o próximo ciclo",
-    description: "Definir o início do módulo de tarefas reais sem criar excesso.",
+    description: "Definir o início das tarefas reais sem criar excesso visual.",
     status: "todo",
     priority: "medium",
     area: "planejamento",
@@ -127,7 +127,7 @@ export const mainGoals: Goal[] = [
     status: "active",
     progress: 22,
     targetDate: "2026-06-30T00:00:00.000Z",
-    note: "Chat, histórico local e módulo de conversas já estão estáveis.",
+    note: "Chat, histórico local e conversas já estão estáveis.",
   },
   {
     id: "revisao-diaria",
@@ -136,7 +136,7 @@ export const mainGoals: Goal[] = [
     status: "planned",
     progress: 14,
     targetDate: "2026-06-15T00:00:00.000Z",
-    note: "A rotina ainda é visual, mas já tem lugar claro na central.",
+    note: "A rotina ainda é visual, mas já tem um lugar claro na central.",
   },
   {
     id: "evolucao-controlada",
@@ -155,7 +155,7 @@ export const activeProjects: Project[] = [
     description: "Aplicação local para organizar vida, tarefas e revisões.",
     status: "active",
     area: "sistema",
-    nextAction: "Refinar layout antes de iniciar tarefas reais",
+    nextAction: "Consolidar a experiência antes de criar tarefas reais",
     signal: "Verde",
     createdAt: "2026-05-10T09:00:00.000Z",
     updatedAt: "2026-05-10T09:00:00.000Z",
@@ -189,7 +189,7 @@ export const routineBlocks: RoutineBlock[] = [
     id: "abertura-dia",
     title: "Abertura do dia",
     window: "08:00",
-    focus: "Ver prioridades, energia e primeira acao.",
+    focus: "Ver prioridades, energia e primeira ação.",
     area: "rotina",
   },
   {
@@ -212,5 +212,5 @@ export const assistantPreview: AssistantPreview = {
   title: "Assistente do Sistema JK",
   status: "Chat com histórico local ativo",
   description:
-    "Use para transformar ideias soltas em próximos passos claros.",
+    "Organize ideias soltas, prioridades e próximos passos em poucos minutos.",
 };
