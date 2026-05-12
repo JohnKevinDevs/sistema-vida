@@ -187,6 +187,8 @@ O histórico visual fica em estado local do React. Ao recarregar a página, a ú
 
 A sidebar busca `GET /api/conversations` no client e mostra conversas salvas localmente no SQLite. Ao selecionar uma conversa, o chat usa `GET /api/conversations/[conversationId]/messages` para carregar as mensagens salvas e continua enviando novas mensagens no mesmo `conversationId`.
 
+O botão `Nova conversa` limpa apenas o chat visível, remove a seleção atual e prepara a próxima mensagem para criar uma nova conversa no SQLite. Conversas antigas não são apagadas.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -196,6 +198,7 @@ Para testar manualmente:
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
+- Clique em `Nova conversa` e confirme que o chat volta ao estado inicial e a seleção antiga sai da sidebar.
 - Sem `GEMINI_API_KEY`, a UI deve mostrar um erro amigável informando que a chave precisa ser configurada.
 
 Também é possível testar a API diretamente:
@@ -227,4 +230,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 2.6 - seleção de conversa salva e carregamento de mensagens no chat.
+Fase 2.7 - botão de nova conversa e reset do chat atual.

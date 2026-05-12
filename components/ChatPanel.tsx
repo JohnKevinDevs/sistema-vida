@@ -12,7 +12,9 @@ import type {
 type ChatPanelProps = {
   activeConversationId: string | null;
   assistant: AssistantPreview;
+  resetKey: number;
   onConversationChange: (conversationId: string) => void;
+  onConversationCreated: (conversationId: string) => void;
 };
 
 type ChatApiResponse = {
@@ -95,7 +97,9 @@ function isLocalChatMessage(
 export function ChatPanel({
   activeConversationId,
   assistant,
+  resetKey,
   onConversationChange,
+  onConversationCreated,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
   const [historyLoadState, setHistoryLoadState] =
@@ -106,6 +110,12 @@ export function ChatPanel({
   const trimmedInput = input.trim();
   const isHistoryLoading = historyLoadState === "loading";
   const canSubmit = Boolean(trimmedInput) && !isLoading && !isHistoryLoading;
+
+  useEffect(() => {
+    setInput("");
+    setHistoryLoadState("idle");
+    setMessages([]);
+  }, [resetKey]);
 
   useEffect(() => {
     let isMounted = true;
@@ -191,7 +201,11 @@ export function ChatPanel({
       }
 
       if (data.conversationId) {
-        onConversationChange(data.conversationId);
+        if (activeConversationId) {
+          onConversationChange(data.conversationId);
+        } else {
+          onConversationCreated(data.conversationId);
+        }
       }
 
       setMessages((current) => [

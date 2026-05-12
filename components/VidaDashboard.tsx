@@ -31,7 +31,10 @@ export function VidaDashboard() {
   const [activeConversationId, setActiveConversationId] = useState<
     string | null
   >(null);
+  const [chatResetKey, setChatResetKey] = useState(0);
   const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
+  const [conversationListRefreshKey, setConversationListRefreshKey] =
+    useState(0);
   const [selectedProjectId, setSelectedProjectId] = useState(
     activeProjects[0]?.id ?? "",
   );
@@ -58,9 +61,21 @@ export function VidaDashboard() {
     );
   }
 
+  function startNewConversation() {
+    setActiveConversationId(null);
+    setChatResetKey((current) => current + 1);
+  }
+
+  function handleConversationCreated(conversationId: string) {
+    setActiveConversationId(conversationId);
+    setConversationListRefreshKey((current) => current + 1);
+  }
+
   return (
     <AppShell
       activeConversationId={activeConversationId}
+      conversationListRefreshKey={conversationListRefreshKey}
+      onStartNewConversation={startNewConversation}
       onSelectConversation={setActiveConversationId}
     >
       <div className="space-y-8">
@@ -128,7 +143,9 @@ export function VidaDashboard() {
             <ChatPanel
               activeConversationId={activeConversationId}
               assistant={assistantPreview}
+              resetKey={chatResetKey}
               onConversationChange={setActiveConversationId}
+              onConversationCreated={handleConversationCreated}
             />
           </div>
         </section>

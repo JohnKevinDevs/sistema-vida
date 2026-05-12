@@ -11,6 +11,7 @@ type LoadState = "idle" | "loading" | "success" | "error";
 
 type ConversationListProps = {
   activeConversationId: string | null;
+  refreshKey: number;
   onSelectConversation: (conversationId: string) => void;
 };
 
@@ -31,6 +32,7 @@ function formatUpdatedAt(value: string) {
 
 export function ConversationList({
   activeConversationId,
+  refreshKey,
   onSelectConversation,
 }: ConversationListProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -74,7 +76,7 @@ export function ConversationList({
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [refreshKey]);
 
   return (
     <section
