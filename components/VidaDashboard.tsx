@@ -83,11 +83,8 @@ export function VidaDashboard() {
       activeConversationId={activeConversationId}
       conversationListRefreshKey={conversationListRefreshKey}
       onDeleteConversation={handleConversationDeleted}
-      onSelectProject={setSelectedProjectId}
       onStartNewConversation={startNewConversation}
       onSelectConversation={setActiveConversationId}
-      projects={activeProjects}
-      selectedProjectId={selectedProjectId}
     >
       <div className="flex min-h-[calc(100vh-2rem)] flex-col gap-6">
         <header className="flex flex-col gap-6 border-b border-slate-800/80 pb-6 xl:flex-row xl:items-end xl:justify-between">

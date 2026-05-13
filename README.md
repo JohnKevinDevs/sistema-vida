@@ -135,7 +135,7 @@ Endpoints iniciais de projetos:
 - `PATCH /api/projects/[projectId]`: atualiza `name`, `description` ou `status`.
 - `DELETE /api/projects/[projectId]`: exclui um projeto salvo.
 
-Projetos ainda não estão conectados à sidebar, ao chat ou às conversas. A Fase 4.1 prepara apenas a base persistente; a associação entre conversas e projetos fica para uma etapa futura.
+A partir da Fase 4.2, a sidebar usa esses projetos reais para criar, listar, renomear e excluir espaços do Sistema JK. Projetos ainda não estão conectados ao chat ou às conversas; a associação entre conversas e projetos fica para uma etapa futura.
 
 Status válidos para projetos persistidos:
 
@@ -261,7 +261,9 @@ Na Fase 3.1, a UI recebeu um polish visual mais forte: paleta escura com azul pr
 
 Na Fase 3.2, a sidebar foi limpa para deixar a interface com mais cara de produto final. Metadados técnicos como versão local, SQLite, Gemini e fase atual saíram da UI principal e ficaram apenas documentados aqui. A seção `Conversas` manteve a lista real, seleção, renomear e excluir. A seção `Projetos` ficou mais discreta e conceitual, preparando a futura lógica de pastas/containers sem criar CRUD falso de projetos.
 
-Na Fase 4.1, foi criada a base real de projetos no SQLite. O banco passou a ter a tabela `projects`, funções de acesso em `lib/db.ts` e endpoints básicos para criar, listar, atualizar e excluir projetos. A UI ainda não usa esses projetos reais e conversas ainda não pertencem a projetos nesta fase.
+Na Fase 4.1, foi criada a base real de projetos no SQLite. O banco passou a ter a tabela `projects`, funções de acesso em `lib/db.ts` e endpoints básicos para criar, listar, atualizar e excluir projetos.
+
+Na Fase 4.2, a seção `Projetos` da sidebar passou a buscar projetos reais em `GET /api/projects`. A UI permite criar, renomear e excluir projetos com estado local simples, loading, erro e estado vazio. As conversas continuam globais e ainda não são filtradas nem movidas para dentro de projetos.
 
 Para testar manualmente:
 
@@ -271,6 +273,7 @@ Para testar manualmente:
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
+- Na seção `Projetos`, crie um projeto, renomeie e exclua para validar a persistência local.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
 - Use `Renomear` em uma conversa e confirme que o novo título aparece na sidebar.
 - Use `Excluir` em uma conversa e confirme que ela sai da sidebar apenas após confirmação.
@@ -306,4 +309,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 4.1 - base real de projetos no SQLite.
+Fase 4.2 - UI real de projetos na sidebar.
