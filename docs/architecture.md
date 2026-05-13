@@ -28,6 +28,10 @@ O Sistema JK e uma aplicacao Next.js local com UI em React, API routes server-si
 - `POST /api/projects`: cria projeto.
 - `PATCH /api/projects/[projectId]`: atualiza projeto.
 - `DELETE /api/projects/[projectId]`: exclui projeto.
+- `GET /api/tasks`: lista tarefas.
+- `POST /api/tasks`: cria tarefa.
+- `PATCH /api/tasks/[taskId]`: atualiza tarefa.
+- `DELETE /api/tasks/[taskId]`: exclui tarefa.
 
 ## Banco atual
 
@@ -42,6 +46,7 @@ Tabelas atuais:
 - `conversations`
 - `messages`
 - `projects`
+- `tasks`
 
 ### `conversations`
 
@@ -83,6 +88,35 @@ Status aceitos:
 - `active`
 - `paused`
 - `archived`
+
+### `tasks`
+
+Campos principais:
+
+- `id`
+- `title`
+- `description`
+- `status`
+- `priority`
+- `project_id`
+- `due_date`
+- `created_at`
+- `updated_at`
+
+`project_id` e opcional. Tarefas globais usam `null`.
+
+Status aceitos:
+
+- `pending`
+- `in_progress`
+- `done`
+- `canceled`
+
+Prioridades aceitas:
+
+- `low`
+- `medium`
+- `high`
 
 ## Regras de banco
 

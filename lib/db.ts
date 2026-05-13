@@ -7,11 +7,15 @@ import type {
   CreateConversationInput,
   CreateMessageInput,
   CreateProjectInput,
+  CreateTaskInput,
   Message,
   MessageRole,
   StoredProject,
   StoredProjectStatus,
+  StoredTask,
+  StoredTaskStatus,
   UpdateProjectInput,
+  UpdateTaskInput,
 } from "@/lib/types";
 
 type SqliteRunResult = {
@@ -55,6 +59,18 @@ type ProjectRow = {
   id: string;
   name: string;
   status: StoredProjectStatus;
+  updated_at: string;
+};
+
+type TaskRow = {
+  created_at: string;
+  description: string | null;
+  due_date: string | null;
+  id: string;
+  priority: StoredTask["priority"];
+  project_id: string | null;
+  status: StoredTaskStatus;
+  title: string;
   updated_at: string;
 };
 
@@ -124,6 +140,20 @@ function mapProject(row: ProjectRow): StoredProject {
   };
 }
 
+function mapTask(row: TaskRow): StoredTask {
+  return {
+    createdAt: row.created_at,
+    description: row.description,
+    dueDate: row.due_date,
+    id: row.id,
+    priority: row.priority,
+    projectId: row.project_id,
+    status: row.status,
+    title: row.title,
+    updatedAt: row.updated_at,
+  };
+}
+
 function ensureConversationProjectColumn(database: SqliteDatabase) {
   const columns = database
     .prepare<TableInfoRow>("PRAGMA table_info(conversations)")
@@ -176,6 +206,18 @@ export function initializeDatabase() {
       updated_at TEXT NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS tasks (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      description TEXT,
+      status TEXT NOT NULL,
+      priority TEXT NOT NULL,
+      project_id TEXT,
+      due_date TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS idx_conversations_updated_at
       ON conversations(updated_at);
 
@@ -184,6 +226,12 @@ export function initializeDatabase() {
 
     CREATE INDEX IF NOT EXISTS idx_projects_updated_at
       ON projects(updated_at);
+
+    CREATE INDEX IF NOT EXISTS idx_tasks_project_id
+      ON tasks(project_id);
+
+    CREATE INDEX IF NOT EXISTS idx_tasks_updated_at
+      ON tasks(updated_at);
   `);
 
   ensureConversationProjectColumn(database);
@@ -346,6 +394,177 @@ export function deleteProject(id: string): boolean {
     .prepare(
       `
         DELETE FROM projects
+        WHERE id = ?
+      `,
+    )
+    .run(id);
+
+  return result.changes > 0;
+}
+
+export function createTask(input: CreateTaskInput): StoredTask {
+  const database = initializeDatabase();
+  const createdAt = nowIso();
+  const task: StoredTask = {
+    createdAt,
+    description: normalizeOptionalText(input.description),
+    dueDate: normalizeOptionalText(input.dueDate),
+    id: randomUUID(),
+    priority: input.priority ?? "medium",
+    projectId: input.projectId ?? null,
+    status: input.status ?? "pending",
+    title: input.title.trim(),
+    updatedAt: createdAt,
+  };
+
+  database
+    .prepare(
+      `
+        INSERT INTO tasks (
+          id,
+          title,
+          description,
+          status,
+          priority,
+          project_id,
+          due_date,
+          created_at,
+          updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `,
+    )
+    .run(
+      task.id,
+      task.title,
+      task.description,
+      task.status,
+      task.priority,
+      task.projectId,
+      task.dueDate,
+      task.createdAt,
+      task.updatedAt,
+    );
+
+  return task;
+}
+
+export function listTasks(): StoredTask[] {
+  const database = initializeDatabase();
+  const rows = database
+    .prepare<TaskRow>(
+      `
+        SELECT
+          id,
+          title,
+          description,
+          status,
+          priority,
+          project_id,
+          due_date,
+          created_at,
+          updated_at
+        FROM tasks
+        ORDER BY updated_at DESC
+      `,
+    )
+    .all();
+
+  return rows.map(mapTask);
+}
+
+export function getTaskById(id: string): StoredTask | null {
+  const database = initializeDatabase();
+  const row = database
+    .prepare<TaskRow>(
+      `
+        SELECT
+          id,
+          title,
+          description,
+          status,
+          priority,
+          project_id,
+          due_date,
+          created_at,
+          updated_at
+        FROM tasks
+        WHERE id = ?
+      `,
+    )
+    .get(id);
+
+  return row ? mapTask(row) : null;
+}
+
+export function updateTask(
+  id: string,
+  input: UpdateTaskInput,
+): StoredTask | null {
+  const database = initializeDatabase();
+  const existingTask = getTaskById(id);
+
+  if (!existingTask) {
+    return null;
+  }
+
+  const hasDescription = Object.prototype.hasOwnProperty.call(
+    input,
+    "description",
+  );
+  const hasDueDate = Object.prototype.hasOwnProperty.call(input, "dueDate");
+  const hasProjectId = Object.prototype.hasOwnProperty.call(input, "projectId");
+  const updatedAt = nowIso();
+
+  const title =
+    typeof input.title === "string" ? input.title.trim() : existingTask.title;
+  const description = hasDescription
+    ? normalizeOptionalText(input.description)
+    : existingTask.description;
+  const dueDate = hasDueDate
+    ? normalizeOptionalText(input.dueDate)
+    : existingTask.dueDate;
+  const projectId = hasProjectId
+    ? input.projectId ?? null
+    : existingTask.projectId;
+  const status = input.status ?? existingTask.status;
+  const priority = input.priority ?? existingTask.priority;
+
+  database
+    .prepare(
+      `
+        UPDATE tasks
+        SET
+          title = ?,
+          description = ?,
+          status = ?,
+          priority = ?,
+          project_id = ?,
+          due_date = ?,
+          updated_at = ?
+        WHERE id = ?
+      `,
+    )
+    .run(
+      title,
+      description,
+      status,
+      priority,
+      projectId,
+      dueDate,
+      updatedAt,
+      id,
+    );
+
+  return getTaskById(id);
+}
+
+export function deleteTask(id: string): boolean {
+  const database = initializeDatabase();
+  const result = database
+    .prepare(
+      `
+        DELETE FROM tasks
         WHERE id = ?
       `,
     )

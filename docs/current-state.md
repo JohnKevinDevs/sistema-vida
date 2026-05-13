@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 4.5.
+Documento atualizado apos a Fase 5.1.
 
 ## Fases concluidas
 
@@ -18,6 +18,7 @@ Documento atualizado apos a Fase 4.5.
 - Fase 4.3: associacao inicial de conversas a projetos.
 - Fase 4.4: filtro de conversas por projeto selecionado.
 - Fase 4.5: auditoria do modulo Projetos + Conversas.
+- Fase 5.1: base real de tarefas no SQLite.
 
 ## Funcionalidades prontas
 
@@ -41,6 +42,9 @@ Documento atualizado apos a Fase 4.5.
 - Filtrar conversas da sidebar pelo projeto ativo.
 - Exibir conversas globais quando nenhum projeto esta selecionado.
 - Limpar o chat visivel ao trocar entre projeto ativo e visao global.
+- Base persistente de tarefas no SQLite.
+- Endpoints basicos para criar, listar, atualizar e excluir tarefas.
+- Tarefas podem ser globais ou associadas opcionalmente a projetos.
 
 ## Estado funcional validado
 
@@ -53,13 +57,15 @@ Documento atualizado apos a Fase 4.5.
 - A sidebar mostra conversas do projeto selecionado ou conversas globais sem projeto ativo.
 - Excluir projeto preserva conversas associadas e remove a associacao, voltando-as para globais.
 - Renomear/excluir conversas e criar/renomear/excluir projetos foram auditados apos o filtro por projeto.
+- A tabela `tasks` existe no SQLite com `project_id` opcional.
+- `GET /api/tasks`, `POST /api/tasks`, `PATCH /api/tasks/[taskId]` e `DELETE /api/tasks/[taskId]` existem e validam entradas basicas.
 
 ## O que ainda nao existe
 
 - Mover conversas existentes entre projetos pela UI.
 - Visao "todas as conversas" dentro da sidebar.
 - Associar conversas antigas a projetos pela UI.
-- Tarefas persistentes.
+- Tarefas persistentes conectadas a UI.
 - Metas persistentes.
 - Rotina persistente.
 - Revisoes diarias ou semanais persistentes.
@@ -72,4 +78,4 @@ Documento atualizado apos a Fase 4.5.
 
 ## Proximo passo recomendado
 
-Fase 5.1: iniciar tarefas reais no SQLite, mantendo o escopo pequeno e sem mexer em metas ou memoria.
+Fase 5.2: conectar a UI de tarefas aos endpoints reais, mantendo o escopo pequeno e sem mexer em metas ou memoria.

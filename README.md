@@ -100,6 +100,7 @@ O acesso ao banco está isolado em `lib/db.ts`. Nesta fase, ele cria as tabelas:
 - `conversations`
 - `messages`
 - `projects`
+- `tasks`
 
 Funções disponíveis:
 
@@ -116,6 +117,11 @@ Funções disponíveis:
 - `getProjectById(id)`
 - `updateProject(id, input)`
 - `deleteProject(id)`
+- `createTask(input)`
+- `listTasks()`
+- `getTaskById(id)`
+- `updateTask(id, input)`
+- `deleteTask(id)`
 
 A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI guarda o `conversationId` apenas em estado local durante a sessão atual, então mensagens seguintes continuam a mesma conversa enquanto a página não for recarregada. Ao selecionar uma conversa na sidebar, o histórico salvo é carregado no chat.
 
@@ -137,6 +143,13 @@ Endpoints iniciais de projetos:
 - `PATCH /api/projects/[projectId]`: atualiza `name`, `description` ou `status`.
 - `DELETE /api/projects/[projectId]`: exclui um projeto salvo.
 
+Endpoints iniciais de tarefas:
+
+- `GET /api/tasks`: lista tarefas salvas.
+- `POST /api/tasks`: cria uma tarefa com `title`, `description` opcional, `status` opcional, `priority` opcional, `projectId` opcional e `dueDate` opcional.
+- `PATCH /api/tasks/[taskId]`: atualiza `title`, `description`, `status`, `priority`, `projectId` ou `dueDate`.
+- `DELETE /api/tasks/[taskId]`: exclui uma tarefa salva.
+
 A partir da Fase 4.2, a sidebar usa esses projetos reais para criar, listar, renomear e excluir espaços do Sistema JK.
 
 Na Fase 4.3, conversas passaram a aceitar `projectId` opcional. A migração adiciona a coluna `project_id` em `conversations` de forma idempotente, preservando conversas e mensagens antigas com `project_id = null`. Para reduzir risco de perda de dados no SQLite local, a FK formal ainda não é recriada na tabela; a integridade é validada pela aplicação ao criar novas conversas, e excluir um projeto remove a associação das conversas sem apagar o histórico.
@@ -144,6 +157,37 @@ Na Fase 4.3, conversas passaram a aceitar `projectId` opcional. A migração adi
 Na Fase 4.4, `GET /api/conversations` passou a aceitar filtros simples. A sidebar usa `?projectId=ID` quando existe um projeto ativo e `?scope=global` quando nenhum projeto está selecionado. Assim, projetos mostram apenas suas conversas associadas, enquanto a visão global mostra apenas conversas sem projeto.
 
 Na Fase 4.5, o módulo de projetos e conversas foi auditado. O fluxo validado cobre projetos reais, conversas globais, conversas associadas, filtro por projeto, renomear/excluir conversas, criar/renomear/excluir projetos e exclusão de projeto com conversas associadas. A auditoria também ajustou a troca de contexto: ao selecionar ou limpar um projeto, o chat visível volta para o estado de nova conversa, evitando continuar acidentalmente uma conversa de outro contexto.
+
+Na Fase 5.1, foi criada a base real de tarefas no SQLite. A tabela `tasks` suporta tarefas globais ou associadas opcionalmente a projetos por `project_id`. A UI ainda não usa esses dados; os endpoints existem como fundação para a próxima fase.
+
+Status válidos para tarefas persistidas:
+
+- `pending`
+- `in_progress`
+- `done`
+- `canceled`
+
+Prioridades válidas para tarefas persistidas:
+
+- `low`
+- `medium`
+- `high`
+
+Formato de tarefa:
+
+```json
+{
+  "id": "id-da-tarefa",
+  "title": "Validar fluxo de tarefas",
+  "description": "Opcional",
+  "status": "pending",
+  "priority": "medium",
+  "projectId": "id-do-projeto-ou-null",
+  "dueDate": "2026-05-13",
+  "createdAt": "2026-05-13T10:00:00.000Z",
+  "updatedAt": "2026-05-13T10:00:00.000Z"
+}
+```
 
 Status válidos para projetos persistidos:
 
@@ -346,4 +390,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 4.5 - auditoria do módulo Projetos + Conversas.
+Fase 5.1 - base real de tarefas no SQLite.

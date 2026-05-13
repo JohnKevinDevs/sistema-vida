@@ -17,6 +17,12 @@ export type LifeAreaId =
 
 export type TaskStatus = "todo" | "in_progress" | "done" | "blocked";
 
+export type StoredTaskStatus =
+  | "pending"
+  | "in_progress"
+  | "done"
+  | "canceled";
+
 export type TaskPriority = "low" | "medium" | "high";
 
 export type ProjectStatus = "planned" | "active" | "paused" | "completed";
@@ -94,6 +100,36 @@ export type UpdateProjectInput = {
   name?: string;
   description?: string | null;
   status?: StoredProjectStatus;
+};
+
+export type StoredTask = {
+  id: EntityId;
+  title: string;
+  description: string | null;
+  status: StoredTaskStatus;
+  priority: TaskPriority;
+  projectId: EntityId | null;
+  dueDate: ISODateString | null;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+};
+
+export type CreateTaskInput = {
+  title: string;
+  description?: string | null;
+  status?: StoredTaskStatus;
+  priority?: TaskPriority;
+  projectId?: EntityId | null;
+  dueDate?: ISODateString | null;
+};
+
+export type UpdateTaskInput = {
+  title?: string;
+  description?: string | null;
+  status?: StoredTaskStatus;
+  priority?: TaskPriority;
+  projectId?: EntityId | null;
+  dueDate?: ISODateString | null;
 };
 
 export type Goal = {
