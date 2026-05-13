@@ -4,8 +4,9 @@ import { createRequire } from "module";
 import { join } from "path";
 import type {
   Conversation,
-  CreateProjectInput,
+  CreateConversationInput,
   CreateMessageInput,
+  CreateProjectInput,
   Message,
   MessageRole,
   StoredProject,
@@ -35,6 +36,7 @@ type SqliteDatabaseConstructor = new (filename: string) => SqliteDatabase;
 type ConversationRow = {
   created_at: string;
   id: string;
+  project_id: string | null;
   title: string;
   updated_at: string;
 };
@@ -54,6 +56,10 @@ type ProjectRow = {
   name: string;
   status: StoredProjectStatus;
   updated_at: string;
+};
+
+type TableInfoRow = {
+  name: string;
 };
 
 const nodeRequire = createRequire(import.meta.url);
@@ -91,6 +97,7 @@ function mapConversation(row: ConversationRow): Conversation {
   return {
     createdAt: row.created_at,
     id: row.id,
+    projectId: row.project_id,
     title: row.title,
     updatedAt: row.updated_at,
   };
@@ -117,6 +124,17 @@ function mapProject(row: ProjectRow): StoredProject {
   };
 }
 
+function ensureConversationProjectColumn(database: SqliteDatabase) {
+  const columns = database
+    .prepare<TableInfoRow>("PRAGMA table_info(conversations)")
+    .all();
+  const hasProjectId = columns.some((column) => column.name === "project_id");
+
+  if (!hasProjectId) {
+    database.exec("ALTER TABLE conversations ADD COLUMN project_id TEXT;");
+  }
+}
+
 export function getDb() {
   ensureDataDirectory();
 
@@ -135,6 +153,7 @@ export function initializeDatabase() {
     CREATE TABLE IF NOT EXISTS conversations (
       id TEXT PRIMARY KEY,
       title TEXT NOT NULL,
+      project_id TEXT,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -167,29 +186,40 @@ export function initializeDatabase() {
       ON projects(updated_at);
   `);
 
+  ensureConversationProjectColumn(database);
+
+  database.exec(`
+    CREATE INDEX IF NOT EXISTS idx_conversations_project_id
+      ON conversations(project_id);
+  `);
+
   return database;
 }
 
-export function createConversation(title?: string): Conversation {
+export function createConversation(
+  input: CreateConversationInput = {},
+): Conversation {
   const database = initializeDatabase();
   const createdAt = nowIso();
   const conversation: Conversation = {
     createdAt,
     id: randomUUID(),
-    title: normalizeTitle(title),
+    projectId: input.projectId ?? null,
+    title: normalizeTitle(input.title),
     updatedAt: createdAt,
   };
 
   database
     .prepare(
       `
-        INSERT INTO conversations (id, title, created_at, updated_at)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO conversations (id, title, project_id, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?)
       `,
     )
     .run(
       conversation.id,
       conversation.title,
+      conversation.projectId,
       conversation.createdAt,
       conversation.updatedAt,
     );
@@ -296,6 +326,22 @@ export function updateProject(
 
 export function deleteProject(id: string): boolean {
   const database = initializeDatabase();
+  const existingProject = getProjectById(id);
+
+  if (!existingProject) {
+    return false;
+  }
+
+  database
+    .prepare(
+      `
+        UPDATE conversations
+        SET project_id = NULL
+        WHERE project_id = ?
+      `,
+    )
+    .run(id);
+
   const result = database
     .prepare(
       `
@@ -313,7 +359,7 @@ export function listConversations(): Conversation[] {
   const rows = database
     .prepare<ConversationRow>(
       `
-        SELECT id, title, created_at, updated_at
+        SELECT id, title, project_id, created_at, updated_at
         FROM conversations
         ORDER BY updated_at DESC
       `,
@@ -328,7 +374,7 @@ export function getConversationById(id: string): Conversation | null {
   const row = database
     .prepare<ConversationRow>(
       `
-        SELECT id, title, created_at, updated_at
+        SELECT id, title, project_id, created_at, updated_at
         FROM conversations
         WHERE id = ?
       `,

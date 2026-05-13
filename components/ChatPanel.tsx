@@ -11,6 +11,7 @@ import type {
 
 type ChatPanelProps = {
   activeConversationId: string | null;
+  activeProjectId: string | null;
   assistant: AssistantPreview;
   className?: string;
   resetKey: number;
@@ -25,6 +26,7 @@ type ChatApiResponse = {
   createdAt?: string;
   error?: string;
   model?: string;
+  projectId?: string | null;
 };
 
 type ConversationMessagesResponse = {
@@ -104,6 +106,7 @@ function isLocalChatMessage(
 
 export function ChatPanel({
   activeConversationId,
+  activeProjectId,
   assistant,
   className = "",
   resetKey,
@@ -191,7 +194,9 @@ export function ChatPanel({
     try {
       const requestBody = activeConversationId
         ? { conversationId: activeConversationId, message }
-        : { message };
+        : activeProjectId
+          ? { message, projectId: activeProjectId }
+          : { message };
       const response = await fetch("/api/chat", {
         body: JSON.stringify(requestBody),
         headers: {

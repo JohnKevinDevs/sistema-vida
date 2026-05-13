@@ -3,18 +3,22 @@ import { Sidebar } from "./Sidebar";
 
 type AppShellProps = {
   activeConversationId: string | null;
+  activeProjectId: string | null;
   children: ReactNode;
   conversationListRefreshKey: number;
   onDeleteConversation: (conversationId: string) => void;
+  onSelectProject: (projectId: string | null) => void;
   onStartNewConversation: () => void;
   onSelectConversation: (conversationId: string) => void;
 };
 
 export function AppShell({
   activeConversationId,
+  activeProjectId,
   children,
   conversationListRefreshKey,
   onDeleteConversation,
+  onSelectProject,
   onStartNewConversation,
   onSelectConversation,
 }: AppShellProps) {
@@ -23,8 +27,10 @@ export function AppShell({
       <div className="mx-auto flex min-h-screen w-full max-w-[1680px] flex-col lg:flex-row">
         <Sidebar
           activeConversationId={activeConversationId}
+          activeProjectId={activeProjectId}
           conversationListRefreshKey={conversationListRefreshKey}
           onDeleteConversation={onDeleteConversation}
+          onSelectProject={onSelectProject}
           onStartNewConversation={onStartNewConversation}
           onSelectConversation={onSelectConversation}
         />

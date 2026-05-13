@@ -4,12 +4,14 @@ import {
   createConversation,
   createMessage,
   getConversationById,
+  getProjectById,
 } from "@/lib/db";
 import type { AssistantErrorCode } from "@/lib/types";
 
 type ChatRequestBody = {
   conversationId?: unknown;
   message?: unknown;
+  projectId?: unknown;
 };
 
 const ASSISTANT_PERSISTED_ERROR_MESSAGE =
@@ -85,6 +87,7 @@ export async function POST(request: Request) {
   }
 
   let conversationId: string | undefined;
+  let projectId: string | null = null;
 
   if ("conversationId" in chatBody) {
     if (typeof chatBody.conversationId !== "string") {
@@ -106,9 +109,38 @@ export async function POST(request: Request) {
     }
   }
 
+  if (!conversationId && "projectId" in chatBody) {
+    if (typeof chatBody.projectId !== "string") {
+      return jsonError(
+        "O campo projectId deve ser uma string.",
+        400,
+        "INVALID_REQUEST",
+      );
+    }
+
+    projectId = chatBody.projectId.trim();
+
+    if (!projectId) {
+      return jsonError(
+        "O campo projectId não pode estar vazio.",
+        400,
+        "INVALID_REQUEST",
+      );
+    }
+
+    const project = getProjectById(projectId);
+
+    if (!project) {
+      return jsonError("Projeto não encontrado.", 400, "INVALID_REQUEST");
+    }
+  }
+
   const conversation = conversationId
     ? getConversationById(conversationId)
-    : createConversation(buildConversationTitle(message));
+    : createConversation({
+        projectId,
+        title: buildConversationTitle(message),
+      });
 
   if (!conversation) {
     return jsonError("Conversa não encontrada.", 400, "INVALID_REQUEST");
@@ -138,6 +170,7 @@ export async function POST(request: Request) {
         createdAt: persistedErrorMessage.createdAt,
         error: assistantResponse.error,
         model: assistantResponse.model,
+        projectId: conversation.projectId,
       },
       { status: 500 },
     );
@@ -155,5 +188,6 @@ export async function POST(request: Request) {
     content: assistantResponse.content,
     createdAt: assistantResponse.createdAt,
     model: assistantResponse.model,
+    projectId: conversation.projectId,
   });
 }

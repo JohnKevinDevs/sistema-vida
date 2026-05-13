@@ -3,16 +3,20 @@ import { ProjectList } from "@/components/ProjectList";
 
 type SidebarProps = {
   activeConversationId: string | null;
+  activeProjectId: string | null;
   conversationListRefreshKey: number;
   onDeleteConversation: (conversationId: string) => void;
+  onSelectProject: (projectId: string | null) => void;
   onStartNewConversation: () => void;
   onSelectConversation: (conversationId: string) => void;
 };
 
 export function Sidebar({
   activeConversationId,
+  activeProjectId,
   conversationListRefreshKey,
   onDeleteConversation,
+  onSelectProject,
   onStartNewConversation,
   onSelectConversation,
 }: SidebarProps) {
@@ -42,7 +46,10 @@ export function Sidebar({
         Nova conversa
       </button>
 
-      <ProjectList />
+      <ProjectList
+        activeProjectId={activeProjectId}
+        onSelectProject={onSelectProject}
+      />
 
       <ConversationList
         activeConversationId={activeConversationId}

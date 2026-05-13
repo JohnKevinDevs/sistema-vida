@@ -126,9 +126,15 @@ export type Review = {
 
 export type Conversation = {
   id: EntityId;
+  projectId: EntityId | null;
   title: string;
   createdAt: ISODateString;
   updatedAt: ISODateString;
+};
+
+export type CreateConversationInput = {
+  projectId?: EntityId | null;
+  title?: string;
 };
 
 export type Message = {

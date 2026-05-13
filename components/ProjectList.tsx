@@ -20,6 +20,11 @@ type DeleteProjectResponse = {
 
 type LoadState = "idle" | "loading" | "success" | "error";
 
+type ProjectListProps = {
+  activeProjectId: string | null;
+  onSelectProject: (projectId: string | null) => void;
+};
+
 const MAX_PROJECT_NAME_LENGTH = 80;
 
 const projectStatusLabels: Record<StoredProjectStatus, string> = {
@@ -43,7 +48,10 @@ function formatUpdatedAt(value: string) {
   }).format(date);
 }
 
-export function ProjectList() {
+export function ProjectList({
+  activeProjectId,
+  onSelectProject,
+}: ProjectListProps) {
   const [createDraft, setCreateDraft] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<{
@@ -178,6 +186,7 @@ export function ProjectList() {
         data.project as StoredProject,
         ...current.filter((project) => project.id !== data.project?.id),
       ]);
+      onSelectProject(data.project.id);
       closeCreateForm();
     } catch (error) {
       setCreateError(
@@ -258,6 +267,10 @@ export function ProjectList() {
         cancelRename();
       }
 
+      if (activeProjectId === project.id) {
+        onSelectProject(null);
+      }
+
       setPendingDeleteProjectId(null);
     } catch (error) {
       setDeleteError({
@@ -283,7 +296,7 @@ export function ProjectList() {
             Projetos
           </h2>
           <p className="mt-1 text-xs leading-5 text-slate-600">
-            Espaços do Sistema JK. Conversas ainda ficam globais.
+            Selecione um espaço para associar novas conversas.
           </p>
         </div>
         <button
@@ -368,6 +381,7 @@ export function ProjectList() {
             {projects.map((project) => {
               const isDeleting = project.id === deletingProjectId;
               const isEditing = project.id === editingProjectId;
+              const isActive = project.id === activeProjectId;
               const isPendingDelete = project.id === pendingDeleteProjectId;
               const isRenaming = project.id === renamingProjectId;
               const titleInputId = `project-name-${project.id}`;
@@ -378,13 +392,27 @@ export function ProjectList() {
 
               return (
                 <li
-                  className="rounded-md border border-transparent transition hover:border-slate-800/80 hover:bg-slate-900/60"
+                  className={`rounded-md border transition ${
+                    isActive
+                      ? "border-blue-400/30 bg-blue-500/10 shadow-sm shadow-blue-950/20"
+                      : "border-transparent hover:border-slate-800/80 hover:bg-slate-900/60"
+                  }`}
                   key={project.id}
                 >
-                  <div className="flex items-start gap-3 px-3 py-2.5">
+                  <button
+                    aria-pressed={isActive}
+                    className="focus-ring flex w-full items-start gap-3 rounded-md px-3 py-2.5 text-left"
+                    data-project-select={project.id}
+                    onClick={() => onSelectProject(isActive ? null : project.id)}
+                    type="button"
+                  >
                     <span
                       aria-hidden="true"
-                      className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-md border border-slate-800/80 bg-slate-950/50 text-slate-300"
+                      className={`mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-md border ${
+                        isActive
+                          ? "border-blue-400/30 bg-blue-500/15 text-blue-100"
+                          : "border-slate-800/80 bg-slate-950/50 text-slate-300"
+                      }`}
                     >
                       <span className="h-3.5 w-4 rounded-[3px] border border-current border-t-2 opacity-80" />
                     </span>
@@ -393,11 +421,14 @@ export function ProjectList() {
                         {project.name}
                       </p>
                       <p className="mt-1 text-xs text-slate-500">
-                        {projectStatusLabels[project.status]} ·{" "}
+                        {isActive
+                          ? "Selecionado"
+                          : projectStatusLabels[project.status]}{" "}
+                        ·{" "}
                         {formatUpdatedAt(project.updatedAt)}
                       </p>
                     </div>
-                  </div>
+                  </button>
 
                   <div className="px-3 pb-2">
                     {isEditing ? (
@@ -448,8 +479,8 @@ export function ProjectList() {
                     ) : isPendingDelete ? (
                       <div className="space-y-2 rounded-md border border-red-300/15 bg-red-500/10 p-2.5">
                         <p className="text-xs leading-5 text-red-100">
-                          Excluir este projeto? As conversas ainda não estão
-                          vinculadas a projetos nesta versão.
+                          Excluir este projeto? Conversas associadas continuam
+                          salvas e voltam para a lista global.
                         </p>
                         <div className="flex flex-wrap gap-2">
                           <button

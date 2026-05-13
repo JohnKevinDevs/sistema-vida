@@ -104,7 +104,7 @@ O acesso ao banco está isolado em `lib/db.ts`. Nesta fase, ele cria as tabelas:
 Funções disponíveis:
 
 - `initializeDatabase()`
-- `createConversation(title?)`
+- `createConversation({ title?, projectId? })`
 - `listConversations()`
 - `getConversationById(id)`
 - `updateConversationTitle(id, title)`
@@ -135,7 +135,9 @@ Endpoints iniciais de projetos:
 - `PATCH /api/projects/[projectId]`: atualiza `name`, `description` ou `status`.
 - `DELETE /api/projects/[projectId]`: exclui um projeto salvo.
 
-A partir da Fase 4.2, a sidebar usa esses projetos reais para criar, listar, renomear e excluir espaços do Sistema JK. Projetos ainda não estão conectados ao chat ou às conversas; a associação entre conversas e projetos fica para uma etapa futura.
+A partir da Fase 4.2, a sidebar usa esses projetos reais para criar, listar, renomear e excluir espaços do Sistema JK.
+
+Na Fase 4.3, conversas passaram a aceitar `projectId` opcional. A migração adiciona a coluna `project_id` em `conversations` de forma idempotente, preservando conversas e mensagens antigas com `project_id = null`. Para reduzir risco de perda de dados no SQLite local, a FK formal ainda não é recriada na tabela; a integridade é validada pela aplicação ao criar novas conversas, e excluir um projeto remove a associação das conversas sem apagar o histórico.
 
 Status válidos para projetos persistidos:
 
@@ -150,6 +152,7 @@ Formato de listagem de conversas:
   "conversations": [
     {
       "id": "id-da-conversa",
+      "projectId": "id-do-projeto-ou-null",
       "title": "Título da conversa",
       "createdAt": "2026-05-11T22:00:00.000Z",
       "updatedAt": "2026-05-11T22:05:00.000Z"
@@ -265,6 +268,8 @@ Na Fase 4.1, foi criada a base real de projetos no SQLite. O banco passou a ter 
 
 Na Fase 4.2, a seção `Projetos` da sidebar passou a buscar projetos reais em `GET /api/projects`. A UI permite criar, renomear e excluir projetos com estado local simples, loading, erro e estado vazio. As conversas continuam globais e ainda não são filtradas nem movidas para dentro de projetos.
 
+Na Fase 4.3, a sidebar passou a permitir selecionar um projeto ativo. Ao iniciar uma nova conversa com um projeto selecionado, a API salva essa conversa com `projectId`. Conversas antigas e conversas criadas sem projeto continuam globais. A lista de conversas ainda permanece global nesta fase.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -273,7 +278,8 @@ Para testar manualmente:
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
 - Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
-- Na seção `Projetos`, crie um projeto, renomeie e exclua para validar a persistência local.
+- Na seção `Projetos`, crie um projeto, selecione, renomeie e exclua para validar a persistência local.
+- Com um projeto selecionado, clique em `Nova conversa` e envie uma mensagem para validar a associação inicial.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
 - Use `Renomear` em uma conversa e confirme que o novo título aparece na sidebar.
 - Use `Excluir` em uma conversa e confirme que ela sai da sidebar apenas após confirmação.
@@ -292,6 +298,14 @@ Para continuar uma conversa salva, use o `conversationId` retornado:
 Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"conversationId":"COLE_O_ID_AQUI","message":"Agora transforme isso em uma checklist."}'
 ```
 
+Para criar uma conversa associada a um projeto, envie `projectId` apenas na primeira mensagem:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentType "application/json" -Body '{"projectId":"COLE_O_ID_DO_PROJETO","message":"Me ajude a organizar este projeto."}'
+```
+
+Se `conversationId` for enviado, ele tem prioridade e a conversa existente continua no projeto em que já estava.
+
 Payload inválido:
 
 ```powershell
@@ -309,4 +323,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 4.2 - UI real de projetos na sidebar.
+Fase 4.3 - associação inicial de conversas a projetos.
