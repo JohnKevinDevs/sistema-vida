@@ -4,9 +4,13 @@ import { createRequire } from "module";
 import { join } from "path";
 import type {
   Conversation,
+  CreateProjectInput,
   CreateMessageInput,
   Message,
   MessageRole,
+  StoredProject,
+  StoredProjectStatus,
+  UpdateProjectInput,
 } from "@/lib/types";
 
 type SqliteRunResult = {
@@ -43,6 +47,15 @@ type MessageRow = {
   role: MessageRole;
 };
 
+type ProjectRow = {
+  created_at: string;
+  description: string | null;
+  id: string;
+  name: string;
+  status: StoredProjectStatus;
+  updated_at: string;
+};
+
 const nodeRequire = createRequire(import.meta.url);
 const Database = nodeRequire("better-sqlite3") as SqliteDatabaseConstructor;
 
@@ -68,6 +81,12 @@ function normalizeTitle(title?: string) {
   return normalizedTitle || "Nova conversa";
 }
 
+function normalizeOptionalText(value?: string | null) {
+  const normalizedValue = value?.trim();
+
+  return normalizedValue || null;
+}
+
 function mapConversation(row: ConversationRow): Conversation {
   return {
     createdAt: row.created_at,
@@ -84,6 +103,17 @@ function mapMessage(row: MessageRow): Message {
     createdAt: row.created_at,
     id: row.id,
     role: row.role,
+  };
+}
+
+function mapProject(row: ProjectRow): StoredProject {
+  return {
+    createdAt: row.created_at,
+    description: row.description,
+    id: row.id,
+    name: row.name,
+    status: row.status,
+    updatedAt: row.updated_at,
   };
 }
 
@@ -118,11 +148,23 @@ export function initializeDatabase() {
       FOREIGN KEY(conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
     );
 
+    CREATE TABLE IF NOT EXISTS projects (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      description TEXT,
+      status TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
     CREATE INDEX IF NOT EXISTS idx_conversations_updated_at
       ON conversations(updated_at);
 
     CREATE INDEX IF NOT EXISTS idx_messages_conversation_id
       ON messages(conversation_id);
+
+    CREATE INDEX IF NOT EXISTS idx_projects_updated_at
+      ON projects(updated_at);
   `);
 
   return database;
@@ -153,6 +195,117 @@ export function createConversation(title?: string): Conversation {
     );
 
   return conversation;
+}
+
+export function createProject(input: CreateProjectInput): StoredProject {
+  const database = initializeDatabase();
+  const createdAt = nowIso();
+  const project: StoredProject = {
+    createdAt,
+    description: normalizeOptionalText(input.description),
+    id: randomUUID(),
+    name: input.name.trim(),
+    status: input.status ?? "active",
+    updatedAt: createdAt,
+  };
+
+  database
+    .prepare(
+      `
+        INSERT INTO projects (id, name, description, status, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `,
+    )
+    .run(
+      project.id,
+      project.name,
+      project.description,
+      project.status,
+      project.createdAt,
+      project.updatedAt,
+    );
+
+  return project;
+}
+
+export function listProjects(): StoredProject[] {
+  const database = initializeDatabase();
+  const rows = database
+    .prepare<ProjectRow>(
+      `
+        SELECT id, name, description, status, created_at, updated_at
+        FROM projects
+        ORDER BY updated_at DESC
+      `,
+    )
+    .all();
+
+  return rows.map(mapProject);
+}
+
+export function getProjectById(id: string): StoredProject | null {
+  const database = initializeDatabase();
+  const row = database
+    .prepare<ProjectRow>(
+      `
+        SELECT id, name, description, status, created_at, updated_at
+        FROM projects
+        WHERE id = ?
+      `,
+    )
+    .get(id);
+
+  return row ? mapProject(row) : null;
+}
+
+export function updateProject(
+  id: string,
+  input: UpdateProjectInput,
+): StoredProject | null {
+  const database = initializeDatabase();
+  const existingProject = getProjectById(id);
+
+  if (!existingProject) {
+    return null;
+  }
+
+  const hasDescription = Object.prototype.hasOwnProperty.call(
+    input,
+    "description",
+  );
+  const name =
+    typeof input.name === "string" ? input.name.trim() : existingProject.name;
+  const description = hasDescription
+    ? normalizeOptionalText(input.description)
+    : existingProject.description;
+  const status = input.status ?? existingProject.status;
+  const updatedAt = nowIso();
+
+  database
+    .prepare(
+      `
+        UPDATE projects
+        SET name = ?, description = ?, status = ?, updated_at = ?
+        WHERE id = ?
+      `,
+    )
+    .run(name, description, status, updatedAt, id);
+
+  return getProjectById(id);
+}
+
+export function deleteProject(id: string): boolean {
+  const database = initializeDatabase();
+  const result = database
+    .prepare(
+      `
+        DELETE FROM projects
+        WHERE id = ?
+      `,
+    )
+    .run(id);
+
+  return result.changes > 0;
 }
 
 export function listConversations(): Conversation[] {

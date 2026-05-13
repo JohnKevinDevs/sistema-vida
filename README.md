@@ -95,10 +95,11 @@ A base SQLite inicial fica em:
 data/sistema-jk.db
 ```
 
-O acesso ao banco está isolado em `lib/db.ts`. Nesta fase, ele cria apenas as tabelas:
+O acesso ao banco está isolado em `lib/db.ts`. Nesta fase, ele cria as tabelas:
 
 - `conversations`
 - `messages`
+- `projects`
 
 Funções disponíveis:
 
@@ -110,6 +111,11 @@ Funções disponíveis:
 - `deleteConversation(id)`
 - `listMessages(conversationId)`
 - `createMessage(input)`
+- `createProject(input)`
+- `listProjects()`
+- `getProjectById(id)`
+- `updateProject(id, input)`
+- `deleteProject(id)`
 
 A API `/api/chat` salva a conversa, a mensagem do usuário e a resposta do assistente no SQLite local. A UI guarda o `conversationId` apenas em estado local durante a sessão atual, então mensagens seguintes continuam a mesma conversa enquanto a página não for recarregada. Ao selecionar uma conversa na sidebar, o histórico salvo é carregado no chat.
 
@@ -121,6 +127,21 @@ Endpoints do módulo de conversas:
 - `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
 - `PATCH /api/conversations/[conversationId]`: renomeia uma conversa salva.
 - `DELETE /api/conversations/[conversationId]`: exclui uma conversa salva e suas mensagens.
+
+Endpoints iniciais de projetos:
+
+- `GET /api/projects`: lista projetos salvos, ordenados por atualização mais recente.
+- `POST /api/projects`: cria um projeto com `name`, `description` opcional e `status` opcional.
+- `PATCH /api/projects/[projectId]`: atualiza `name`, `description` ou `status`.
+- `DELETE /api/projects/[projectId]`: exclui um projeto salvo.
+
+Projetos ainda não estão conectados à sidebar, ao chat ou às conversas. A Fase 4.1 prepara apenas a base persistente; a associação entre conversas e projetos fica para uma etapa futura.
+
+Status válidos para projetos persistidos:
+
+- `active`
+- `paused`
+- `archived`
 
 Formato de listagem de conversas:
 
@@ -240,6 +261,8 @@ Na Fase 3.1, a UI recebeu um polish visual mais forte: paleta escura com azul pr
 
 Na Fase 3.2, a sidebar foi limpa para deixar a interface com mais cara de produto final. Metadados técnicos como versão local, SQLite, Gemini e fase atual saíram da UI principal e ficaram apenas documentados aqui. A seção `Conversas` manteve a lista real, seleção, renomear e excluir. A seção `Projetos` ficou mais discreta e conceitual, preparando a futura lógica de pastas/containers sem criar CRUD falso de projetos.
 
+Na Fase 4.1, foi criada a base real de projetos no SQLite. O banco passou a ter a tabela `projects`, funções de acesso em `lib/db.ts` e endpoints básicos para criar, listar, atualizar e excluir projetos. A UI ainda não usa esses projetos reais e conversas ainda não pertencem a projetos nesta fase.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -283,4 +306,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 3.2 - limpeza visual da sidebar e preparação conceitual para projetos.
+Fase 4.1 - base real de projetos no SQLite.

@@ -21,6 +21,8 @@ export type TaskPriority = "low" | "medium" | "high";
 
 export type ProjectStatus = "planned" | "active" | "paused" | "completed";
 
+export type StoredProjectStatus = "active" | "paused" | "archived";
+
 export type GoalStatus = "planned" | "active" | "paused" | "completed";
 
 export type ReviewType = "daily" | "weekly";
@@ -71,6 +73,27 @@ export type Project = {
   signal: ProjectSignal;
   createdAt: ISODateString;
   updatedAt: ISODateString;
+};
+
+export type StoredProject = {
+  id: EntityId;
+  name: string;
+  description: string | null;
+  status: StoredProjectStatus;
+  createdAt: ISODateString;
+  updatedAt: ISODateString;
+};
+
+export type CreateProjectInput = {
+  name: string;
+  description?: string | null;
+  status?: StoredProjectStatus;
+};
+
+export type UpdateProjectInput = {
+  name?: string;
+  description?: string | null;
+  status?: StoredProjectStatus;
 };
 
 export type Goal = {
