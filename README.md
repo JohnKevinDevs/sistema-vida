@@ -228,7 +228,7 @@ Cada conversa também pode ser excluída pela ação `Excluir`. A UI pede confir
 
 Na Fase 2.11, o fluxo completo de conversas foi auditado: criar, continuar, listar, selecionar, carregar histórico, renomear, excluir, tratar payload inválido e manter erros amigáveis do Gemini persistidos sem quebrar a UI.
 
-Na Fase 3.0, a interface foi refinada para reduzir poluição visual. A sidebar ficou mais próxima de uma central de conversas, com cabeçalho simples, botão `Nova conversa`, lista compacta de projetos, conversas reais salvas e status discreto. A área principal passou a mostrar apenas um contexto por vez:
+Na Fase 3.0, a interface foi refinada para reduzir poluição visual. A sidebar ficou mais próxima de uma central de conversas, com cabeçalho simples, botão `Nova conversa`, lista compacta de projetos e conversas reais salvas. A área principal passou a mostrar apenas um contexto por vez:
 
 - `Dia`: foco principal, três prioridades e próximo passo.
 - `Semana`: projetos em andamento, projeto em foco e ritmo da semana.
@@ -237,6 +237,8 @@ Na Fase 3.0, a interface foi refinada para reduzir poluição visual. A sidebar 
 O chat ganhou mais espaço e passou a ser a área de maior protagonismo da tela, mantendo o mesmo fluxo técnico de conversa, histórico, renomear, excluir e persistência local.
 
 Na Fase 3.1, a UI recebeu um polish visual mais forte: paleta escura com azul profundo como acento, superfícies mais consistentes, melhor hierarquia tipográfica, espaçamentos mais confortáveis, botões e estados ativos mais refinados, mensagens do chat mais legíveis e microcopy revisada em PT-BR.
+
+Na Fase 3.2, a sidebar foi limpa para deixar a interface com mais cara de produto final. Metadados técnicos como versão local, SQLite, Gemini e fase atual saíram da UI principal e ficaram apenas documentados aqui. A seção `Conversas` manteve a lista real, seleção, renomear e excluir. A seção `Projetos` ficou mais discreta e conceitual, preparando a futura lógica de pastas/containers sem criar CRUD falso de projetos.
 
 Para testar manualmente:
 
@@ -281,4 +283,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 3.1 - polish visual forte de UI/UX.
+Fase 3.2 - limpeza visual da sidebar e preparação conceitual para projetos.

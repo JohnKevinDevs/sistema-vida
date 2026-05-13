@@ -12,7 +12,7 @@ import type {
 
 export const daySummary: DaySummary = {
   dateLabel: "Hoje",
-  state: "Fase 3.1 com polish visual",
+  state: "Central limpa e pronta para o próximo ciclo",
   mainFocus: "Começar pelo chat e transformar o dia em decisões claras.",
   nextFocus: "Evoluir tarefas reais sem perder a clareza da central.",
 };
@@ -28,8 +28,8 @@ export const dashboardStats: DashboardStat[] = [
   {
     id: "estado",
     label: "Estado",
-    value: "3.1",
-    detail: "polish visual de UI e UX",
+    value: "OK",
+    detail: "central limpa e conversas estáveis",
     tone: "emerald",
   },
   {

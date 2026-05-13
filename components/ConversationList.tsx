@@ -222,16 +222,13 @@ export function ConversationList({
 
   return (
     <section aria-labelledby="saved-conversations-title" className="mt-8">
-      <div className="flex items-center justify-between gap-3 px-1">
+      <div className="px-1">
         <h2
           className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500"
           id="saved-conversations-title"
         >
           Conversas
         </h2>
-        <span className="rounded-full border border-slate-700/80 bg-slate-900/70 px-2 py-0.5 text-[11px] font-medium text-slate-500">
-          SQLite
-        </span>
       </div>
 
       <div className="mt-3">
