@@ -143,6 +143,8 @@ Na Fase 4.3, conversas passaram a aceitar `projectId` opcional. A migração adi
 
 Na Fase 4.4, `GET /api/conversations` passou a aceitar filtros simples. A sidebar usa `?projectId=ID` quando existe um projeto ativo e `?scope=global` quando nenhum projeto está selecionado. Assim, projetos mostram apenas suas conversas associadas, enquanto a visão global mostra apenas conversas sem projeto.
 
+Na Fase 4.5, o módulo de projetos e conversas foi auditado. O fluxo validado cobre projetos reais, conversas globais, conversas associadas, filtro por projeto, renomear/excluir conversas, criar/renomear/excluir projetos e exclusão de projeto com conversas associadas. A auditoria também ajustou a troca de contexto: ao selecionar ou limpar um projeto, o chat visível volta para o estado de nova conversa, evitando continuar acidentalmente uma conversa de outro contexto.
+
 Status válidos para projetos persistidos:
 
 - `active`
@@ -276,6 +278,8 @@ Na Fase 4.3, a sidebar passou a permitir selecionar um projeto ativo. Ao iniciar
 
 Na Fase 4.4, a lista de conversas da sidebar passou a respeitar o projeto selecionado. Com um projeto ativo, aparecem apenas conversas vinculadas a ele. Sem projeto ativo, aparecem apenas conversas globais (`project_id = null`). A rota `GET /api/conversations` ainda continua disponível sem filtro para retornar todas as conversas quando necessário.
 
+Na Fase 4.5, o fluxo Projetos + Conversas foi auditado com dados temporários e validação no SQLite. A troca entre projeto selecionado e visão global limpa a conversa visível para manter o próximo envio coerente com o contexto atual.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -286,6 +290,7 @@ Para testar manualmente:
 - Confirme que a sidebar mostra conversas do projeto ativo ou conversas globais quando nenhum projeto estiver selecionado.
 - Na seção `Projetos`, crie um projeto, selecione, renomeie e exclua para validar a persistência local.
 - Com um projeto selecionado, clique em `Nova conversa` e envie uma mensagem para validar a associação inicial.
+- Alterne entre projeto selecionado e visão global e confirme que a lista de conversas muda de contexto.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
 - Use `Renomear` em uma conversa e confirme que o novo título aparece na sidebar.
 - Use `Excluir` em uma conversa e confirme que ela sai da sidebar apenas após confirmação.
@@ -341,4 +346,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 4.4 - filtro de conversas por projeto selecionado.
+Fase 4.5 - auditoria do módulo Projetos + Conversas.

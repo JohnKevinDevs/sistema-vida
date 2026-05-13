@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 4.4.
+Documento atualizado apos a Fase 4.5.
 
 ## Fases concluidas
 
@@ -17,6 +17,7 @@ Documento atualizado apos a Fase 4.4.
 - Fase 4.2: UI real de projetos na sidebar.
 - Fase 4.3: associacao inicial de conversas a projetos.
 - Fase 4.4: filtro de conversas por projeto selecionado.
+- Fase 4.5: auditoria do modulo Projetos + Conversas.
 
 ## Funcionalidades prontas
 
@@ -39,6 +40,7 @@ Documento atualizado apos a Fase 4.4.
 - Criar conversas globais quando nenhum projeto esta selecionado.
 - Filtrar conversas da sidebar pelo projeto ativo.
 - Exibir conversas globais quando nenhum projeto esta selecionado.
+- Limpar o chat visivel ao trocar entre projeto ativo e visao global.
 
 ## Estado funcional validado
 
@@ -49,6 +51,8 @@ Documento atualizado apos a Fase 4.4.
 - `GET /api/conversations?projectId=ID` retorna conversas de um projeto.
 - `GET /api/conversations?scope=global` retorna conversas globais.
 - A sidebar mostra conversas do projeto selecionado ou conversas globais sem projeto ativo.
+- Excluir projeto preserva conversas associadas e remove a associacao, voltando-as para globais.
+- Renomear/excluir conversas e criar/renomear/excluir projetos foram auditados apos o filtro por projeto.
 
 ## O que ainda nao existe
 
@@ -68,4 +72,4 @@ Documento atualizado apos a Fase 4.4.
 
 ## Proximo passo recomendado
 
-Fase 4.5: auditar o modulo de projetos e conversas, incluindo filtros, conversas globais e exclusao de projetos.
+Fase 5.1: iniciar tarefas reais no SQLite, mantendo o escopo pequeno e sem mexer em metas ou memoria.

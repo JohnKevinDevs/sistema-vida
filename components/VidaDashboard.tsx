@@ -79,13 +79,18 @@ export function VidaDashboard() {
     }
   }
 
+  function handleProjectSelection(projectId: string | null) {
+    setActiveProjectId(projectId);
+    startNewConversation();
+  }
+
   return (
     <AppShell
       activeConversationId={activeConversationId}
       activeProjectId={activeProjectId}
       conversationListRefreshKey={conversationListRefreshKey}
       onDeleteConversation={handleConversationDeleted}
-      onSelectProject={setActiveProjectId}
+      onSelectProject={handleProjectSelection}
       onStartNewConversation={startNewConversation}
       onSelectConversation={setActiveConversationId}
     >

@@ -2,22 +2,22 @@
 
 ## Atual
 
-- Fase 4.4 concluida: filtro de conversas por projeto selecionado.
+- Fase 4.5 concluida: auditoria de projetos e conversas.
 
 ## Proximas fases sugeridas
 
-### Fase 4.5 - Auditoria de projetos e conversas
-
-- Auditar criar, renomear, excluir e selecionar projetos.
-- Auditar conversas globais e associadas.
-- Garantir que exclusao de projeto nao apague historico indevidamente.
-
-### Fase 5.x - Tarefas reais
+### Fase 5.1 - Tarefas reais no SQLite
 
 - Criar tabela de tarefas.
 - Criar endpoints basicos.
 - Conectar UI de tarefas ao SQLite.
 - Associar tarefas a areas, projetos ou datas quando fizer sentido.
+
+### Fase 5.2 - UI de tarefas reais
+
+- Substituir mocks principais por tarefas persistidas.
+- Manter fluxo visual simples.
+- Evitar CRUD avancado antes da base estar estavel.
 
 ### Fases futuras
 
