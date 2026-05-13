@@ -22,6 +22,7 @@ type LoadState = "idle" | "loading" | "success" | "error";
 
 type ConversationListProps = {
   activeConversationId: string | null;
+  activeProjectId: string | null;
   refreshKey: number;
   onDeleteConversation: (conversationId: string) => void;
   onSelectConversation: (conversationId: string) => void;
@@ -44,6 +45,7 @@ function formatUpdatedAt(value: string) {
 
 export function ConversationList({
   activeConversationId,
+  activeProjectId,
   refreshKey,
   onDeleteConversation,
   onSelectConversation,
@@ -75,7 +77,10 @@ export function ConversationList({
       setLoadState("loading");
 
       try {
-        const response = await fetch("/api/conversations", {
+        const conversationsUrl = activeProjectId
+          ? `/api/conversations?projectId=${encodeURIComponent(activeProjectId)}`
+          : "/api/conversations?scope=global";
+        const response = await fetch(conversationsUrl, {
           cache: "no-store",
         });
 
@@ -108,7 +113,7 @@ export function ConversationList({
     return () => {
       isMounted = false;
     };
-  }, [refreshKey]);
+  }, [activeProjectId, refreshKey]);
 
   function startRename(conversation: Conversation) {
     setEditingConversationId(conversation.id);
@@ -227,8 +232,13 @@ export function ConversationList({
           className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500"
           id="saved-conversations-title"
         >
-          Conversas
+          {activeProjectId ? "Conversas do projeto" : "Conversas globais"}
         </h2>
+        <p className="mt-1 text-xs leading-5 text-slate-600">
+          {activeProjectId
+            ? "Histórico vinculado ao projeto selecionado."
+            : "Histórico sem projeto vinculado."}
+        </p>
       </div>
 
       <div className="mt-3">
@@ -246,7 +256,9 @@ export function ConversationList({
 
         {loadState === "success" && conversations.length === 0 && (
           <p className="rounded-md border border-slate-800/80 bg-slate-900/55 px-3 py-3 text-sm leading-6 text-slate-500">
-            Nenhuma conversa salva ainda.
+            {activeProjectId
+              ? "Nenhuma conversa neste projeto ainda."
+              : "Nenhuma conversa global salva ainda."}
           </p>
         )}
 

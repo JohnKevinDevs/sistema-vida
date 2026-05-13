@@ -123,7 +123,9 @@ Arquivos `.db` e derivados locais, como `data/*.db` e `data/*.db-*`, estão prot
 
 Endpoints do módulo de conversas:
 
-- `GET /api/conversations`: lista conversas salvas, ordenadas por atualização mais recente.
+- `GET /api/conversations`: lista todas as conversas salvas, ordenadas por atualização mais recente.
+- `GET /api/conversations?scope=global`: lista apenas conversas sem projeto vinculado.
+- `GET /api/conversations?projectId=ID`: lista apenas conversas vinculadas ao projeto informado.
 - `GET /api/conversations/[conversationId]/messages`: retorna as mensagens de uma conversa, em ordem cronológica.
 - `PATCH /api/conversations/[conversationId]`: renomeia uma conversa salva.
 - `DELETE /api/conversations/[conversationId]`: exclui uma conversa salva e suas mensagens.
@@ -138,6 +140,8 @@ Endpoints iniciais de projetos:
 A partir da Fase 4.2, a sidebar usa esses projetos reais para criar, listar, renomear e excluir espaços do Sistema JK.
 
 Na Fase 4.3, conversas passaram a aceitar `projectId` opcional. A migração adiciona a coluna `project_id` em `conversations` de forma idempotente, preservando conversas e mensagens antigas com `project_id = null`. Para reduzir risco de perda de dados no SQLite local, a FK formal ainda não é recriada na tabela; a integridade é validada pela aplicação ao criar novas conversas, e excluir um projeto remove a associação das conversas sem apagar o histórico.
+
+Na Fase 4.4, `GET /api/conversations` passou a aceitar filtros simples. A sidebar usa `?projectId=ID` quando existe um projeto ativo e `?scope=global` quando nenhum projeto está selecionado. Assim, projetos mostram apenas suas conversas associadas, enquanto a visão global mostra apenas conversas sem projeto.
 
 Status válidos para projetos persistidos:
 
@@ -240,7 +244,7 @@ A UI mínima de chat aparece no dashboard, na área do assistente. Ela envia men
 
 O histórico visual fica em estado local do React. Ao recarregar a página, a última conversa ainda não é restaurada automaticamente.
 
-A sidebar busca `GET /api/conversations` no client e mostra conversas salvas localmente no SQLite. Ao selecionar uma conversa, o chat usa `GET /api/conversations/[conversationId]/messages` para carregar as mensagens salvas e continua enviando novas mensagens no mesmo `conversationId`.
+A sidebar busca conversas no client usando o contexto atual: `GET /api/conversations?projectId=ID` para projeto selecionado ou `GET /api/conversations?scope=global` para conversas globais. Ao selecionar uma conversa, o chat usa `GET /api/conversations/[conversationId]/messages` para carregar as mensagens salvas e continua enviando novas mensagens no mesmo `conversationId`.
 
 O botão `Nova conversa` limpa apenas o chat visível, remove a seleção atual e prepara a próxima mensagem para criar uma nova conversa no SQLite. Conversas antigas não são apagadas.
 
@@ -270,6 +274,8 @@ Na Fase 4.2, a seção `Projetos` da sidebar passou a buscar projetos reais em `
 
 Na Fase 4.3, a sidebar passou a permitir selecionar um projeto ativo. Ao iniciar uma nova conversa com um projeto selecionado, a API salva essa conversa com `projectId`. Conversas antigas e conversas criadas sem projeto continuam globais. A lista de conversas ainda permanece global nesta fase.
 
+Na Fase 4.4, a lista de conversas da sidebar passou a respeitar o projeto selecionado. Com um projeto ativo, aparecem apenas conversas vinculadas a ele. Sem projeto ativo, aparecem apenas conversas globais (`project_id = null`). A rota `GET /api/conversations` ainda continua disponível sem filtro para retornar todas as conversas quando necessário.
+
 Para testar manualmente:
 
 - Digite uma mensagem no campo do assistente.
@@ -277,7 +283,7 @@ Para testar manualmente:
 - Use `Enter` sozinho para quebrar linha.
 - Confirme que o botão fica desabilitado com mensagem vazia ou durante o carregamento.
 - Depois da primeira resposta, confirme que a UI indica uma conversa local ativa na sessão.
-- Confirme que a sidebar mostra conversas salvas ou o estado vazio quando não houver histórico local.
+- Confirme que a sidebar mostra conversas do projeto ativo ou conversas globais quando nenhum projeto estiver selecionado.
 - Na seção `Projetos`, crie um projeto, selecione, renomeie e exclua para validar a persistência local.
 - Com um projeto selecionado, clique em `Nova conversa` e envie uma mensagem para validar a associação inicial.
 - Clique em uma conversa salva e confirme que ela fica destacada e que as mensagens aparecem no chat.
@@ -306,6 +312,18 @@ Invoke-RestMethod -Uri "http://localhost:3000/api/chat" -Method POST -ContentTyp
 
 Se `conversationId` for enviado, ele tem prioridade e a conversa existente continua no projeto em que já estava.
 
+Para listar conversas de um projeto:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/conversations?projectId=COLE_O_ID_DO_PROJETO" -Method GET
+```
+
+Para listar conversas globais:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:3000/api/conversations?scope=global" -Method GET
+```
+
 Payload inválido:
 
 ```powershell
@@ -323,4 +341,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 4.3 - associação inicial de conversas a projetos.
+Fase 4.4 - filtro de conversas por projeto selecionado.

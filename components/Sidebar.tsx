@@ -53,6 +53,7 @@ export function Sidebar({
 
       <ConversationList
         activeConversationId={activeConversationId}
+        activeProjectId={activeProjectId}
         refreshKey={conversationListRefreshKey}
         onDeleteConversation={onDeleteConversation}
         onSelectConversation={onSelectConversation}

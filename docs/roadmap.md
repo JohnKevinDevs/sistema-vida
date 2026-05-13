@@ -2,15 +2,9 @@
 
 ## Atual
 
-- Fase 4.3 concluida: associacao inicial de conversas a projetos.
+- Fase 4.4 concluida: filtro de conversas por projeto selecionado.
 
 ## Proximas fases sugeridas
-
-### Fase 4.4 - Filtrar conversas por projeto
-
-- Mostrar conversas do projeto selecionado.
-- Manter opcao de conversas globais.
-- Evitar mover conversas antigas automaticamente.
 
 ### Fase 4.5 - Auditoria de projetos e conversas
 

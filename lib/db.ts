@@ -369,6 +369,38 @@ export function listConversations(): Conversation[] {
   return rows.map(mapConversation);
 }
 
+export function listConversationsByProjectId(projectId: string): Conversation[] {
+  const database = initializeDatabase();
+  const rows = database
+    .prepare<ConversationRow>(
+      `
+        SELECT id, title, project_id, created_at, updated_at
+        FROM conversations
+        WHERE project_id = ?
+        ORDER BY updated_at DESC
+      `,
+    )
+    .all(projectId);
+
+  return rows.map(mapConversation);
+}
+
+export function listGlobalConversations(): Conversation[] {
+  const database = initializeDatabase();
+  const rows = database
+    .prepare<ConversationRow>(
+      `
+        SELECT id, title, project_id, created_at, updated_at
+        FROM conversations
+        WHERE project_id IS NULL
+        ORDER BY updated_at DESC
+      `,
+    )
+    .all();
+
+  return rows.map(mapConversation);
+}
+
 export function getConversationById(id: string): Conversation | null {
   const database = initializeDatabase();
   const row = database
