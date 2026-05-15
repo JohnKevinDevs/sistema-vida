@@ -146,6 +146,8 @@ Endpoints iniciais de projetos:
 Endpoints iniciais de tarefas:
 
 - `GET /api/tasks`: lista tarefas salvas.
+- `GET /api/tasks?scope=global`: lista apenas tarefas sem projeto vinculado.
+- `GET /api/tasks?projectId=ID`: lista apenas tarefas vinculadas ao projeto informado.
 - `POST /api/tasks`: cria uma tarefa com `title`, `description` opcional, `status` opcional, `priority` opcional, `projectId` opcional e `dueDate` opcional.
 - `PATCH /api/tasks/[taskId]`: atualiza `title`, `description`, `status`, `priority`, `projectId` ou `dueDate`.
 - `DELETE /api/tasks/[taskId]`: exclui uma tarefa salva.
@@ -158,7 +160,9 @@ Na Fase 4.4, `GET /api/conversations` passou a aceitar filtros simples. A sideba
 
 Na Fase 4.5, o módulo de projetos e conversas foi auditado. O fluxo validado cobre projetos reais, conversas globais, conversas associadas, filtro por projeto, renomear/excluir conversas, criar/renomear/excluir projetos e exclusão de projeto com conversas associadas. A auditoria também ajustou a troca de contexto: ao selecionar ou limpar um projeto, o chat visível volta para o estado de nova conversa, evitando continuar acidentalmente uma conversa de outro contexto.
 
-Na Fase 5.1, foi criada a base real de tarefas no SQLite. A tabela `tasks` suporta tarefas globais ou associadas opcionalmente a projetos por `project_id`. A UI ainda não usa esses dados; os endpoints existem como fundação para a próxima fase.
+Na Fase 5.1, foi criada a base real de tarefas no SQLite. A tabela `tasks` suporta tarefas globais ou associadas opcionalmente a projetos por `project_id`, com endpoints próprios para leitura e escrita.
+
+Na Fase 5.2, o contexto `Dia` passou a usar tarefas reais vindas de `/api/tasks`. Sem projeto selecionado, a UI mostra tarefas globais (`scope=global`). Com projeto ativo, a UI mostra e cria tarefas associadas ao projeto. A interface permite criar tarefa simples por título, marcar como concluída, voltar para pendente e excluir.
 
 Status válidos para tarefas persistidas:
 
@@ -390,4 +394,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.1 - base real de tarefas no SQLite.
+Fase 5.2 - UI de tarefas reais conectada ao SQLite.

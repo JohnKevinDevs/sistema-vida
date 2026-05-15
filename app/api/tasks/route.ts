@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { createTask, getProjectById, listTasks } from "@/lib/db";
+import {
+  createTask,
+  getProjectById,
+  listGlobalTasks,
+  listTasks,
+  listTasksByProjectId,
+} from "@/lib/db";
 import type {
   AssistantErrorCode,
   StoredTaskStatus,
@@ -69,8 +75,44 @@ function normalizeOptionalString(value: unknown) {
   return value;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const projectId = searchParams.get("projectId");
+    const scope = searchParams.get("scope");
+
+    if (projectId !== null) {
+      const normalizedProjectId = projectId.trim();
+
+      if (!normalizedProjectId) {
+        return jsonError(
+          "O campo projectId não pode estar vazio.",
+          400,
+          "INVALID_REQUEST",
+        );
+      }
+
+      const project = getProjectById(normalizedProjectId);
+
+      if (!project) {
+        return jsonError("Projeto não encontrado.", 400, "INVALID_REQUEST");
+      }
+
+      return NextResponse.json({
+        tasks: listTasksByProjectId(normalizedProjectId),
+      });
+    }
+
+    if (scope === "global") {
+      return NextResponse.json({
+        tasks: listGlobalTasks(),
+      });
+    }
+
+    if (scope !== null) {
+      return jsonError("Escopo de tarefas inválido.", 400, "INVALID_REQUEST");
+    }
+
     return NextResponse.json({
       tasks: listTasks(),
     });
