@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.1.
+Documento atualizado apos a Fase 5.2.
 
 ## Fases concluidas
 
@@ -19,6 +19,7 @@ Documento atualizado apos a Fase 5.1.
 - Fase 4.4: filtro de conversas por projeto selecionado.
 - Fase 4.5: auditoria do modulo Projetos + Conversas.
 - Fase 5.1: base real de tarefas no SQLite.
+- Fase 5.2: UI de tarefas reais conectada ao SQLite.
 
 ## Funcionalidades prontas
 
@@ -45,6 +46,9 @@ Documento atualizado apos a Fase 5.1.
 - Base persistente de tarefas no SQLite.
 - Endpoints basicos para criar, listar, atualizar e excluir tarefas.
 - Tarefas podem ser globais ou associadas opcionalmente a projetos.
+- UI do contexto Dia lista tarefas reais.
+- Criar, concluir, voltar para pendente e excluir tarefas pela UI.
+- Tarefas da UI respeitam projeto ativo ou visao global.
 
 ## Estado funcional validado
 
@@ -59,13 +63,16 @@ Documento atualizado apos a Fase 5.1.
 - Renomear/excluir conversas e criar/renomear/excluir projetos foram auditados apos o filtro por projeto.
 - A tabela `tasks` existe no SQLite com `project_id` opcional.
 - `GET /api/tasks`, `POST /api/tasks`, `PATCH /api/tasks/[taskId]` e `DELETE /api/tasks/[taskId]` existem e validam entradas basicas.
+- `GET /api/tasks?projectId=ID` retorna tarefas de um projeto.
+- `GET /api/tasks?scope=global` retorna tarefas globais.
+- O bloco de tarefas no contexto Dia usa dados reais do SQLite em vez dos mocks.
 
 ## O que ainda nao existe
 
 - Mover conversas existentes entre projetos pela UI.
 - Visao "todas as conversas" dentro da sidebar.
 - Associar conversas antigas a projetos pela UI.
-- Tarefas persistentes conectadas a UI.
+- Edicao completa de tarefas pela UI.
 - Metas persistentes.
 - Rotina persistente.
 - Revisoes diarias ou semanais persistentes.
@@ -78,4 +85,4 @@ Documento atualizado apos a Fase 5.1.
 
 ## Proximo passo recomendado
 
-Fase 5.2: conectar a UI de tarefas aos endpoints reais, mantendo o escopo pequeno e sem mexer em metas ou memoria.
+Fase 5.3: auditar o modulo de tarefas reais e corrigir apenas inconsistencias pequenas antes de evoluir para edicao ou filtros.
