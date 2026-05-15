@@ -164,6 +164,8 @@ Na Fase 5.1, foi criada a base real de tarefas no SQLite. A tabela `tasks` supor
 
 Na Fase 5.2, o contexto `Dia` passou a usar tarefas reais vindas de `/api/tasks`. Sem projeto selecionado, a UI mostra tarefas globais (`scope=global`). Com projeto ativo, a UI mostra e cria tarefas associadas ao projeto. A interface permite criar tarefa simples por título, marcar como concluída, voltar para pendente e excluir.
 
+Na Fase 5.3, o módulo de tarefas reais foi auditado. A validação cobriu tarefas globais e tarefas associadas a projeto, criação, alternância entre concluída e pendente, exclusão, filtros `scope=global` e `projectId`, erro de título vazio, erro de projeto inexistente, troca entre contexto global/projeto e regressão básica de conversas e projetos.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -394,4 +396,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.2 - UI de tarefas reais conectada ao SQLite.
+Fase 5.3 - Auditoria do módulo de tarefas reais concluída.

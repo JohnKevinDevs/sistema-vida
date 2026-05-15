@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.2.
+Documento atualizado apos a Fase 5.3.
 
 ## Fases concluidas
 
@@ -20,6 +20,7 @@ Documento atualizado apos a Fase 5.2.
 - Fase 4.5: auditoria do modulo Projetos + Conversas.
 - Fase 5.1: base real de tarefas no SQLite.
 - Fase 5.2: UI de tarefas reais conectada ao SQLite.
+- Fase 5.3: auditoria do modulo de tarefas reais.
 
 ## Funcionalidades prontas
 
@@ -66,6 +67,9 @@ Documento atualizado apos a Fase 5.2.
 - `GET /api/tasks?projectId=ID` retorna tarefas de um projeto.
 - `GET /api/tasks?scope=global` retorna tarefas globais.
 - O bloco de tarefas no contexto Dia usa dados reais do SQLite em vez dos mocks.
+- Criar tarefa global, criar tarefa de projeto, concluir, voltar para pendente, excluir e alternar contexto foram auditados.
+- A UI de tarefas nao mistura tarefas globais com tarefas do projeto ativo.
+- Erros de titulo vazio e `projectId` inexistente retornam erro controlado.
 
 ## O que ainda nao existe
 
@@ -85,4 +89,4 @@ Documento atualizado apos a Fase 5.2.
 
 ## Proximo passo recomendado
 
-Fase 5.3: auditar o modulo de tarefas reais e corrigir apenas inconsistencias pequenas antes de evoluir para edicao ou filtros.
+Fase 5.4: avaliar refinamentos pequenos de tarefas, como edicao simples de titulo ou filtros visuais basicos, sem criar subtarefas, recorrencia ou calendario ainda.

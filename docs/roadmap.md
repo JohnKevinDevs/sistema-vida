@@ -2,21 +2,20 @@
 
 ## Atual
 
-- Fase 5.2 concluida: UI de tarefas reais conectada ao SQLite.
+- Fase 5.3 concluida: auditoria do modulo de tarefas reais.
 
 ## Proximas fases sugeridas
-
-### Fase 5.3 - Auditoria do modulo de tarefas
-
-- Auditar criar, listar, atualizar e excluir tarefas.
-- Validar tarefas globais e tarefas associadas a projetos.
-- Corrigir apenas bugs pequenos encontrados.
 
 ### Fase 5.4 - Refinos pequenos de tarefas
 
 - Avaliar edicao simples de titulo.
 - Avaliar filtro visual por status.
 - Manter sem subtarefas, recorrencia ou calendario ate haver necessidade real.
+
+### Fase 5.5 - Auditoria dos refinamentos de tarefas
+
+- Validar que os refinamentos nao misturam tarefas globais e de projeto.
+- Confirmar regressao de conversas e projetos.
 
 ### Fases futuras
 
