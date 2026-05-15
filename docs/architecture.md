@@ -105,12 +105,6 @@ Campos principais:
 
 `project_id` e opcional. Tarefas globais usam `null`.
 
-Filtros de leitura:
-
-- `GET /api/tasks?projectId=ID`: lista tarefas vinculadas ao projeto informado.
-- `GET /api/tasks?scope=global`: lista tarefas sem projeto vinculado.
-- `GET /api/tasks`: lista todas as tarefas.
-
 Status aceitos:
 
 - `pending`

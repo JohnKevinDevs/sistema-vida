@@ -2,21 +2,22 @@
 
 ## Atual
 
-- Fase 5.2 concluida: UI de tarefas reais conectada ao SQLite.
+- Fase 5.1 concluida: base real de tarefas no SQLite.
 
 ## Proximas fases sugeridas
+
+### Fase 5.2 - UI de tarefas reais
+
+- Substituir mocks principais por tarefas persistidas.
+- Conectar UI de tarefas aos endpoints reais.
+- Manter fluxo visual simples.
+- Evitar CRUD avancado antes da base estar estavel.
 
 ### Fase 5.3 - Auditoria do modulo de tarefas
 
 - Auditar criar, listar, atualizar e excluir tarefas.
 - Validar tarefas globais e tarefas associadas a projetos.
 - Corrigir apenas bugs pequenos encontrados.
-
-### Fase 5.4 - Refinos pequenos de tarefas
-
-- Avaliar edicao simples de titulo.
-- Avaliar filtro visual por status.
-- Manter sem subtarefas, recorrencia ou calendario ate haver necessidade real.
 
 ### Fases futuras
 

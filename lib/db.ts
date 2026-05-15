@@ -473,56 +473,6 @@ export function listTasks(): StoredTask[] {
   return rows.map(mapTask);
 }
 
-export function listTasksByProjectId(projectId: string): StoredTask[] {
-  const database = initializeDatabase();
-  const rows = database
-    .prepare<TaskRow>(
-      `
-        SELECT
-          id,
-          title,
-          description,
-          status,
-          priority,
-          project_id,
-          due_date,
-          created_at,
-          updated_at
-        FROM tasks
-        WHERE project_id = ?
-        ORDER BY updated_at DESC
-      `,
-    )
-    .all(projectId);
-
-  return rows.map(mapTask);
-}
-
-export function listGlobalTasks(): StoredTask[] {
-  const database = initializeDatabase();
-  const rows = database
-    .prepare<TaskRow>(
-      `
-        SELECT
-          id,
-          title,
-          description,
-          status,
-          priority,
-          project_id,
-          due_date,
-          created_at,
-          updated_at
-        FROM tasks
-        WHERE project_id IS NULL
-        ORDER BY updated_at DESC
-      `,
-    )
-    .all();
-
-  return rows.map(mapTask);
-}
-
 export function getTaskById(id: string): StoredTask | null {
   const database = initializeDatabase();
   const row = database

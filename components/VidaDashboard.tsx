@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { ChatPanel } from "@/components/ChatPanel";
-import { TaskList } from "@/components/TaskList";
 import { ViewSwitcher } from "@/components/ViewSwitcher";
 import {
   activeProjects,
@@ -11,6 +10,7 @@ import {
   daySummary,
   mainGoals,
   routineBlocks,
+  todayTasks,
   viewSummaries,
 } from "@/data/vida";
 import type {
@@ -19,6 +19,7 @@ import type {
   LifeView,
   Project,
   RoutineBlock,
+  Task,
   ViewSummary,
 } from "@/lib/types";
 
@@ -31,6 +32,7 @@ export function VidaDashboard() {
   >(null);
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [chatResetKey, setChatResetKey] = useState(0);
+  const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
   const [conversationListRefreshKey, setConversationListRefreshKey] =
     useState(0);
   const [selectedProjectId, setSelectedProjectId] = useState(
@@ -50,6 +52,14 @@ export function VidaDashboard() {
       activeProjects[0],
     [selectedProjectId],
   );
+
+  function toggleTask(taskId: string) {
+    setCompletedTaskIds((current) =>
+      current.includes(taskId)
+        ? current.filter((id) => id !== taskId)
+        : [...current, taskId],
+    );
+  }
 
   function startNewConversation() {
     setActiveConversationId(null);
@@ -107,16 +117,18 @@ export function VidaDashboard() {
 
         <section className="grid flex-1 gap-6 xl:grid-cols-[minmax(320px,0.74fr)_minmax(480px,1.26fr)]">
           <ContextPanel
-            activeProjectId={activeProjectId}
             activeView={activeView}
+            completedTaskIds={completedTaskIds}
             daySummary={daySummary}
             goals={mainGoals}
             onSelectProject={setSelectedProjectId}
+            onToggleTask={toggleTask}
             projects={activeProjects}
             routineBlocks={routineBlocks}
             selectedProject={selectedProject}
             selectedProjectId={selectedProjectId}
             selectedView={selectedView}
+            tasks={todayTasks}
           />
 
           <ChatPanel
@@ -135,29 +147,33 @@ export function VidaDashboard() {
 }
 
 type ContextPanelProps = {
-  activeProjectId: string | null;
   activeView: LifeView;
+  completedTaskIds: string[];
   daySummary: DaySummary;
   goals: Goal[];
   onSelectProject: (projectId: string) => void;
+  onToggleTask: (taskId: string) => void;
   projects: Project[];
   routineBlocks: RoutineBlock[];
   selectedProject?: Project;
   selectedProjectId: string;
   selectedView: ViewSummary;
+  tasks: Task[];
 };
 
 function ContextPanel({
-  activeProjectId,
   activeView,
+  completedTaskIds,
   daySummary,
   goals,
   onSelectProject,
+  onToggleTask,
   projects,
   routineBlocks,
   selectedProject,
   selectedProjectId,
   selectedView,
+  tasks,
 }: ContextPanelProps) {
   return (
     <div className="surface-panel rounded-lg border p-4 shadow-2xl shadow-black/20 sm:p-5">
@@ -174,7 +190,12 @@ function ContextPanel({
       </div>
 
       {activeView === "Dia" ? (
-        <DayContext activeProjectId={activeProjectId} daySummary={daySummary} />
+        <DayContext
+          completedTaskIds={completedTaskIds}
+          daySummary={daySummary}
+          onToggleTask={onToggleTask}
+          tasks={tasks}
+        />
       ) : activeView === "Semana" ? (
         <WeekContext
           onSelectProject={onSelectProject}
@@ -191,11 +212,18 @@ function ContextPanel({
 }
 
 type DayContextProps = {
-  activeProjectId: string | null;
+  completedTaskIds: string[];
   daySummary: DaySummary;
+  onToggleTask: (taskId: string) => void;
+  tasks: Task[];
 };
 
-function DayContext({ activeProjectId, daySummary }: DayContextProps) {
+function DayContext({
+  completedTaskIds,
+  daySummary,
+  onToggleTask,
+  tasks,
+}: DayContextProps) {
   return (
     <div className="mt-6 space-y-6">
       <div>
@@ -207,7 +235,44 @@ function DayContext({ activeProjectId, daySummary }: DayContextProps) {
         </p>
       </div>
 
-      <TaskList activeProjectId={activeProjectId} />
+      <div>
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-sm font-semibold text-white">3 prioridades</h3>
+          <span className="rounded-full border border-slate-800/80 px-2 py-0.5 text-xs text-slate-500">
+            {completedTaskIds.length}/{tasks.length}
+          </span>
+        </div>
+        <div className="mt-3 space-y-2">
+          {tasks.map((task) => {
+            const isDone = completedTaskIds.includes(task.id);
+
+            return (
+              <button
+                aria-pressed={isDone}
+                className={`focus-ring w-full rounded-md border px-3.5 py-3 text-left transition ${
+                  isDone
+                    ? "border-emerald-300/20 bg-emerald-300/10"
+                    : "border-slate-800/80 bg-slate-950/45 hover:border-blue-400/20 hover:bg-blue-500/10"
+                }`}
+                key={task.id}
+                onClick={() => onToggleTask(task.id)}
+                type="button"
+              >
+                <span
+                  className={`block text-sm font-medium leading-5 ${
+                    isDone ? "text-slate-400 line-through" : "text-white"
+                  }`}
+                >
+                  {task.title}
+                </span>
+                <span className="mt-1 block text-xs text-slate-500">
+                  {task.timeWindow ?? "Sem horário"} • {task.areaLabel}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="rounded-md border border-blue-400/20 bg-blue-500/10 p-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
