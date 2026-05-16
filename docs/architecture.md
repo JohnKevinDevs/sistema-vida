@@ -60,6 +60,8 @@ Campos principais:
 
 `project_id` e opcional. Conversas antigas ou globais usam `null`.
 
+Quando um projeto e excluido, conversas associadas sao preservadas e voltam para `project_id = null`.
+
 ### `messages`
 
 Campos principais:
@@ -104,6 +106,8 @@ Campos principais:
 - `updated_at`
 
 `project_id` e opcional. Tarefas globais usam `null`.
+
+Quando um projeto e excluido, tarefas associadas sao preservadas e voltam para `project_id = null`.
 
 Filtros de leitura:
 

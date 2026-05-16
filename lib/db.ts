@@ -390,6 +390,16 @@ export function deleteProject(id: string): boolean {
     )
     .run(id);
 
+  database
+    .prepare(
+      `
+        UPDATE tasks
+        SET project_id = NULL
+        WHERE project_id = ?
+      `,
+    )
+    .run(id);
+
   const result = database
     .prepare(
       `

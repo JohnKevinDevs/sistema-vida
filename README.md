@@ -170,6 +170,8 @@ Na Fase 5.4, a UI de tarefas passou a permitir edição simples do título de um
 
 Na Fase 5.5, a edição de tarefas foi auditada. A validação cobriu criação e edição de tarefas globais e de projeto, título vazio, limite de 120 caracteres no backend, alternância entre concluída e pendente, exclusão, troca entre visão global/projeto e regressão básica de projetos e conversas.
 
+Na Auditoria Geral do Sistema JK v1, o núcleo do sistema foi validado em conjunto: chat com Gemini, conversas globais, conversas dentro de projetos, projetos reais, tarefas globais, tarefas de projeto, troca global/projeto, sidebar, contextos Dia/Semana/Metas, endpoints principais, SQLite e docs operacionais. A auditoria também corrigiu a exclusão de projeto para preservar tarefas associadas e retorná-las para a visão global, evitando tarefas órfãs.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -400,4 +402,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.5 - Auditoria da edição de tarefas concluída.
+Auditoria Geral do Sistema JK v1 concluída.

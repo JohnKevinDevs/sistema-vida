@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.5.
+Documento atualizado apos a Auditoria Geral do Sistema JK v1.
 
 ## Fases concluidas
 
@@ -23,6 +23,7 @@ Documento atualizado apos a Fase 5.5.
 - Fase 5.3: auditoria do modulo de tarefas reais.
 - Fase 5.4: edicao simples de titulo de tarefa.
 - Fase 5.5: auditoria da edicao de tarefas.
+- Auditoria Geral do Sistema JK v1: chat, conversas, projetos, tarefas, UI, endpoints, SQLite e docs operacionais revisados em conjunto.
 
 ## Funcionalidades prontas
 
@@ -63,7 +64,7 @@ Documento atualizado apos a Fase 5.5.
 - `GET /api/conversations?projectId=ID` retorna conversas de um projeto.
 - `GET /api/conversations?scope=global` retorna conversas globais.
 - A sidebar mostra conversas do projeto selecionado ou conversas globais sem projeto ativo.
-- Excluir projeto preserva conversas associadas e remove a associacao, voltando-as para globais.
+- Excluir projeto preserva conversas e tarefas associadas e remove a associacao, voltando-as para globais.
 - Renomear/excluir conversas e criar/renomear/excluir projetos foram auditados apos o filtro por projeto.
 - A tabela `tasks` existe no SQLite com `project_id` opcional.
 - `GET /api/tasks`, `POST /api/tasks`, `PATCH /api/tasks/[taskId]` e `DELETE /api/tasks/[taskId]` existem e validam entradas basicas.
@@ -76,6 +77,7 @@ Documento atualizado apos a Fase 5.5.
 - A edicao simples de titulo usa `PATCH /api/tasks/[taskId]` e mantem a tarefa no mesmo contexto.
 - A edicao de titulo foi auditada em tarefas globais e tarefas de projeto.
 - O limite de 120 caracteres no backend foi validado.
+- A auditoria geral validou chat, projetos, conversas globais, conversas por projeto, tarefas globais, tarefas por projeto, troca de contexto, endpoints principais e docs operacionais.
 
 ## O que ainda nao existe
 

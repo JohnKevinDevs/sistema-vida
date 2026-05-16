@@ -2,7 +2,7 @@
 
 ## Atual
 
-- Fase 5.5 concluida: auditoria da edicao de tarefas.
+- Auditoria Geral do Sistema JK v1 concluida: chat, conversas, projetos, tarefas, SQLite, endpoints, UI e docs operacionais revisados em conjunto.
 
 ## Proximas fases sugeridas
 
