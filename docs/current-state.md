@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Auditoria Geral do Sistema JK v1.
+Documento atualizado apos a Fase 5.6.
 
 ## Fases concluidas
 
@@ -24,6 +24,7 @@ Documento atualizado apos a Auditoria Geral do Sistema JK v1.
 - Fase 5.4: edicao simples de titulo de tarefa.
 - Fase 5.5: auditoria da edicao de tarefas.
 - Auditoria Geral do Sistema JK v1: chat, conversas, projetos, tarefas, UI, endpoints, SQLite e docs operacionais revisados em conjunto.
+- Fase 5.6: filtros visuais simples de tarefas.
 
 ## Funcionalidades prontas
 
@@ -53,6 +54,7 @@ Documento atualizado apos a Auditoria Geral do Sistema JK v1.
 - UI do contexto Dia lista tarefas reais.
 - Criar, concluir, voltar para pendente e excluir tarefas pela UI.
 - Editar titulo de tarefa pela UI.
+- Filtrar tarefas visualmente entre todas, pendentes e concluidas.
 - Tarefas da UI respeitam projeto ativo ou visao global.
 
 ## Estado funcional validado
@@ -78,6 +80,7 @@ Documento atualizado apos a Auditoria Geral do Sistema JK v1.
 - A edicao de titulo foi auditada em tarefas globais e tarefas de projeto.
 - O limite de 120 caracteres no backend foi validado.
 - A auditoria geral validou chat, projetos, conversas globais, conversas por projeto, tarefas globais, tarefas por projeto, troca de contexto, endpoints principais e docs operacionais.
+- Os filtros de tarefas sao apenas client-side e usam os dados ja carregados por `/api/tasks`, sem novo endpoint ou alteracao de schema.
 
 ## O que ainda nao existe
 
@@ -97,4 +100,4 @@ Documento atualizado apos a Auditoria Geral do Sistema JK v1.
 
 ## Proximo passo recomendado
 
-Fase 5.6: avaliar filtros visuais basicos para tarefas, sem criar subtarefas, recorrencia ou calendario ainda.
+Fase 5.7: auditar os filtros visuais de tarefas e confirmar regressao de projetos e conversas.

@@ -172,6 +172,8 @@ Na Fase 5.5, a edição de tarefas foi auditada. A validação cobriu criação 
 
 Na Auditoria Geral do Sistema JK v1, o núcleo do sistema foi validado em conjunto: chat com Gemini, conversas globais, conversas dentro de projetos, projetos reais, tarefas globais, tarefas de projeto, troca global/projeto, sidebar, contextos Dia/Semana/Metas, endpoints principais, SQLite e docs operacionais. A auditoria também corrigiu a exclusão de projeto para preservar tarefas associadas e retorná-las para a visão global, evitando tarefas órfãs.
 
+Na Fase 5.6, o bloco de tarefas recebeu filtros visuais simples no client: `Todas`, `Pendentes` e `Concluídas`. Os filtros usam as tarefas já carregadas de `/api/tasks`, respeitam o contexto global/projeto e não criam novos endpoints, schema ou persistência adicional.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -402,4 +404,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Auditoria Geral do Sistema JK v1 concluída.
+Fase 5.6 - Filtros visuais simples de tarefas concluída.

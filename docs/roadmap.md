@@ -2,18 +2,14 @@
 
 ## Atual
 
-- Auditoria Geral do Sistema JK v1 concluida: chat, conversas, projetos, tarefas, SQLite, endpoints, UI e docs operacionais revisados em conjunto.
+- Fase 5.6 concluida: filtros visuais simples de tarefas.
 
 ## Proximas fases sugeridas
 
-### Fase 5.6 - Refinos pequenos de tarefas
-
-- Avaliar filtro visual por status.
-- Manter sem subtarefas, recorrencia ou calendario ate haver necessidade real.
-
 ### Fase 5.7 - Auditoria dos refinamentos de tarefas
 
-- Validar que filtros futuros nao misturam tarefas globais e de projeto.
+- Validar que filtros visuais nao misturam tarefas globais e de projeto.
+- Confirmar que criar, editar, concluir, voltar para pendente e excluir continuam funcionando com filtros ativos.
 - Confirmar regressao de conversas e projetos.
 
 ### Fases futuras

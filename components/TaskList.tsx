@@ -19,12 +19,21 @@ type DeleteTaskResponse = {
 };
 
 type LoadState = "idle" | "loading" | "success" | "error";
+type TaskStatusFilter = "all" | "pending" | "done";
 
 type TaskListProps = {
   activeProjectId: string | null;
 };
 
 const MAX_TASK_TITLE_LENGTH = 120;
+const taskFilterOptions: Array<{
+  label: string;
+  value: TaskStatusFilter;
+}> = [
+  { label: "Todas", value: "all" },
+  { label: "Pendentes", value: "pending" },
+  { label: "Concluídas", value: "done" },
+];
 
 const priorityLabels: Record<StoredTask["priority"], string> = {
   high: "Alta",
@@ -51,13 +60,35 @@ export function TaskList({ activeProjectId }: TaskListProps) {
   const [loadState, setLoadState] = useState<LoadState>("idle");
   const [mutationError, setMutationError] = useState<string | null>(null);
   const [savingTaskId, setSavingTaskId] = useState<string | null>(null);
+  const [taskFilter, setTaskFilter] = useState<TaskStatusFilter>("all");
   const [tasks, setTasks] = useState<StoredTask[]>([]);
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
 
+  const pendingTasks = useMemo(
+    () => tasks.filter((task) => task.status !== "done").length,
+    [tasks],
+  );
   const completedTasks = useMemo(
     () => tasks.filter((task) => task.status === "done").length,
     [tasks],
   );
+  const filteredTasks = useMemo(() => {
+    if (taskFilter === "done") {
+      return tasks.filter((task) => task.status === "done");
+    }
+
+    if (taskFilter === "pending") {
+      return tasks.filter((task) => task.status !== "done");
+    }
+
+    return tasks;
+  }, [taskFilter, tasks]);
+
+  const taskFilterCounts: Record<TaskStatusFilter, number> = {
+    all: tasks.length,
+    done: completedTasks,
+    pending: pendingTasks,
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -347,6 +378,42 @@ export function TaskList({ activeProjectId }: TaskListProps) {
         </p>
       ) : null}
 
+      {tasks.length > 0 ? (
+        <div
+          aria-label="Filtrar tarefas por status"
+          className="mt-3 grid grid-cols-3 gap-1 rounded-lg border border-slate-800/80 bg-slate-950/60 p-1"
+          role="group"
+        >
+          {taskFilterOptions.map((option) => {
+            const isActive = option.value === taskFilter;
+
+            return (
+              <button
+                aria-pressed={isActive}
+                className={`focus-ring rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+                  isActive
+                    ? "bg-blue-600 text-white shadow-sm shadow-blue-950/30"
+                    : "text-slate-500 hover:bg-slate-900 hover:text-slate-100"
+                }`}
+                data-task-filter={option.value}
+                key={option.value}
+                onClick={() => setTaskFilter(option.value)}
+                type="button"
+              >
+                {option.label}
+                <span
+                  className={`ml-1.5 ${
+                    isActive ? "text-blue-100" : "text-slate-600"
+                  }`}
+                >
+                  {taskFilterCounts[option.value]}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+
       <div className="mt-3 space-y-2">
         {loadState === "loading" ? (
           <p className="rounded-md border border-slate-800/80 bg-slate-950/45 px-3.5 py-3 text-sm leading-6 text-slate-400">
@@ -366,7 +433,13 @@ export function TaskList({ activeProjectId }: TaskListProps) {
           </p>
         ) : null}
 
-        {tasks.map((task) => {
+        {loadState === "success" && tasks.length > 0 && filteredTasks.length === 0 ? (
+          <p className="rounded-md border border-slate-800/80 bg-slate-950/45 px-3.5 py-3 text-sm leading-6 text-slate-500">
+            Nenhuma tarefa neste filtro.
+          </p>
+        ) : null}
+
+        {filteredTasks.map((task) => {
           const isDone = task.status === "done";
           const isEditing = editingTaskId === task.id;
           const isSaving = savingTaskId === task.id;
