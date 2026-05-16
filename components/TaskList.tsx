@@ -49,6 +49,18 @@ function getTaskListUrl(activeProjectId: string | null) {
   return "/api/tasks?scope=global";
 }
 
+function getEmptyFilterMessage(taskFilter: TaskStatusFilter) {
+  if (taskFilter === "done") {
+    return "Nenhuma tarefa concluída neste contexto.";
+  }
+
+  if (taskFilter === "pending") {
+    return "Nenhuma tarefa pendente neste contexto.";
+  }
+
+  return "Nenhuma tarefa neste filtro.";
+}
+
 export function TaskList({ activeProjectId }: TaskListProps) {
   const [createDraft, setCreateDraft] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
@@ -325,8 +337,8 @@ export function TaskList({ activeProjectId }: TaskListProps) {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between gap-3">
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h3 className="text-sm font-semibold text-white">
             {activeProjectId ? "Tarefas do projeto" : "Tarefas globais"}
@@ -334,30 +346,30 @@ export function TaskList({ activeProjectId }: TaskListProps) {
           <p className="mt-1 text-xs leading-5 text-slate-500">
             {activeProjectId
               ? "Próximas ações ligadas ao projeto selecionado."
-              : "Prioridades sem projeto vinculado."}
+              : "Tarefas sem projeto vinculado."}
           </p>
         </div>
-        <span className="shrink-0 rounded-full border border-slate-800/80 px-2 py-0.5 text-xs text-slate-500">
-          {completedTasks}/{tasks.length}
+        <span className="w-fit shrink-0 rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-xs font-medium text-blue-100/80">
+          {completedTasks}/{tasks.length} feitas
         </span>
       </div>
 
-      <form className="mt-3 flex gap-2" onSubmit={handleCreateTask}>
+      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleCreateTask}>
         <label className="sr-only" htmlFor="new-task-title">
           Nova tarefa
         </label>
         <input
-          className="focus-ring min-w-0 flex-1 rounded-md border border-slate-800/80 bg-slate-950/70 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-600"
+          className="focus-ring min-w-0 flex-1 rounded-md border border-slate-800/80 bg-slate-950/70 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 transition hover:border-slate-700"
           data-task-create-input
           disabled={isCreating}
           id="new-task-title"
           maxLength={MAX_TASK_TITLE_LENGTH}
           onChange={(event) => setCreateDraft(event.target.value)}
-          placeholder="Adicionar tarefa"
+          placeholder="Adicionar tarefa do dia"
           value={createDraft}
         />
         <button
-          className="focus-ring rounded-md border border-blue-400/30 bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500"
+          className="focus-ring rounded-md border border-blue-400/30 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-950/20 transition hover:bg-blue-500 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 disabled:shadow-none"
           data-task-create-submit
           disabled={isCreating || createDraft.trim().length === 0}
           type="submit"
@@ -381,7 +393,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
       {tasks.length > 0 ? (
         <div
           aria-label="Filtrar tarefas por status"
-          className="mt-3 grid grid-cols-3 gap-1 rounded-lg border border-slate-800/80 bg-slate-950/60 p-1"
+          className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800/80 bg-slate-950/60 p-1 shadow-inner shadow-black/20"
           role="group"
         >
           {taskFilterOptions.map((option) => {
@@ -390,10 +402,10 @@ export function TaskList({ activeProjectId }: TaskListProps) {
             return (
               <button
                 aria-pressed={isActive}
-                className={`focus-ring rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
+                className={`focus-ring rounded-md px-2.5 py-2 text-xs font-medium transition ${
                   isActive
                     ? "bg-blue-600 text-white shadow-sm shadow-blue-950/30"
-                    : "text-slate-500 hover:bg-slate-900 hover:text-slate-100"
+                    : "text-slate-500 hover:bg-slate-900/90 hover:text-slate-100"
                 }`}
                 data-task-filter={option.value}
                 key={option.value}
@@ -402,8 +414,10 @@ export function TaskList({ activeProjectId }: TaskListProps) {
               >
                 {option.label}
                 <span
-                  className={`ml-1.5 ${
-                    isActive ? "text-blue-100" : "text-slate-600"
+                  className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] ${
+                    isActive
+                      ? "bg-blue-400/20 text-blue-50"
+                      : "bg-slate-900 text-slate-500"
                   }`}
                 >
                   {taskFilterCounts[option.value]}
@@ -414,7 +428,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
         </div>
       ) : null}
 
-      <div className="mt-3 space-y-2">
+      <div className="space-y-2.5">
         {loadState === "loading" ? (
           <p className="rounded-md border border-slate-800/80 bg-slate-950/45 px-3.5 py-3 text-sm leading-6 text-slate-400">
             Carregando tarefas...
@@ -428,15 +442,25 @@ export function TaskList({ activeProjectId }: TaskListProps) {
         ) : null}
 
         {loadState === "success" && tasks.length === 0 ? (
-          <p className="rounded-md border border-slate-800/80 bg-slate-950/45 px-3.5 py-3 text-sm leading-6 text-slate-500">
-            Nenhuma tarefa criada neste contexto ainda.
-          </p>
+          <div className="rounded-lg border border-slate-800/80 bg-slate-950/45 px-4 py-4">
+            <p className="text-sm font-medium text-slate-300">
+              Nenhuma tarefa criada ainda.
+            </p>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Adicione uma tarefa simples para deixar o próximo passo visível.
+            </p>
+          </div>
         ) : null}
 
         {loadState === "success" && tasks.length > 0 && filteredTasks.length === 0 ? (
-          <p className="rounded-md border border-slate-800/80 bg-slate-950/45 px-3.5 py-3 text-sm leading-6 text-slate-500">
-            Nenhuma tarefa neste filtro.
-          </p>
+          <div className="rounded-lg border border-slate-800/80 bg-slate-950/45 px-4 py-4">
+            <p className="text-sm font-medium text-slate-300">
+              {getEmptyFilterMessage(taskFilter)}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Troque o filtro ou crie uma nova tarefa para este contexto.
+            </p>
+          </div>
         ) : null}
 
         {filteredTasks.map((task) => {
@@ -449,15 +473,15 @@ export function TaskList({ activeProjectId }: TaskListProps) {
 
           return (
             <article
-              className={`rounded-md border px-3.5 py-3 transition ${
+              className={`rounded-lg border px-3.5 py-3.5 transition ${
                 isDone
-                  ? "border-emerald-300/20 bg-emerald-300/10"
-                  : "border-slate-800/80 bg-slate-950/45"
+                  ? "border-emerald-300/20 bg-emerald-300/10 shadow-sm shadow-emerald-950/10"
+                  : "border-slate-800/80 bg-slate-950/45 hover:border-blue-400/20 hover:bg-slate-950/70"
               }`}
               data-task-id={task.id}
               key={task.id}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
                 <button
                   aria-label={
                     isDone
@@ -465,10 +489,10 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                       : `Marcar tarefa como concluída: ${task.title}`
                   }
                   aria-pressed={isDone}
-                  className={`focus-ring mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] transition ${
+                  className={`focus-ring mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border text-xs transition ${
                     isDone
                       ? "border-emerald-300/40 bg-emerald-300/15 text-emerald-100"
-                      : "border-slate-700 bg-slate-950 text-transparent hover:border-blue-400/40"
+                      : "border-slate-700 bg-slate-950 text-transparent hover:border-blue-400/50 hover:bg-blue-500/10"
                   }`}
                   data-task-toggle={task.id}
                   disabled={isUpdating || isDeleting || isSaving}
@@ -477,7 +501,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                   }}
                   type="button"
                 >
-                  ✓
+                  {isDone ? "✓" : "•"}
                 </button>
 
                 <div className="min-w-0 flex-1">
@@ -492,7 +516,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                         Editar título da tarefa
                       </label>
                       <input
-                        className="focus-ring w-full rounded-md border border-slate-700/80 bg-slate-950/90 px-2.5 py-2 text-sm text-slate-100 placeholder:text-slate-600"
+                        className="focus-ring w-full rounded-md border border-slate-700/80 bg-slate-950/90 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600"
                         data-task-edit-input={task.id}
                         disabled={isSaving}
                         id={titleInputId}
@@ -507,7 +531,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                       ) : null}
                       <div className="flex flex-wrap gap-2">
                         <button
-                          className="focus-ring rounded-md border border-blue-400/30 bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-100 transition hover:bg-blue-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
+                          className="focus-ring rounded-md border border-blue-400/30 bg-blue-500/10 px-3 py-1.5 text-xs font-medium text-blue-100 transition hover:bg-blue-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
                           data-task-edit-save={task.id}
                           disabled={isSaving}
                           type="submit"
@@ -515,7 +539,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                           {isSaving ? "Salvando..." : "Salvar"}
                         </button>
                         <button
-                          className="focus-ring rounded-md border border-slate-700/80 px-2.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:text-slate-500"
+                          className="focus-ring rounded-md border border-slate-700/80 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:text-slate-500"
                           disabled={isSaving}
                           onClick={cancelEditTask}
                           type="button"
@@ -533,18 +557,21 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                       >
                         {task.title}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
-                        Prioridade {priorityLabels[task.priority]}
-                        {task.dueDate ? ` · ${task.dueDate}` : ""}
-                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                        <span className="rounded-full border border-slate-800/80 px-2 py-0.5">
+                          {isDone ? "Concluída" : "Pendente"}
+                        </span>
+                        <span>Prioridade {priorityLabels[task.priority]}</span>
+                        {task.dueDate ? <span>{task.dueDate}</span> : null}
+                      </div>
                     </>
                   )}
                 </div>
 
                 {!isEditing ? (
-                  <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
+                  <div className="flex shrink-0 flex-wrap gap-1.5 sm:justify-end">
                     <button
-                      className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-slate-500 transition hover:bg-slate-800/80 hover:text-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
+                      className="focus-ring rounded-md border border-transparent px-2.5 py-1.5 text-xs font-medium text-slate-500 transition hover:border-slate-800/80 hover:bg-slate-800/80 hover:text-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
                       data-task-edit={task.id}
                       disabled={isUpdating || isDeleting}
                       onClick={() => startEditTask(task)}
@@ -553,7 +580,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                       Editar
                     </button>
                     <button
-                      className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-500/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-slate-600"
+                      className="focus-ring rounded-md border border-transparent px-2.5 py-1.5 text-xs font-medium text-red-200/70 transition hover:border-red-300/15 hover:bg-red-500/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-slate-600"
                       data-task-delete={task.id}
                       disabled={isUpdating || isDeleting}
                       onClick={() => {

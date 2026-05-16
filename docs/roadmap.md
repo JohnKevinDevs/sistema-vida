@@ -2,14 +2,15 @@
 
 ## Atual
 
-- Fase 5.6 concluida: filtros visuais simples de tarefas.
+- Fase 5.7 concluida: polish leve do modulo Dia/Tarefas.
 
 ## Proximas fases sugeridas
 
-### Fase 5.7 - Auditoria dos refinamentos de tarefas
+### Fase 5.8 - Auditoria do polish de tarefas
 
 - Validar que filtros visuais nao misturam tarefas globais e de projeto.
 - Confirmar que criar, editar, concluir, voltar para pendente e excluir continuam funcionando com filtros ativos.
+- Confirmar responsividade basica do modulo Dia/Tarefas.
 - Confirmar regressao de conversas e projetos.
 
 ### Fases futuras

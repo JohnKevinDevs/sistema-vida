@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.6.
+Documento atualizado apos a Fase 5.7.
 
 ## Fases concluidas
 
@@ -25,6 +25,7 @@ Documento atualizado apos a Fase 5.6.
 - Fase 5.5: auditoria da edicao de tarefas.
 - Auditoria Geral do Sistema JK v1: chat, conversas, projetos, tarefas, UI, endpoints, SQLite e docs operacionais revisados em conjunto.
 - Fase 5.6: filtros visuais simples de tarefas.
+- Fase 5.7: polish leve do modulo Dia/Tarefas.
 
 ## Funcionalidades prontas
 
@@ -55,6 +56,7 @@ Documento atualizado apos a Fase 5.6.
 - Criar, concluir, voltar para pendente e excluir tarefas pela UI.
 - Editar titulo de tarefa pela UI.
 - Filtrar tarefas visualmente entre todas, pendentes e concluidas.
+- UI de tarefas com hierarquia, estados vazios e responsividade basica refinados.
 - Tarefas da UI respeitam projeto ativo ou visao global.
 
 ## Estado funcional validado
@@ -81,6 +83,7 @@ Documento atualizado apos a Fase 5.6.
 - O limite de 120 caracteres no backend foi validado.
 - A auditoria geral validou chat, projetos, conversas globais, conversas por projeto, tarefas globais, tarefas por projeto, troca de contexto, endpoints principais e docs operacionais.
 - Os filtros de tarefas sao apenas client-side e usam os dados ja carregados por `/api/tasks`, sem novo endpoint ou alteracao de schema.
+- O polish da Fase 5.7 refinou apenas a apresentacao do modulo Dia/Tarefas, preservando endpoints, schema e comportamento existente.
 
 ## O que ainda nao existe
 
@@ -100,4 +103,4 @@ Documento atualizado apos a Fase 5.6.
 
 ## Proximo passo recomendado
 
-Fase 5.7: auditar os filtros visuais de tarefas e confirmar regressao de projetos e conversas.
+Fase 5.8: auditar o polish do modulo Dia/Tarefas e confirmar regressao de tarefas, projetos e conversas.

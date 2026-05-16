@@ -174,6 +174,8 @@ Na Auditoria Geral do Sistema JK v1, o núcleo do sistema foi validado em conjun
 
 Na Fase 5.6, o bloco de tarefas recebeu filtros visuais simples no client: `Todas`, `Pendentes` e `Concluídas`. Os filtros usam as tarefas já carregadas de `/api/tasks`, respeitam o contexto global/projeto e não criam novos endpoints, schema ou persistência adicional.
 
+Na Fase 5.7, o módulo Dia/Tarefas recebeu um polish leve de UI: espaçamentos mais confortáveis, filtros com contagens mais legíveis, estados vazios mais claros, cards de tarefa mais refinados e melhor adaptação mobile básica. Nenhum endpoint, schema ou comportamento de backend foi alterado.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -404,4 +406,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.6 - Filtros visuais simples de tarefas concluída.
+Fase 5.7 - Polish leve do módulo Dia/Tarefas concluída.
