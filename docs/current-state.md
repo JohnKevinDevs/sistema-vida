@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.3.
+Documento atualizado apos a Fase 5.4.
 
 ## Fases concluidas
 
@@ -21,6 +21,7 @@ Documento atualizado apos a Fase 5.3.
 - Fase 5.1: base real de tarefas no SQLite.
 - Fase 5.2: UI de tarefas reais conectada ao SQLite.
 - Fase 5.3: auditoria do modulo de tarefas reais.
+- Fase 5.4: edicao simples de titulo de tarefa.
 
 ## Funcionalidades prontas
 
@@ -49,6 +50,7 @@ Documento atualizado apos a Fase 5.3.
 - Tarefas podem ser globais ou associadas opcionalmente a projetos.
 - UI do contexto Dia lista tarefas reais.
 - Criar, concluir, voltar para pendente e excluir tarefas pela UI.
+- Editar titulo de tarefa pela UI.
 - Tarefas da UI respeitam projeto ativo ou visao global.
 
 ## Estado funcional validado
@@ -70,13 +72,14 @@ Documento atualizado apos a Fase 5.3.
 - Criar tarefa global, criar tarefa de projeto, concluir, voltar para pendente, excluir e alternar contexto foram auditados.
 - A UI de tarefas nao mistura tarefas globais com tarefas do projeto ativo.
 - Erros de titulo vazio e `projectId` inexistente retornam erro controlado.
+- A edicao simples de titulo usa `PATCH /api/tasks/[taskId]` e mantem a tarefa no mesmo contexto.
 
 ## O que ainda nao existe
 
 - Mover conversas existentes entre projetos pela UI.
 - Visao "todas as conversas" dentro da sidebar.
 - Associar conversas antigas a projetos pela UI.
-- Edicao completa de tarefas pela UI.
+- Edicao completa de tarefas pela UI, incluindo descricao, prioridade ou data.
 - Metas persistentes.
 - Rotina persistente.
 - Revisoes diarias ou semanais persistentes.
@@ -89,4 +92,4 @@ Documento atualizado apos a Fase 5.3.
 
 ## Proximo passo recomendado
 
-Fase 5.4: avaliar refinamentos pequenos de tarefas, como edicao simples de titulo ou filtros visuais basicos, sem criar subtarefas, recorrencia ou calendario ainda.
+Fase 5.5: auditar a edicao simples de tarefas e avaliar filtros visuais basicos, sem criar subtarefas, recorrencia ou calendario ainda.

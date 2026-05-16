@@ -44,9 +44,13 @@ export function TaskList({ activeProjectId }: TaskListProps) {
   const [createDraft, setCreateDraft] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [editError, setEditError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [loadState, setLoadState] = useState<LoadState>("idle");
   const [mutationError, setMutationError] = useState<string | null>(null);
+  const [savingTaskId, setSavingTaskId] = useState<string | null>(null);
   const [tasks, setTasks] = useState<StoredTask[]>([]);
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
 
@@ -61,6 +65,9 @@ export function TaskList({ activeProjectId }: TaskListProps) {
     async function loadTasks() {
       setLoadState("loading");
       setMutationError(null);
+      setEditingTaskId(null);
+      setEditDraft("");
+      setEditError(null);
 
       try {
         const response = await fetch(getTaskListUrl(activeProjectId), {
@@ -110,6 +117,19 @@ export function TaskList({ activeProjectId }: TaskListProps) {
     return null;
   }
 
+  function startEditTask(task: StoredTask) {
+    setEditDraft(task.title);
+    setEditError(null);
+    setEditingTaskId(task.id);
+    setMutationError(null);
+  }
+
+  function cancelEditTask() {
+    setEditingTaskId(null);
+    setEditDraft("");
+    setEditError(null);
+  }
+
   async function handleCreateTask(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -153,6 +173,59 @@ export function TaskList({ activeProjectId }: TaskListProps) {
       );
     } finally {
       setIsCreating(false);
+    }
+  }
+
+  async function handleEditTask(
+    event: FormEvent<HTMLFormElement>,
+    task: StoredTask,
+  ) {
+    event.preventDefault();
+
+    const validationError = validateTitle(editDraft);
+
+    if (validationError) {
+      setEditError(validationError);
+      return;
+    }
+
+    const title = editDraft.trim();
+
+    if (title === task.title) {
+      cancelEditTask();
+      return;
+    }
+
+    setEditError(null);
+    setMutationError(null);
+    setSavingTaskId(task.id);
+
+    try {
+      const response = await fetch(`/api/tasks/${task.id}`, {
+        body: JSON.stringify({ title }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+      });
+      const data = (await response.json()) as TaskMutationResponse;
+
+      if (!response.ok || !data.task) {
+        throw new Error(data.error ?? "Não consegui editar a tarefa.");
+      }
+
+      setTasks((current) =>
+        current.map((item) =>
+          item.id === data.task?.id ? (data.task as StoredTask) : item,
+        ),
+      );
+      cancelEditTask();
+    } catch (error) {
+      setEditError(
+        error instanceof Error ? error.message : "Não consegui editar a tarefa.",
+      );
+    } finally {
+      setSavingTaskId(null);
     }
   }
 
@@ -207,6 +280,10 @@ export function TaskList({ activeProjectId }: TaskListProps) {
       }
 
       setTasks((current) => current.filter((item) => item.id !== task.id));
+
+      if (editingTaskId === task.id) {
+        cancelEditTask();
+      }
     } catch (error) {
       setMutationError(
         error instanceof Error ? error.message : "Não consegui excluir a tarefa.",
@@ -291,8 +368,11 @@ export function TaskList({ activeProjectId }: TaskListProps) {
 
         {tasks.map((task) => {
           const isDone = task.status === "done";
+          const isEditing = editingTaskId === task.id;
+          const isSaving = savingTaskId === task.id;
           const isUpdating = updatingTaskId === task.id;
           const isDeleting = deletingTaskId === task.id;
+          const titleInputId = `task-title-${task.id}`;
 
           return (
             <article
@@ -318,7 +398,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                       : "border-slate-700 bg-slate-950 text-transparent hover:border-blue-400/40"
                   }`}
                   data-task-toggle={task.id}
-                  disabled={isUpdating || isDeleting}
+                  disabled={isUpdating || isDeleting || isSaving}
                   onClick={() => {
                     void handleToggleTask(task);
                   }}
@@ -328,30 +408,90 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                 </button>
 
                 <div className="min-w-0 flex-1">
-                  <p
-                    className={`text-sm font-medium leading-5 ${
-                      isDone ? "text-slate-400 line-through" : "text-white"
-                    }`}
-                  >
-                    {task.title}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Prioridade {priorityLabels[task.priority]}
-                    {task.dueDate ? ` · ${task.dueDate}` : ""}
-                  </p>
+                  {isEditing ? (
+                    <form
+                      className="space-y-2"
+                      onSubmit={(event) => {
+                        void handleEditTask(event, task);
+                      }}
+                    >
+                      <label className="sr-only" htmlFor={titleInputId}>
+                        Editar título da tarefa
+                      </label>
+                      <input
+                        className="focus-ring w-full rounded-md border border-slate-700/80 bg-slate-950/90 px-2.5 py-2 text-sm text-slate-100 placeholder:text-slate-600"
+                        data-task-edit-input={task.id}
+                        disabled={isSaving}
+                        id={titleInputId}
+                        maxLength={MAX_TASK_TITLE_LENGTH}
+                        onChange={(event) => setEditDraft(event.target.value)}
+                        value={editDraft}
+                      />
+                      {editError ? (
+                        <p className="text-xs leading-5 text-amber-200">
+                          {editError}
+                        </p>
+                      ) : null}
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          className="focus-ring rounded-md border border-blue-400/30 bg-blue-500/10 px-2.5 py-1.5 text-xs font-medium text-blue-100 transition hover:bg-blue-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500"
+                          data-task-edit-save={task.id}
+                          disabled={isSaving}
+                          type="submit"
+                        >
+                          {isSaving ? "Salvando..." : "Salvar"}
+                        </button>
+                        <button
+                          className="focus-ring rounded-md border border-slate-700/80 px-2.5 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:text-slate-500"
+                          disabled={isSaving}
+                          onClick={cancelEditTask}
+                          type="button"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      <p
+                        className={`text-sm font-medium leading-5 ${
+                          isDone ? "text-slate-400 line-through" : "text-white"
+                        }`}
+                      >
+                        {task.title}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        Prioridade {priorityLabels[task.priority]}
+                        {task.dueDate ? ` · ${task.dueDate}` : ""}
+                      </p>
+                    </>
+                  )}
                 </div>
 
-                <button
-                  className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-500/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-slate-600"
-                  data-task-delete={task.id}
-                  disabled={isUpdating || isDeleting}
-                  onClick={() => {
-                    void handleDeleteTask(task);
-                  }}
-                  type="button"
-                >
-                  {isDeleting ? "Excluindo..." : "Excluir"}
-                </button>
+                {!isEditing ? (
+                  <div className="flex shrink-0 flex-wrap justify-end gap-1.5">
+                    <button
+                      className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-slate-500 transition hover:bg-slate-800/80 hover:text-slate-100 disabled:cursor-not-allowed disabled:text-slate-600"
+                      data-task-edit={task.id}
+                      disabled={isUpdating || isDeleting}
+                      onClick={() => startEditTask(task)}
+                      type="button"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="focus-ring rounded-md px-2 py-1 text-xs font-medium text-red-200/70 transition hover:bg-red-500/10 hover:text-red-100 disabled:cursor-not-allowed disabled:text-slate-600"
+                      data-task-delete={task.id}
+                      disabled={isUpdating || isDeleting}
+                      onClick={() => {
+                        void handleDeleteTask(task);
+                      }}
+                      type="button"
+                    >
+                      {isDeleting ? "Excluindo..." : "Excluir"}
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </article>
           );

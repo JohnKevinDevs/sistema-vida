@@ -166,6 +166,8 @@ Na Fase 5.2, o contexto `Dia` passou a usar tarefas reais vindas de `/api/tasks`
 
 Na Fase 5.3, o módulo de tarefas reais foi auditado. A validação cobriu tarefas globais e tarefas associadas a projeto, criação, alternância entre concluída e pendente, exclusão, filtros `scope=global` e `projectId`, erro de título vazio, erro de projeto inexistente, troca entre contexto global/projeto e regressão básica de conversas e projetos.
 
+Na Fase 5.4, a UI de tarefas passou a permitir edição simples do título de uma tarefa existente. A edição usa `PATCH /api/tasks/[taskId]`, valida título vazio no client, preserva o limite de título do backend e mantém criar, concluir, voltar para pendente e excluir funcionando.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -396,4 +398,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.3 - Auditoria do módulo de tarefas reais concluída.
+Fase 5.4 - Edição simples de título de tarefa.
