@@ -2,20 +2,19 @@
 
 ## Atual
 
-- Fase 5.4 concluida: edicao simples de titulo de tarefa.
+- Fase 5.5 concluida: auditoria da edicao de tarefas.
 
 ## Proximas fases sugeridas
-
-### Fase 5.5 - Auditoria dos refinamentos de tarefas
-
-- Validar edicao de titulo em tarefas globais e de projeto.
-- Confirmar que criar, concluir, voltar para pendente e excluir continuam funcionando.
-- Confirmar regressao de conversas e projetos.
 
 ### Fase 5.6 - Refinos pequenos de tarefas
 
 - Avaliar filtro visual por status.
 - Manter sem subtarefas, recorrencia ou calendario ate haver necessidade real.
+
+### Fase 5.7 - Auditoria dos refinamentos de tarefas
+
+- Validar que filtros futuros nao misturam tarefas globais e de projeto.
+- Confirmar regressao de conversas e projetos.
 
 ### Fases futuras
 

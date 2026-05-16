@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.4.
+Documento atualizado apos a Fase 5.5.
 
 ## Fases concluidas
 
@@ -22,6 +22,7 @@ Documento atualizado apos a Fase 5.4.
 - Fase 5.2: UI de tarefas reais conectada ao SQLite.
 - Fase 5.3: auditoria do modulo de tarefas reais.
 - Fase 5.4: edicao simples de titulo de tarefa.
+- Fase 5.5: auditoria da edicao de tarefas.
 
 ## Funcionalidades prontas
 
@@ -73,6 +74,8 @@ Documento atualizado apos a Fase 5.4.
 - A UI de tarefas nao mistura tarefas globais com tarefas do projeto ativo.
 - Erros de titulo vazio e `projectId` inexistente retornam erro controlado.
 - A edicao simples de titulo usa `PATCH /api/tasks/[taskId]` e mantem a tarefa no mesmo contexto.
+- A edicao de titulo foi auditada em tarefas globais e tarefas de projeto.
+- O limite de 120 caracteres no backend foi validado.
 
 ## O que ainda nao existe
 
@@ -92,4 +95,4 @@ Documento atualizado apos a Fase 5.4.
 
 ## Proximo passo recomendado
 
-Fase 5.5: auditar a edicao simples de tarefas e avaliar filtros visuais basicos, sem criar subtarefas, recorrencia ou calendario ainda.
+Fase 5.6: avaliar filtros visuais basicos para tarefas, sem criar subtarefas, recorrencia ou calendario ainda.

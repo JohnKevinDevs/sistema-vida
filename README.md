@@ -168,6 +168,8 @@ Na Fase 5.3, o módulo de tarefas reais foi auditado. A validação cobriu taref
 
 Na Fase 5.4, a UI de tarefas passou a permitir edição simples do título de uma tarefa existente. A edição usa `PATCH /api/tasks/[taskId]`, valida título vazio no client, preserva o limite de título do backend e mantém criar, concluir, voltar para pendente e excluir funcionando.
 
+Na Fase 5.5, a edição de tarefas foi auditada. A validação cobriu criação e edição de tarefas globais e de projeto, título vazio, limite de 120 caracteres no backend, alternância entre concluída e pendente, exclusão, troca entre visão global/projeto e regressão básica de projetos e conversas.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -398,4 +400,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.4 - Edição simples de título de tarefa.
+Fase 5.5 - Auditoria da edição de tarefas concluída.
