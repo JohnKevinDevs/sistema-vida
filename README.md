@@ -182,6 +182,8 @@ Na Fase 5.8, o módulo de tarefas passou a permitir definir prioridade baixa, m�
 
 Na Fase 5.9, o fluxo de prioridade de tarefas foi auditado. A validação cobriu criação de tarefas globais e de projeto com prioridade baixa, média e alta, edição de prioridade, edição de título junto com prioridade, filtros `Todas`, `Pendentes` e `Concluídas`, alternância entre concluída e pendente, exclusão, isolamento entre contexto global/projeto e regressão básica de projetos, conversas e chat.
 
+Na Fase 5.10, a lista de tarefas passou a usar ordenação visual inteligente apenas no client: tarefas pendentes aparecem antes das concluídas; pendentes são ordenadas por prioridade alta, média e baixa; dentro do mesmo grupo, as tarefas mais recentes aparecem primeiro. Os filtros existentes continuam funcionando sobre essa ordem visual, sem alteração de backend, API ou schema.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -412,4 +414,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.9 - Auditoria da prioridade de tarefas concluída.
+Fase 5.10 - Ordenação visual inteligente de tarefas concluída.

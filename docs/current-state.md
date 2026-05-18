@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.9.
+Documento atualizado apos a Fase 5.10.
 
 ## Fases concluidas
 
@@ -29,6 +29,7 @@ Documento atualizado apos a Fase 5.9.
 - Auditoria pos-polish Claude Design: ajustes recentes de UX/UI auditados e pequeno bug de estado vazio da sidebar corrigido.
 - Fase 5.8: prioridade visual simples de tarefas.
 - Fase 5.9: auditoria da prioridade de tarefas.
+- Fase 5.10: ordenacao visual inteligente de tarefas.
 
 ## Funcionalidades prontas
 
@@ -60,6 +61,7 @@ Documento atualizado apos a Fase 5.9.
 - Editar titulo de tarefa pela UI.
 - Definir prioridade baixa, media ou alta ao criar tarefas.
 - Alterar prioridade de tarefa existente pela UI.
+- Ordenar tarefas no client com pendentes primeiro, prioridade alta/media/baixa e concluidas por ultimo.
 - Filtrar tarefas visualmente entre todas, pendentes e concluidas.
 - UI de tarefas com hierarquia, estados vazios e responsividade basica refinados.
 - Tarefas da UI respeitam projeto ativo ou visao global.
@@ -93,6 +95,7 @@ Documento atualizado apos a Fase 5.9.
 - A sidebar agora mostra textos vazios curtos apenas quando a lista correspondente esta realmente vazia.
 - A prioridade de tarefas usa o campo `priority` ja existente no backend e continua respeitando contexto global/projeto.
 - A auditoria da Fase 5.9 validou prioridades baixa, media e alta em tarefas globais e de projeto, edicao de prioridade, edicao de titulo junto com prioridade, filtros, done/pending, exclusao e regressao basica de projetos, conversas e chat.
+- A ordenacao da Fase 5.10 e feita apenas no client, sem endpoint novo, schema novo ou ordenacao manual.
 
 ## O que ainda nao existe
 
@@ -112,4 +115,4 @@ Documento atualizado apos a Fase 5.9.
 
 ## Proximo passo recomendado
 
-Fase 5.10: escolher o proximo incremento pequeno de tarefas sem criar calendario, subtarefas ou ordenacao complexa antes da hora.
+Fase 5.11: auditar a ordenacao visual inteligente de tarefas e confirmar regressao de filtros, projetos, conversas e chat.

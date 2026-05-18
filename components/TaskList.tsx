@@ -57,6 +57,12 @@ const priorityToneClasses: Record<TaskPriority, string> = {
   medium: "border-slate-700/80 bg-slate-900/70 text-slate-300",
 };
 
+const prioritySortRank: Record<TaskPriority, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
 function getTaskListUrl(activeProjectId: string | null) {
   if (activeProjectId) {
     return `/api/tasks?projectId=${encodeURIComponent(activeProjectId)}`;
@@ -75,6 +81,35 @@ function getEmptyFilterMessage(taskFilter: TaskStatusFilter) {
   }
 
   return "Nenhuma tarefa neste filtro.";
+}
+
+function getTaskCreatedTime(task: StoredTask) {
+  const timestamp = Date.parse(task.createdAt);
+
+  return Number.isNaN(timestamp) ? 0 : timestamp;
+}
+
+function sortTasksForDisplay(tasks: StoredTask[]) {
+  return [...tasks].sort((firstTask, secondTask) => {
+    const firstIsDone = firstTask.status === "done";
+    const secondIsDone = secondTask.status === "done";
+
+    if (firstIsDone !== secondIsDone) {
+      return firstIsDone ? 1 : -1;
+    }
+
+    if (!firstIsDone && !secondIsDone) {
+      const priorityDifference =
+        prioritySortRank[firstTask.priority] -
+        prioritySortRank[secondTask.priority];
+
+      if (priorityDifference !== 0) {
+        return priorityDifference;
+      }
+    }
+
+    return getTaskCreatedTime(secondTask) - getTaskCreatedTime(firstTask);
+  });
 }
 
 export function TaskList({ activeProjectId }: TaskListProps) {
@@ -102,17 +137,18 @@ export function TaskList({ activeProjectId }: TaskListProps) {
     () => tasks.filter((task) => task.status === "done").length,
     [tasks],
   );
+  const sortedTasks = useMemo(() => sortTasksForDisplay(tasks), [tasks]);
   const filteredTasks = useMemo(() => {
     if (taskFilter === "done") {
-      return tasks.filter((task) => task.status === "done");
+      return sortedTasks.filter((task) => task.status === "done");
     }
 
     if (taskFilter === "pending") {
-      return tasks.filter((task) => task.status !== "done");
+      return sortedTasks.filter((task) => task.status !== "done");
     }
 
-    return tasks;
-  }, [taskFilter, tasks]);
+    return sortedTasks;
+  }, [sortedTasks, taskFilter]);
 
   const taskFilterCounts: Record<TaskStatusFilter, number> = {
     all: tasks.length,
