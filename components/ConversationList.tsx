@@ -235,9 +235,7 @@ export function ConversationList({
           {activeProjectId ? "Conversas do projeto" : "Conversas globais"}
         </h2>
         <p className="mt-1 text-xs leading-5 text-slate-600">
-          {activeProjectId
-            ? "Histórico vinculado ao projeto selecionado."
-            : "Histórico sem projeto vinculado."}
+          Sem conversas ainda.
         </p>
       </div>
 

@@ -296,7 +296,7 @@ export function ProjectList({
             Projetos
           </h2>
           <p className="mt-1 text-xs leading-5 text-slate-600">
-            Selecione um espaço para associar novas conversas.
+            Nenhum projeto ainda.
           </p>
         </div>
         <button
