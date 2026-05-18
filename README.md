@@ -178,6 +178,8 @@ Na Fase 5.7, o módulo Dia/Tarefas recebeu um polish leve de UI: espaçamentos m
 
 Na auditoria pós-polish Claude Design, os ajustes recentes de UX/UI foram validados: títulos de conversas com acento permanecem em UTF-8, o chat mostra a tag de contexto `Global` ou o nome do projeto ativo, o header global está reduzido, o contexto `Dia` mantém a ordem foco/tarefas/próximo passo e tarefas concluídas aparecem de forma mais recuada. A auditoria também corrigiu a sidebar para mostrar mensagens vazias curtas apenas quando projetos ou conversas realmente não existem.
 
+Na Fase 5.8, o módulo de tarefas passou a permitir definir prioridade baixa, média ou alta ao criar uma tarefa e alterar essa prioridade na edição simples. A prioridade usa o campo `priority` já existente no SQLite/API, aparece como badge discreto na lista e preserva filtros, contexto global/projeto e demais ações de tarefa.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -408,4 +410,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Auditoria pós-polish Claude Design concluída.
+Fase 5.8 - Prioridade visual de tarefas concluída.

@@ -2,15 +2,16 @@
 
 ## Atual
 
-- Auditoria pos-polish Claude Design concluida: ajustes recentes de UI/UX validados e estado vazio da sidebar corrigido.
+- Fase 5.8 concluida: prioridade visual simples de tarefas.
 
 ## Proximas fases sugeridas
 
-### Fase 5.8 - Proximo refinamento incremental
+### Fase 5.9 - Auditoria da prioridade de tarefas
 
-- Refinar a proxima parte mais importante do fluxo de tarefas, projetos ou conversas.
-- Manter escopo pequeno e auditavel.
-- Evitar novos schemas ou dependencias sem fase dedicada.
+- Validar criacao de tarefas com prioridade baixa, media e alta.
+- Validar alteracao de prioridade em tarefas globais e de projeto.
+- Confirmar que filtros Todas/Pendentes/Concluidas continuam funcionando.
+- Confirmar regressao de projetos, conversas e chat.
 
 ### Fases futuras
 

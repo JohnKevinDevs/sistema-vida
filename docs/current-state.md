@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a auditoria pos-polish Claude Design.
+Documento atualizado apos a Fase 5.8.
 
 ## Fases concluidas
 
@@ -27,6 +27,7 @@ Documento atualizado apos a auditoria pos-polish Claude Design.
 - Fase 5.6: filtros visuais simples de tarefas.
 - Fase 5.7: polish leve do modulo Dia/Tarefas.
 - Auditoria pos-polish Claude Design: ajustes recentes de UX/UI auditados e pequeno bug de estado vazio da sidebar corrigido.
+- Fase 5.8: prioridade visual simples de tarefas.
 
 ## Funcionalidades prontas
 
@@ -56,6 +57,8 @@ Documento atualizado apos a auditoria pos-polish Claude Design.
 - UI do contexto Dia lista tarefas reais.
 - Criar, concluir, voltar para pendente e excluir tarefas pela UI.
 - Editar titulo de tarefa pela UI.
+- Definir prioridade baixa, media ou alta ao criar tarefas.
+- Alterar prioridade de tarefa existente pela UI.
 - Filtrar tarefas visualmente entre todas, pendentes e concluidas.
 - UI de tarefas com hierarquia, estados vazios e responsividade basica refinados.
 - Tarefas da UI respeitam projeto ativo ou visao global.
@@ -87,13 +90,14 @@ Documento atualizado apos a auditoria pos-polish Claude Design.
 - O polish da Fase 5.7 refinou apenas a apresentacao do modulo Dia/Tarefas, preservando endpoints, schema e comportamento existente.
 - A auditoria pos-polish validou encoding UTF-8 em novos titulos com acento, tag de contexto do chat, header reduzido, ordem do contexto Dia, visual recuado de tarefas concluidas, badge oculto sem tarefas e estados vazios da sidebar.
 - A sidebar agora mostra textos vazios curtos apenas quando a lista correspondente esta realmente vazia.
+- A prioridade de tarefas usa o campo `priority` ja existente no backend e continua respeitando contexto global/projeto.
 
 ## O que ainda nao existe
 
 - Mover conversas existentes entre projetos pela UI.
 - Visao "todas as conversas" dentro da sidebar.
 - Associar conversas antigas a projetos pela UI.
-- Edicao completa de tarefas pela UI, incluindo descricao, prioridade ou data.
+- Edicao completa de tarefas pela UI, incluindo descricao ou data.
 - Metas persistentes.
 - Rotina persistente.
 - Revisoes diarias ou semanais persistentes.
@@ -106,4 +110,4 @@ Documento atualizado apos a auditoria pos-polish Claude Design.
 
 ## Proximo passo recomendado
 
-Fase 5.8: definir o proximo refinamento incremental de tarefas, projetos ou conversas sem criar complexidade antes da hora.
+Fase 5.9: auditar a prioridade visual de tarefas e confirmar regressao de tarefas, projetos, conversas e chat.

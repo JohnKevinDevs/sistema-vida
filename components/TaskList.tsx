@@ -19,6 +19,7 @@ type DeleteTaskResponse = {
 };
 
 type LoadState = "idle" | "loading" | "success" | "error";
+type TaskPriority = StoredTask["priority"];
 type TaskStatusFilter = "all" | "pending" | "done";
 
 type TaskListProps = {
@@ -39,6 +40,21 @@ const priorityLabels: Record<StoredTask["priority"], string> = {
   high: "Alta",
   low: "Baixa",
   medium: "Média",
+};
+
+const taskPriorityOptions: Array<{
+  label: string;
+  value: TaskPriority;
+}> = [
+  { label: "Baixa", value: "low" },
+  { label: "Média", value: "medium" },
+  { label: "Alta", value: "high" },
+];
+
+const priorityToneClasses: Record<TaskPriority, string> = {
+  high: "border-blue-300/35 bg-blue-500/15 text-blue-100",
+  low: "border-slate-800/80 bg-slate-950/40 text-slate-500",
+  medium: "border-slate-700/80 bg-slate-900/70 text-slate-300",
 };
 
 function getTaskListUrl(activeProjectId: string | null) {
@@ -64,10 +80,12 @@ function getEmptyFilterMessage(taskFilter: TaskStatusFilter) {
 export function TaskList({ activeProjectId }: TaskListProps) {
   const [createDraft, setCreateDraft] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
+  const [createPriority, setCreatePriority] = useState<TaskPriority>("medium");
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState("");
   const [editError, setEditError] = useState<string | null>(null);
+  const [editPriority, setEditPriority] = useState<TaskPriority>("medium");
   const [isCreating, setIsCreating] = useState(false);
   const [loadState, setLoadState] = useState<LoadState>("idle");
   const [mutationError, setMutationError] = useState<string | null>(null);
@@ -163,6 +181,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
   function startEditTask(task: StoredTask) {
     setEditDraft(task.title);
     setEditError(null);
+    setEditPriority(task.priority);
     setEditingTaskId(task.id);
     setMutationError(null);
   }
@@ -171,6 +190,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
     setEditingTaskId(null);
     setEditDraft("");
     setEditError(null);
+    setEditPriority("medium");
   }
 
   async function handleCreateTask(event: FormEvent<HTMLFormElement>) {
@@ -190,7 +210,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
     try {
       const response = await fetch("/api/tasks", {
         body: JSON.stringify({
-          priority: "medium",
+          priority: createPriority,
           projectId: activeProjectId,
           title: createDraft.trim(),
         }),
@@ -210,6 +230,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
         ...current.filter((task) => task.id !== data.task?.id),
       ]);
       setCreateDraft("");
+      setCreatePriority("medium");
     } catch (error) {
       setCreateError(
         error instanceof Error ? error.message : "Não consegui criar a tarefa.",
@@ -234,7 +255,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
 
     const title = editDraft.trim();
 
-    if (title === task.title) {
+    if (title === task.title && editPriority === task.priority) {
       cancelEditTask();
       return;
     }
@@ -245,7 +266,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
 
     try {
       const response = await fetch(`/api/tasks/${task.id}`, {
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({ priority: editPriority, title }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -356,28 +377,49 @@ export function TaskList({ activeProjectId }: TaskListProps) {
         ) : null}
       </div>
 
-      <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleCreateTask}>
-        <label className="sr-only" htmlFor="new-task-title">
-          Nova tarefa
-        </label>
-        <input
-          className="focus-ring min-w-0 flex-1 rounded-md border border-slate-800/80 bg-slate-950/70 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 transition hover:border-slate-700"
-          data-task-create-input
-          disabled={isCreating}
-          id="new-task-title"
-          maxLength={MAX_TASK_TITLE_LENGTH}
-          onChange={(event) => setCreateDraft(event.target.value)}
-          placeholder="Adicionar tarefa do dia"
-          value={createDraft}
-        />
-        <button
-          className="focus-ring rounded-md border border-blue-400/30 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-950/20 transition hover:bg-blue-500 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 disabled:shadow-none"
-          data-task-create-submit
-          disabled={isCreating || createDraft.trim().length === 0}
-          type="submit"
-        >
-          {isCreating ? "Criando..." : "Criar"}
-        </button>
+      <form className="space-y-2" onSubmit={handleCreateTask}>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <label className="sr-only" htmlFor="new-task-title">
+            Nova tarefa
+          </label>
+          <input
+            className="focus-ring min-w-0 flex-1 rounded-md border border-slate-800/80 bg-slate-950/70 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 transition hover:border-slate-700"
+            data-task-create-input
+            disabled={isCreating}
+            id="new-task-title"
+            maxLength={MAX_TASK_TITLE_LENGTH}
+            onChange={(event) => setCreateDraft(event.target.value)}
+            placeholder="Adicionar tarefa do dia"
+            value={createDraft}
+          />
+          <label className="sr-only" htmlFor="new-task-priority">
+            Prioridade da nova tarefa
+          </label>
+          <select
+            className="focus-ring rounded-md border border-slate-800/80 bg-slate-950/70 px-3 py-2.5 text-sm text-slate-200 transition hover:border-slate-700 sm:w-32"
+            data-task-create-priority
+            disabled={isCreating}
+            id="new-task-priority"
+            onChange={(event) =>
+              setCreatePriority(event.target.value as TaskPriority)
+            }
+            value={createPriority}
+          >
+            {taskPriorityOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <button
+            className="focus-ring rounded-md border border-blue-400/30 bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-950/20 transition hover:bg-blue-500 active:scale-[0.99] disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 disabled:shadow-none"
+            data-task-create-submit
+            disabled={isCreating || createDraft.trim().length === 0}
+            type="submit"
+          >
+            {isCreating ? "Criando..." : "Criar"}
+          </button>
+        </div>
       </form>
 
       {createError ? (
@@ -526,6 +568,28 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                         onChange={(event) => setEditDraft(event.target.value)}
                         value={editDraft}
                       />
+                      <label
+                        className="sr-only"
+                        htmlFor={`task-priority-${task.id}`}
+                      >
+                        Editar prioridade da tarefa
+                      </label>
+                      <select
+                        className="focus-ring w-full rounded-md border border-slate-700/80 bg-slate-950/90 px-3 py-2.5 text-sm text-slate-100"
+                        data-task-edit-priority={task.id}
+                        disabled={isSaving}
+                        id={`task-priority-${task.id}`}
+                        onChange={(event) =>
+                          setEditPriority(event.target.value as TaskPriority)
+                        }
+                        value={editPriority}
+                      >
+                        {taskPriorityOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
                       {editError ? (
                         <p className="text-xs leading-5 text-amber-200">
                           {editError}
@@ -563,7 +627,11 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                         <span className="rounded-full border border-slate-800/80 px-2 py-0.5">
                           {isDone ? "Concluída" : "Pendente"}
                         </span>
-                        <span>Prioridade {priorityLabels[task.priority]}</span>
+                        <span
+                          className={`rounded-full border px-2 py-0.5 ${priorityToneClasses[task.priority]}`}
+                        >
+                          Prioridade {priorityLabels[task.priority]}
+                        </span>
                         {task.dueDate ? <span>{task.dueDate}</span> : null}
                       </div>
                     </>
