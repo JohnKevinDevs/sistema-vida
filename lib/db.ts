@@ -97,8 +97,12 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+function normalizeSqliteText(value: string) {
+  return value.normalize("NFC");
+}
+
 function normalizeTitle(title?: string) {
-  const normalizedTitle = title?.trim();
+  const normalizedTitle = title ? normalizeSqliteText(title).trim() : "";
 
   return normalizedTitle || "Nova conversa";
 }
@@ -114,7 +118,7 @@ function mapConversation(row: ConversationRow): Conversation {
     createdAt: row.created_at,
     id: row.id,
     projectId: row.project_id,
-    title: row.title,
+    title: normalizeSqliteText(row.title),
     updatedAt: row.updated_at,
   };
 }
@@ -701,6 +705,7 @@ export function updateConversationTitle(
 ): Conversation | null {
   const database = initializeDatabase();
   const updatedAt = nowIso();
+  const normalizedTitle = normalizeTitle(title);
 
   const result = database
     .prepare(
@@ -710,7 +715,7 @@ export function updateConversationTitle(
         WHERE id = ?
       `,
     )
-    .run(title.trim(), updatedAt, id);
+    .run(normalizedTitle, updatedAt, id);
 
   if (result.changes === 0) {
     return null;
