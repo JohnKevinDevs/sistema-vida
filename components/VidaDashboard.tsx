@@ -85,18 +85,14 @@ export function VidaDashboard() {
       onSelectConversation={setActiveConversationId}
     >
       <div className="flex min-h-[calc(100vh-2rem)] flex-col gap-6">
-        <header className="flex flex-col gap-6 border-b border-slate-800/80 pb-6 xl:flex-row xl:items-end xl:justify-between">
-          <div className="min-w-0">
+        <header className="flex flex-col gap-3 border-b border-slate-800/80 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-blue-300">
               {daySummary.dateLabel}
             </p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+            <span className="text-sm text-slate-500">
               Sistema JK
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-400">
-              Central pessoal local para conversar, decidir o próximo passo e
-              manter o essencial visível.
-            </p>
+            </span>
           </div>
           <ViewSwitcher
             activeView={activeView}
@@ -165,9 +161,9 @@ function ContextPanel({
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           {activeView}
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">
           {selectedView.title}
-        </h2>
+        </h1>
         <p className="mt-2 text-sm leading-6 text-slate-400">
           {selectedView.description}
         </p>
