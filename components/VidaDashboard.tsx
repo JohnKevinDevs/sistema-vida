@@ -193,20 +193,20 @@ type DayContextProps = {
 
 function DayContext({ activeProjectId, daySummary }: DayContextProps) {
   return (
-    <div className="mt-6 space-y-6">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+    <div className="mt-6 space-y-5">
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+        <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
           Foco principal
-        </p>
-        <p className="mt-2 text-base leading-7 text-slate-100">
+        </span>
+        <span className="text-sm font-medium leading-6 text-slate-100">
           {daySummary.mainFocus}
-        </p>
+        </span>
       </div>
 
       <TaskList activeProjectId={activeProjectId} />
 
-      <div className="rounded-md border border-blue-400/20 bg-blue-500/10 p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-100/80">
+      <div className="rounded-md border border-blue-400/20 bg-blue-500/10 p-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-100/80">
           Próximo passo
         </p>
         <p className="mt-2 text-sm leading-6 text-blue-50">
