@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { ConversationList } from "@/components/ConversationList";
 import { ProjectList } from "@/components/ProjectList";
 
@@ -20,9 +23,11 @@ export function Sidebar({
   onStartNewConversation,
   onSelectConversation,
 }: SidebarProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
     <aside className="border-b border-slate-800/80 bg-[#030711]/95 px-4 py-5 backdrop-blur lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-[340px] lg:shrink-0 lg:flex-col lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-5 lg:py-6">
-      <div className="flex items-start gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="grid h-10 w-10 place-items-center rounded-md border border-blue-400/25 bg-blue-500/10 text-sm font-semibold text-blue-100">
             JK
@@ -36,30 +41,40 @@ export function Sidebar({
             </h1>
           </div>
         </div>
+        <button
+          aria-expanded={isMenuOpen}
+          className="focus-ring rounded-md border border-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-blue-400/25 hover:bg-blue-500/10 hover:text-blue-100 lg:hidden"
+          onClick={() => setIsMenuOpen((current) => !current)}
+          type="button"
+        >
+          Menu
+        </button>
       </div>
 
-      <button
-        className="focus-ring mt-6 w-full rounded-md border border-blue-400/30 bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:border-blue-300/50 hover:bg-blue-500 active:scale-[0.99]"
-        onClick={onStartNewConversation}
-        type="button"
-      >
-        Nova conversa
-      </button>
+      <div className={`${isMenuOpen ? "block" : "hidden"} lg:block`}>
+        <button
+          className="focus-ring mt-6 w-full rounded-md border border-blue-400/30 bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:border-blue-300/50 hover:bg-blue-500 active:scale-[0.99]"
+          onClick={onStartNewConversation}
+          type="button"
+        >
+          Nova conversa
+        </button>
 
-      <ProjectList
-        activeProjectId={activeProjectId}
-        onSelectProject={onSelectProject}
-      />
+        <ProjectList
+          activeProjectId={activeProjectId}
+          onSelectProject={onSelectProject}
+        />
 
-      <ConversationList
-        activeConversationId={activeConversationId}
-        activeProjectId={activeProjectId}
-        refreshKey={conversationListRefreshKey}
-        onDeleteConversation={onDeleteConversation}
-        onSelectConversation={onSelectConversation}
-      />
+        <ConversationList
+          activeConversationId={activeConversationId}
+          activeProjectId={activeProjectId}
+          refreshKey={conversationListRefreshKey}
+          onDeleteConversation={onDeleteConversation}
+          onSelectConversation={onSelectConversation}
+        />
 
-      <div className="mt-8 border-t border-slate-800/70 pt-4 lg:mt-auto" />
+        <div className="mt-8 border-t border-slate-800/70 pt-4 lg:mt-auto" />
+      </div>
     </aside>
   );
 }

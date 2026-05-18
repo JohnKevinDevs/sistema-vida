@@ -161,7 +161,7 @@ function ContextPanel({
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           {activeView}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl xl:text-2xl">
           {selectedView.title}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-400">
