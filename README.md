@@ -180,6 +180,8 @@ Na auditoria pós-polish Claude Design, os ajustes recentes de UX/UI foram valid
 
 Na Fase 5.8, o módulo de tarefas passou a permitir definir prioridade baixa, média ou alta ao criar uma tarefa e alterar essa prioridade na edição simples. A prioridade usa o campo `priority` já existente no SQLite/API, aparece como badge discreto na lista e preserva filtros, contexto global/projeto e demais ações de tarefa.
 
+Na Fase 5.9, o fluxo de prioridade de tarefas foi auditado. A validação cobriu criação de tarefas globais e de projeto com prioridade baixa, média e alta, edição de prioridade, edição de título junto com prioridade, filtros `Todas`, `Pendentes` e `Concluídas`, alternância entre concluída e pendente, exclusão, isolamento entre contexto global/projeto e regressão básica de projetos, conversas e chat.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -410,4 +412,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.8 - Prioridade visual de tarefas concluída.
+Fase 5.9 - Auditoria da prioridade de tarefas concluída.

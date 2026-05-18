@@ -2,16 +2,15 @@
 
 ## Atual
 
-- Fase 5.8 concluida: prioridade visual simples de tarefas.
+- Fase 5.9 concluida: auditoria da prioridade de tarefas.
 
 ## Proximas fases sugeridas
 
-### Fase 5.9 - Auditoria da prioridade de tarefas
+### Fase 5.10 - Proximo incremento pequeno de tarefas
 
-- Validar criacao de tarefas com prioridade baixa, media e alta.
-- Validar alteracao de prioridade em tarefas globais e de projeto.
-- Confirmar que filtros Todas/Pendentes/Concluidas continuam funcionando.
-- Confirmar regressao de projetos, conversas e chat.
+- Definir o proximo ajuste de tarefas com escopo pequeno.
+- Evitar calendario, subtarefas, ordenacao complexa ou novas tabelas sem fase dedicada.
+- Manter regressao de projetos, conversas e chat em toda mudanca.
 
 ### Fases futuras
 

@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.8.
+Documento atualizado apos a Fase 5.9.
 
 ## Fases concluidas
 
@@ -28,6 +28,7 @@ Documento atualizado apos a Fase 5.8.
 - Fase 5.7: polish leve do modulo Dia/Tarefas.
 - Auditoria pos-polish Claude Design: ajustes recentes de UX/UI auditados e pequeno bug de estado vazio da sidebar corrigido.
 - Fase 5.8: prioridade visual simples de tarefas.
+- Fase 5.9: auditoria da prioridade de tarefas.
 
 ## Funcionalidades prontas
 
@@ -91,6 +92,7 @@ Documento atualizado apos a Fase 5.8.
 - A auditoria pos-polish validou encoding UTF-8 em novos titulos com acento, tag de contexto do chat, header reduzido, ordem do contexto Dia, visual recuado de tarefas concluidas, badge oculto sem tarefas e estados vazios da sidebar.
 - A sidebar agora mostra textos vazios curtos apenas quando a lista correspondente esta realmente vazia.
 - A prioridade de tarefas usa o campo `priority` ja existente no backend e continua respeitando contexto global/projeto.
+- A auditoria da Fase 5.9 validou prioridades baixa, media e alta em tarefas globais e de projeto, edicao de prioridade, edicao de titulo junto com prioridade, filtros, done/pending, exclusao e regressao basica de projetos, conversas e chat.
 
 ## O que ainda nao existe
 
@@ -110,4 +112,4 @@ Documento atualizado apos a Fase 5.8.
 
 ## Proximo passo recomendado
 
-Fase 5.9: auditar a prioridade visual de tarefas e confirmar regressao de tarefas, projetos, conversas e chat.
+Fase 5.10: escolher o proximo incremento pequeno de tarefas sem criar calendario, subtarefas ou ordenacao complexa antes da hora.
