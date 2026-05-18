@@ -2,15 +2,15 @@
 
 ## Atual
 
-- Fase 5.11 concluida: auditoria da ordenacao de tarefas.
+- Fase 6.0 concluida: revisao completa e debug geral do Sistema JK.
 
 ## Proximas fases sugeridas
 
-### Fase 5.12 - Proximo incremento pequeno de tarefas
+### Fase 6.1 - Uso real controlado
 
-- Definir o proximo ajuste de tarefas com escopo pequeno.
-- Evitar datas, calendario, subtarefas, automacoes ou novas tabelas sem fase dedicada.
-- Manter regressao de projetos, conversas, chat e isolamento global/projeto em toda mudanca.
+- Usar o sistema com dados reais por um ciclo curto.
+- Registrar bugs, friccoes e ajustes pequenos observados no uso.
+- Corrigir apenas problemas reais antes de criar novas features.
 
 ### Fases futuras
 

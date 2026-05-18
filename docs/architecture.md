@@ -4,6 +4,10 @@
 
 O Sistema JK e uma aplicacao Next.js local com UI em React, API routes server-side, Gemini isolado em camada de servico e SQLite local para persistencia.
 
+## Estado de revisao
+
+A Fase 6.0 revisou o nucleo atual antes de uso real controlado. Foram validados dashboard, sidebar, contextos Dia/Semana/Metas, projetos, conversas, chat/Gemini, tarefas, filtros, ordenacao visual, contexto global/projeto, UTF-8, mobile basico, endpoints principais e persistencia SQLite. A revisao nao exigiu mudanca de arquitetura, schema ou backend.
+
 ## Diretorios principais
 
 - `app/`: App Router do Next.js.

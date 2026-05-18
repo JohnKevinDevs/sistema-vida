@@ -186,6 +186,8 @@ Na Fase 5.10, a lista de tarefas passou a usar ordenação visual inteligente ap
 
 Na Fase 5.11, a ordenação visual inteligente das tarefas foi auditada com tarefas globais e tarefas de projeto. A validação cobriu prioridade alta, média e baixa, desempate por tarefas mais recentes dentro do mesmo grupo, filtros `Todas`, `Pendentes` e `Concluídas`, edição de título junto com prioridade, alternância entre concluída e pendente, exclusão, isolamento entre global/projeto e regressão básica de projetos, conversas e chat.
 
+Na Fase 6.0, foi feita uma revisão completa do núcleo do Sistema JK antes de iniciar uso real controlado. A auditoria cobriu dashboard, sidebar, Dia/Semana/Metas, projetos, conversas, chat/Gemini, tarefas, contexto global/projeto, UTF-8, mobile básico, SQLite, endpoints principais e documentação operacional. Não foi necessária correção de código.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -416,4 +418,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.11 - Auditoria da ordenação de tarefas concluída.
+Fase 6.0 - Revisão completa e debug geral concluídos.
