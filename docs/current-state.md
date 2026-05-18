@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.7.
+Documento atualizado apos a auditoria pos-polish Claude Design.
 
 ## Fases concluidas
 
@@ -26,6 +26,7 @@ Documento atualizado apos a Fase 5.7.
 - Auditoria Geral do Sistema JK v1: chat, conversas, projetos, tarefas, UI, endpoints, SQLite e docs operacionais revisados em conjunto.
 - Fase 5.6: filtros visuais simples de tarefas.
 - Fase 5.7: polish leve do modulo Dia/Tarefas.
+- Auditoria pos-polish Claude Design: ajustes recentes de UX/UI auditados e pequeno bug de estado vazio da sidebar corrigido.
 
 ## Funcionalidades prontas
 
@@ -84,6 +85,8 @@ Documento atualizado apos a Fase 5.7.
 - A auditoria geral validou chat, projetos, conversas globais, conversas por projeto, tarefas globais, tarefas por projeto, troca de contexto, endpoints principais e docs operacionais.
 - Os filtros de tarefas sao apenas client-side e usam os dados ja carregados por `/api/tasks`, sem novo endpoint ou alteracao de schema.
 - O polish da Fase 5.7 refinou apenas a apresentacao do modulo Dia/Tarefas, preservando endpoints, schema e comportamento existente.
+- A auditoria pos-polish validou encoding UTF-8 em novos titulos com acento, tag de contexto do chat, header reduzido, ordem do contexto Dia, visual recuado de tarefas concluidas, badge oculto sem tarefas e estados vazios da sidebar.
+- A sidebar agora mostra textos vazios curtos apenas quando a lista correspondente esta realmente vazia.
 
 ## O que ainda nao existe
 
@@ -103,4 +106,4 @@ Documento atualizado apos a Fase 5.7.
 
 ## Proximo passo recomendado
 
-Fase 5.8: auditar o polish do modulo Dia/Tarefas e confirmar regressao de tarefas, projetos e conversas.
+Fase 5.8: definir o proximo refinamento incremental de tarefas, projetos ou conversas sem criar complexidade antes da hora.

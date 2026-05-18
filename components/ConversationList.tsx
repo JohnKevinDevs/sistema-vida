@@ -234,9 +234,6 @@ export function ConversationList({
         >
           {activeProjectId ? "Conversas do projeto" : "Conversas globais"}
         </h2>
-        <p className="mt-1 text-xs leading-5 text-slate-600">
-          Sem conversas ainda.
-        </p>
       </div>
 
       <div className="mt-3">
@@ -254,9 +251,7 @@ export function ConversationList({
 
         {loadState === "success" && conversations.length === 0 && (
           <p className="rounded-md border border-slate-800/80 bg-slate-900/55 px-3 py-3 text-sm leading-6 text-slate-500">
-            {activeProjectId
-              ? "Nenhuma conversa neste projeto ainda."
-              : "Nenhuma conversa global salva ainda."}
+            Sem conversas ainda.
           </p>
         )}
 

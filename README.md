@@ -176,6 +176,8 @@ Na Fase 5.6, o bloco de tarefas recebeu filtros visuais simples no client: `Toda
 
 Na Fase 5.7, o módulo Dia/Tarefas recebeu um polish leve de UI: espaçamentos mais confortáveis, filtros com contagens mais legíveis, estados vazios mais claros, cards de tarefa mais refinados e melhor adaptação mobile básica. Nenhum endpoint, schema ou comportamento de backend foi alterado.
 
+Na auditoria pós-polish Claude Design, os ajustes recentes de UX/UI foram validados: títulos de conversas com acento permanecem em UTF-8, o chat mostra a tag de contexto `Global` ou o nome do projeto ativo, o header global está reduzido, o contexto `Dia` mantém a ordem foco/tarefas/próximo passo e tarefas concluídas aparecem de forma mais recuada. A auditoria também corrigiu a sidebar para mostrar mensagens vazias curtas apenas quando projetos ou conversas realmente não existem.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -406,4 +408,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.7 - Polish leve do módulo Dia/Tarefas concluída.
+Auditoria pós-polish Claude Design concluída.

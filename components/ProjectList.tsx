@@ -295,9 +295,6 @@ export function ProjectList({
           >
             Projetos
           </h2>
-          <p className="mt-1 text-xs leading-5 text-slate-600">
-            Nenhum projeto ainda.
-          </p>
         </div>
         <button
           className="focus-ring shrink-0 rounded-md border border-blue-400/25 bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-100 transition hover:bg-blue-500/15 disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-600"
@@ -372,7 +369,7 @@ export function ProjectList({
 
         {loadState === "success" && projects.length === 0 && (
           <p className="rounded-md border border-slate-800/80 bg-slate-900/55 px-3 py-3 text-sm leading-6 text-slate-500">
-            Nenhum projeto criado ainda.
+            Nenhum projeto ainda.
           </p>
         )}
 

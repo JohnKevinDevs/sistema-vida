@@ -2,16 +2,15 @@
 
 ## Atual
 
-- Fase 5.7 concluida: polish leve do modulo Dia/Tarefas.
+- Auditoria pos-polish Claude Design concluida: ajustes recentes de UI/UX validados e estado vazio da sidebar corrigido.
 
 ## Proximas fases sugeridas
 
-### Fase 5.8 - Auditoria do polish de tarefas
+### Fase 5.8 - Proximo refinamento incremental
 
-- Validar que filtros visuais nao misturam tarefas globais e de projeto.
-- Confirmar que criar, editar, concluir, voltar para pendente e excluir continuam funcionando com filtros ativos.
-- Confirmar responsividade basica do modulo Dia/Tarefas.
-- Confirmar regressao de conversas e projetos.
+- Refinar a proxima parte mais importante do fluxo de tarefas, projetos ou conversas.
+- Manter escopo pequeno e auditavel.
+- Evitar novos schemas ou dependencias sem fase dedicada.
 
 ### Fases futuras
 
