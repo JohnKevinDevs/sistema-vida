@@ -35,6 +35,13 @@ type ConversationMessagesResponse = {
   messages?: Message[];
 };
 
+type ProjectsResponse = {
+  projects?: Array<{
+    id: string;
+    name: string;
+  }>;
+};
+
 type HistoryLoadState = "idle" | "loading" | "success" | "error";
 
 const persistedAssistantErrorMessage =
@@ -118,16 +125,61 @@ export function ChatPanel({
     useState<HistoryLoadState>("idle");
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<LocalChatMessage[]>([]);
+  const [activeProjectName, setActiveProjectName] = useState<string | null>(
+    null,
+  );
 
   const trimmedInput = input.trim();
   const isHistoryLoading = historyLoadState === "loading";
   const canSubmit = Boolean(trimmedInput) && !isLoading && !isHistoryLoading;
+  const contextLabel = activeProjectId
+    ? activeProjectName ?? "Projeto"
+    : "Global";
 
   useEffect(() => {
     setInput("");
     setHistoryLoadState("idle");
     setMessages([]);
   }, [resetKey]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadActiveProjectName(projectId: string) {
+      try {
+        const response = await fetch("/api/projects", { cache: "no-store" });
+        const data = (await response.json()) as ProjectsResponse;
+
+        if (!response.ok || !Array.isArray(data.projects)) {
+          throw new Error("Failed to load projects");
+        }
+
+        if (!isMounted) {
+          return;
+        }
+
+        const project = data.projects.find((item) => item.id === projectId);
+        setActiveProjectName(project?.name ?? null);
+      } catch {
+        if (isMounted) {
+          setActiveProjectName(null);
+        }
+      }
+    }
+
+    if (!activeProjectId) {
+      setActiveProjectName(null);
+      return () => {
+        isMounted = false;
+      };
+    }
+
+    loadActiveProjectName(activeProjectId);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [activeProjectId]);
 
   useEffect(() => {
     let isMounted = true;
@@ -281,7 +333,7 @@ export function ChatPanel({
           </p>
         </div>
         <div className="rounded-full border border-blue-400/25 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-100">
-          {activeConversationId ? "Conversa ativa" : "Nova conversa"}
+          {contextLabel}
         </div>
       </div>
 
