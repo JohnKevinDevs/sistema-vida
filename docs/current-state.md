@@ -1,6 +1,6 @@
 # Estado atual do Sistema JK
 
-Documento atualizado apos a Fase 5.10.
+Documento atualizado apos a Fase 5.11.
 
 ## Fases concluidas
 
@@ -30,6 +30,7 @@ Documento atualizado apos a Fase 5.10.
 - Fase 5.8: prioridade visual simples de tarefas.
 - Fase 5.9: auditoria da prioridade de tarefas.
 - Fase 5.10: ordenacao visual inteligente de tarefas.
+- Fase 5.11: auditoria da ordenacao de tarefas.
 
 ## Funcionalidades prontas
 
@@ -96,6 +97,7 @@ Documento atualizado apos a Fase 5.10.
 - A prioridade de tarefas usa o campo `priority` ja existente no backend e continua respeitando contexto global/projeto.
 - A auditoria da Fase 5.9 validou prioridades baixa, media e alta em tarefas globais e de projeto, edicao de prioridade, edicao de titulo junto com prioridade, filtros, done/pending, exclusao e regressao basica de projetos, conversas e chat.
 - A ordenacao da Fase 5.10 e feita apenas no client, sem endpoint novo, schema novo ou ordenacao manual.
+- A auditoria da Fase 5.11 validou pendentes antes de concluidas, prioridade alta/media/baixa, desempate por tarefas mais recentes, filtros, edicao de titulo/prioridade, done/pending, exclusao e isolamento global/projeto.
 
 ## O que ainda nao existe
 
@@ -115,4 +117,4 @@ Documento atualizado apos a Fase 5.10.
 
 ## Proximo passo recomendado
 
-Fase 5.11: auditar a ordenacao visual inteligente de tarefas e confirmar regressao de filtros, projetos, conversas e chat.
+Fase 5.12: escolher o proximo incremento pequeno de tarefas sem criar datas, calendario, subtarefas ou novas features grandes antes da hora.

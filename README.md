@@ -184,6 +184,8 @@ Na Fase 5.9, o fluxo de prioridade de tarefas foi auditado. A validação cobriu
 
 Na Fase 5.10, a lista de tarefas passou a usar ordenação visual inteligente apenas no client: tarefas pendentes aparecem antes das concluídas; pendentes são ordenadas por prioridade alta, média e baixa; dentro do mesmo grupo, as tarefas mais recentes aparecem primeiro. Os filtros existentes continuam funcionando sobre essa ordem visual, sem alteração de backend, API ou schema.
 
+Na Fase 5.11, a ordenação visual inteligente das tarefas foi auditada com tarefas globais e tarefas de projeto. A validação cobriu prioridade alta, média e baixa, desempate por tarefas mais recentes dentro do mesmo grupo, filtros `Todas`, `Pendentes` e `Concluídas`, edição de título junto com prioridade, alternância entre concluída e pendente, exclusão, isolamento entre global/projeto e regressão básica de projetos, conversas e chat.
+
 Status válidos para tarefas persistidas:
 
 - `pending`
@@ -414,4 +416,4 @@ No pedido para salvar algo, o assistente deve explicar que ainda não consegue s
 
 ## Status atual
 
-Fase 5.10 - Ordenação visual inteligente de tarefas concluída.
+Fase 5.11 - Auditoria da ordenação de tarefas concluída.

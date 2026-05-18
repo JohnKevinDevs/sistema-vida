@@ -2,16 +2,15 @@
 
 ## Atual
 
-- Fase 5.10 concluida: ordenacao visual inteligente de tarefas no client.
+- Fase 5.11 concluida: auditoria da ordenacao de tarefas.
 
 ## Proximas fases sugeridas
 
-### Fase 5.11 - Auditoria da ordenacao de tarefas
+### Fase 5.12 - Proximo incremento pequeno de tarefas
 
-- Validar pendentes antes de concluidas.
-- Validar ordem alta, media e baixa dentro das pendentes.
-- Validar tarefas mais recentes primeiro dentro do mesmo grupo.
-- Confirmar filtros, contexto global/projeto, projetos, conversas e chat.
+- Definir o proximo ajuste de tarefas com escopo pequeno.
+- Evitar datas, calendario, subtarefas, automacoes ou novas tabelas sem fase dedicada.
+- Manter regressao de projetos, conversas, chat e isolamento global/projeto em toda mudanca.
 
 ### Fases futuras
 
