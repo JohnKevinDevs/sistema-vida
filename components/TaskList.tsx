@@ -349,9 +349,11 @@ export function TaskList({ activeProjectId }: TaskListProps) {
               : "Tarefas sem projeto vinculado."}
           </p>
         </div>
-        <span className="w-fit shrink-0 rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-xs font-medium text-blue-100/80">
-          {completedTasks}/{tasks.length} feitas
-        </span>
+        {tasks.length > 0 ? (
+          <span className="w-fit shrink-0 rounded-full border border-blue-400/20 bg-blue-500/10 px-2.5 py-1 text-xs font-medium text-blue-100/80">
+            {completedTasks}/{tasks.length} feitas
+          </span>
+        ) : null}
       </div>
 
       <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleCreateTask}>
