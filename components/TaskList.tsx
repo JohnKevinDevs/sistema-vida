@@ -475,7 +475,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
             <article
               className={`rounded-lg border px-3.5 py-3.5 transition ${
                 isDone
-                  ? "border-emerald-300/20 bg-emerald-300/10 shadow-sm shadow-emerald-950/10"
+                  ? "border-slate-800/60 bg-slate-950/40 opacity-60"
                   : "border-slate-800/80 bg-slate-950/45 hover:border-blue-400/20 hover:bg-slate-950/70"
               }`}
               data-task-id={task.id}
@@ -491,7 +491,7 @@ export function TaskList({ activeProjectId }: TaskListProps) {
                   aria-pressed={isDone}
                   className={`focus-ring mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border text-xs transition ${
                     isDone
-                      ? "border-emerald-300/40 bg-emerald-300/15 text-emerald-100"
+                      ? "border-blue-400/30 bg-blue-500/10 text-blue-200/80"
                       : "border-slate-700 bg-slate-950 text-transparent hover:border-blue-400/50 hover:bg-blue-500/10"
                   }`}
                   data-task-toggle={task.id}
