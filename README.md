@@ -2,6 +2,10 @@
 
 Sistema JK v1.0 - Vida e Tarefas.
 
+## Screenshot
+
+![Sistema JK dashboard](docs/assets/screenshots/home.png)
+
 ## Objetivo
 
 MVP local do segundo cérebro pessoal de John Kevin. Nesta fase, o projeto contém a base visual do módulo Vida e Tarefas, chat real com Gemini, histórico persistente em SQLite local e uma interface mais simples organizada em Dia, Semana e Metas.
