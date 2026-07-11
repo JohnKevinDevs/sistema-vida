@@ -2,7 +2,7 @@
 
 Sistema JK v1.0 - Vida e Tarefas.
 
-## Screenshots
+## Capturas de tela
 
 | Dia | Semana |
 | --- | --- |
