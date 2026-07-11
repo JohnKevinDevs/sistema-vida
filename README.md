@@ -2,9 +2,15 @@
 
 Sistema JK v1.0 - Vida e Tarefas.
 
-## Screenshot
+## Screenshots
 
-![Sistema JK dashboard](docs/assets/screenshots/home.png)
+| Dia | Semana |
+| --- | --- |
+| ![Sistema JK day dashboard](docs/assets/screenshots/home.png) | ![Sistema JK week dashboard](docs/assets/screenshots/semana.png) |
+
+| Metas | Nova conversa |
+| --- | --- |
+| ![Sistema JK goals screen](docs/assets/screenshots/metas.png) | ![Sistema JK new conversation screen](docs/assets/screenshots/nova-conversa.png) |
 
 ## Objetivo
 
